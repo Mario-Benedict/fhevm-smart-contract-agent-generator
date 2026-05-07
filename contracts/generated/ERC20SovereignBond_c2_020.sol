@@ -87,7 +87,7 @@ contract ERC20SovereignBond_c2_020 is ZamaEthereumConfig, Ownable, ReentrancyGua
         // coupon = faceValue * couponRate * yearsElapsed / 10000
         euint64 coupon = FHE.div(
             FHE.mul(FHE.mul(b.faceValue, b.couponRate), FHE.asEuint64(uint64(yearsElapsed))),
-            FHE.asEuint64(10_000)
+            10000
         );
         ebool ok = FHE.ge(_reserves[b.issuer], coupon);
         euint64 actual = FHE.select(ok, coupon, _reserves[b.issuer]);

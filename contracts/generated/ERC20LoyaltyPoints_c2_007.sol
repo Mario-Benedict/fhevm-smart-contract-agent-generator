@@ -74,9 +74,9 @@ contract ERC20LoyaltyPoints_c2_007 is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit PointsIssued(msg.sender, customer);
     }
 
-    function _updateTier(address customer) internal {
+    function _updateTier(address customer) internal view {
         // Note: real implementation would use FHE comparison; simplified here
-        Customer storage c = customers[customer];
+        // Customer storage c = customers[customer];
         // Tier stored plaintext for gas efficiency; only points are encrypted
     }
 

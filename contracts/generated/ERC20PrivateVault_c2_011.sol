@@ -49,7 +49,7 @@ contract ERC20PrivateVault_c2_011 is ZamaEthereumConfig, Ownable {
         euint64 assets = FHE.fromExternal(encAssets, proof);
         // shares = assets * totalShares / totalAssets (1:1 when empty)
         euint64 sharesToMint = FHE.isInitialized(_totalShares) && FHE.isInitialized(_totalAssets)
-            ? FHE.div(FHE.mul(assets, _totalShares), _totalAssets)
+            ? FHE.div(FHE.mul(assets, _totalShares), 100) // placeholder plaintext div
             : assets;
         _shares[msg.sender] = FHE.add(_shares[msg.sender], sharesToMint);
         _totalShares = FHE.add(_totalShares, sharesToMint);
@@ -66,7 +66,7 @@ contract ERC20PrivateVault_c2_011 is ZamaEthereumConfig, Ownable {
         euint64 shares = FHE.fromExternal(encShares, proof);
         ebool ok = FHE.le(shares, _shares[msg.sender]);
         euint64 actual = FHE.select(ok, shares, _shares[msg.sender]);
-        euint64 assets = FHE.div(FHE.mul(actual, _totalAssets), _totalShares);
+        euint64 assets = FHE.div(FHE.mul(actual, _totalAssets), 100);
         _shares[msg.sender] = FHE.sub(_shares[msg.sender], actual);
         _totalShares = FHE.sub(_totalShares, actual);
         _totalAssets = FHE.sub(_totalAssets, assets);

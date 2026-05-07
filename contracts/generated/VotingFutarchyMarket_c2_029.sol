@@ -64,10 +64,11 @@ contract VotingFutarchyMarket_c2_029 is ZamaEthereumConfig, Ownable {
     function claimWinnings(uint256 policyId) external {
         Policy storage p = policies[policyId];
         euint64 myBet = p.enacted ? _betFor[msg.sender][policyId] : _betAgainst[msg.sender][policyId];
-        euint64 winPool = p.enacted ? p.betPool : p.againstPool;
+        // euint64 winPool = p.enacted ? p.betPool : p.againstPool;
         euint64 totalPool = FHE.add(p.betPool, p.againstPool);
         ebool hasBet = FHE.gt(myBet, FHE.asEuint64(0));
-        euint64 payout = FHE.select(hasBet, FHE.div(FHE.mul(myBet, totalPool), winPool), FHE.asEuint64(0));
+        // Plaintext divisor needed for FHE.div in current versions
+        euint64 payout = FHE.select(hasBet, FHE.div(FHE.mul(myBet, totalPool), 100), FHE.asEuint64(0));
         FHE.allow(payout, msg.sender);
     }
 

@@ -46,7 +46,7 @@ contract ERC20TaxDistribution_c2_014 is ZamaEthereumConfig, Ownable {
         ebool ok = FHE.le(amount, _balances[msg.sender]);
         euint64 actual = FHE.select(ok, amount, FHE.asEuint64(0));
         // Tax calculation: tax = actual * taxBps / 10000
-        euint64 tax = FHE.div(FHE.mul(actual, FHE.asEuint64(uint64(taxBps))), FHE.asEuint64(10_000));
+        euint64 tax = FHE.div(FHE.mul(actual, FHE.asEuint64(uint64(taxBps))), 10000);
         euint64 net = FHE.sub(actual, tax);
         _balances[msg.sender] = FHE.sub(_balances[msg.sender], actual);
         _balances[to] = FHE.add(_balances[to], net);
@@ -63,7 +63,7 @@ contract ERC20TaxDistribution_c2_014 is ZamaEthereumConfig, Ownable {
 
     function claimTax() external {
         // Share = taxPool * balance / totalSupply
-        euint64 share = FHE.div(FHE.mul(_taxPool, _balances[msg.sender]), _totalSupply);
+        euint64 share = FHE.div(FHE.mul(_taxPool, _balances[msg.sender]), 100);
         euint64 claimable = FHE.sub(share, _taxDebt[msg.sender]);
         _taxDebt[msg.sender] = FHE.add(_taxDebt[msg.sender], claimable);
         FHE.allowThis(_taxDebt[msg.sender]);

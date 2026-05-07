@@ -29,7 +29,7 @@ contract ERC20BondingCurve_c2_004 is ZamaEthereumConfig, Ownable, ReentrancyGuar
     }
 
     /// @notice Calculate cost to buy `amount` tokens given current supply
-    function _calculateBuyCost(euint64 amount) internal view returns (euint64) {
+    function _calculateBuyCost(euint64 amount) internal returns (euint64) {
         // cost = slope * (supply * amount + amount^2 / 2)
         euint64 supplyTimesAmount = FHE.mul(_totalSupply, amount);
         euint64 halfSquared = FHE.div(FHE.mul(amount, amount), 2);
