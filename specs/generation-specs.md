@@ -5,11 +5,12 @@ Generate 100 unique fhEVM smart contracts per batch.
 Total target: 1000 contracts across 10 batches.
 
 ## Distribution per batch (100 contracts):
-- 20x Confidential ERC20 variants
+- 10x Confidential ERC20 variants
 - 15x Encrypted Voting variants  
 - 15x Blind Auction variants
 - 15x Confidential DeFi (lending/staking)
 - 15x Private Gaming / RNG
+- 10x Decentralized Identity (DID)
 - 10x Encrypted Access Control
 - 10x Mixed / creative
 
