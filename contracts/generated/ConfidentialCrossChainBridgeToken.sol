@@ -36,7 +36,7 @@ contract ConfidentialCrossChainBridgeToken is ZamaEthereumConfig, Ownable, Reent
         _totalSupply = FHE.asEuint64(0);
         _totalBridgedOut = FHE.asEuint64(0);
         _totalFeesCollected = FHE.asEuint64(0);
-        _globalDailyCap = FHE.asEuint64(10_000_000 * 1e18);
+        _globalDailyCap = FHE.mul(FHE.asEuint64(10_000_000), FHE.asEuint64(1e18));
         FHE.allowThis(_totalSupply); FHE.allowThis(_totalBridgedOut);
         FHE.allowThis(_totalFeesCollected); FHE.allowThis(_globalDailyCap);
         isBridgeRelayer[msg.sender] = true;

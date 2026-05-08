@@ -86,7 +86,7 @@ contract EncryptedDrugCounterfeitDetection is ZamaEthereumConfig, Ownable, Reent
             ndcCode: ndcCode, brandName: brandName, manufacturer: msg.sender,
             batchSizeUnits: batchSize, authenticityScore: authScore,
             tamperIndicatorBps: tamper,
-            expiryTimestamp: FHE.asEuint64(block.timestamp + expiryDays * 1 days),
+            expiryTimestamp: FHE.asEuint64(uint64(block.timestamp + expiryDays * 1 days)),
             status: AuthStatus.Authentic, recalled: false
         });
         _totalBatchesProcessed = FHE.add(_totalBatchesProcessed, FHE.asEuint64(1));

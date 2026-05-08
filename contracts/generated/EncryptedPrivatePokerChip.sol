@@ -89,7 +89,7 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
             seatNumber: t.playerCount, seated: true
         });
         tableSeatByPlayer[tableId][msg.sender] = seatId;
-        t.playerCount++;
+        t.playerCount = FHE.add(t.playerCount, FHE.asEuint8(1));
         FHE.allowThis(_chipBalances[msg.sender]); FHE.allow(_chipBalances[msg.sender], msg.sender);
         FHE.allowThis(seats[seatId].chipStack); FHE.allow(seats[seatId].chipStack, msg.sender);
         emit PlayerSeated(seatId, tableId, msg.sender);

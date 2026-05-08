@@ -118,20 +118,20 @@ contract EncryptedQuantumComputingAccessCredit is ZamaEthereumConfig, Ownable, R
         require(isQPUClient[msg.sender], "Not QPU client");
         QuantumProcessor storage p = processors[processorId];
         require(p.online, "Processor offline");
-        euint64 hours = FHE.fromExternal(encHours, hProof);
+        euint64 _hours = FHE.fromExternal(encHours, hProof);
         euint32 maxDepth = FHE.fromExternal(encMaxDepth, mdProof);
         euint32 maxQubits = FHE.fromExternal(encMaxQubits, mqProof);
-        euint64 totalCost = FHE.mul(hours, p.pricePerQPUHourCents);
+        euint64 totalCost = FHE.mul(_hours, p.pricePerQPUHourCents);
         id = subscriptionCount++;
         subscriptions[id] = AccessSubscription({
             client: msg.sender, processorId: processorId, tier: tier,
-            purchasedQPUHours: hours, usedQPUHours: FHE.asEuint64(0),
+            purchasedQPUHours: _hours, usedQPUHours: FHE.asEuint64(0),
             maxCircuitDepth: maxDepth, maxQubitsAccessible: maxQubits,
             totalSpentCents: totalCost,
             validUntil: block.timestamp + validDays * 1 days, active: true
         });
         p.totalRevenueEarned = FHE.add(p.totalRevenueEarned, totalCost);
-        _totalQPUHoursSold = FHE.add(_totalQPUHoursSold, hours);
+        _totalQPUHoursSold = FHE.add(_totalQPUHoursSold, _hours);
         _totalMarketRevenueCents = FHE.add(_totalMarketRevenueCents, totalCost);
         FHE.allowThis(subscriptions[id].purchasedQPUHours); FHE.allow(subscriptions[id].purchasedQPUHours, msg.sender);
         FHE.allowThis(subscriptions[id].usedQPUHours); FHE.allow(subscriptions[id].usedQPUHours, msg.sender);
@@ -153,19 +153,19 @@ contract EncryptedQuantumComputingAccessCredit is ZamaEthereumConfig, Ownable, R
         require(s.client == msg.sender && s.active && block.timestamp < s.validUntil, "Not authorized");
         euint32 depth = FHE.fromExternal(encDepth, dProof);
         euint32 qubits = FHE.fromExternal(encQubits, qProof);
-        euint64 hours = FHE.fromExternal(encHours, hProof);
+        euint64 _hours = FHE.fromExternal(encHours, hProof);
         // Validate depth within subscription limit
         ebool depthOk = FHE.le(depth, s.maxCircuitDepth);
         ebool qubitsOk = FHE.le(qubits, s.maxQubitsAccessible);
-        ebool hoursOk = FHE.le(FHE.add(s.usedQPUHours, hours), s.purchasedQPUHours);
-        s.usedQPUHours = FHE.add(s.usedQPUHours, hours);
+        ebool hoursOk = FHE.le(FHE.add(s.usedQPUHours, _hours), s.purchasedQPUHours);
+        s.usedQPUHours = FHE.add(s.usedQPUHours, _hours);
         jobs[subscriptionId].push(JobRecord({
             subscriptionId: subscriptionId, circuitDepth: depth, qubitsUsed: qubits,
-            hoursConsumed: hours, fidelityScore: FHE.asEuint32(0),
+            hoursConsumed: _hours, fidelityScore: FHE.asEuint32(0),
             submittedAt: block.timestamp, completed: false
         }));
         jobIndex = jobs[subscriptionId].length - 1;
-        FHE.allowThis(depth); FHE.allowThis(qubits); FHE.allowThis(hours);
+        FHE.allowThis(depth); FHE.allowThis(qubits); FHE.allowThis(_hours);
         FHE.allowThis(s.usedQPUHours); FHE.allow(s.usedQPUHours, msg.sender);
         emit JobSubmitted(subscriptionId, jobIndex);
     }

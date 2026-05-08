@@ -57,7 +57,7 @@ contract PrivateImmigrationSkillsVerification is ZamaEthereumConfig, Ownable, Re
     event RankingRecorded(uint256 indexed rankId, bytes32 applicantHash);
     event ApplicantSelected(uint256 indexed rankId);
 
-    constructor(externalEuint64 encMinScore, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encMinScore, bytes memory proof) Ownable(msg.sender) {
         _minimumPassScore = FHE.fromExternal(encMinScore, proof);
         _totalPointsPool = FHE.asEuint64(0);
         FHE.allowThis(_minimumPassScore);

@@ -53,7 +53,7 @@ contract PrivateCryptoHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGua
     event RedemptionProcessed(uint256 indexed reqId);
     event NAVRecalculated();
 
-    constructor(externalEuint64 encMgmtFee, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encMgmtFee, bytes memory proof) Ownable(msg.sender) {
         _managementFeeBps = FHE.fromExternal(encMgmtFee, proof);
         _totalFundNAV = FHE.asEuint64(0);
         _totalShares = FHE.asEuint64(0);

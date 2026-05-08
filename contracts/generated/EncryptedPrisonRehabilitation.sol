@@ -61,7 +61,7 @@ contract EncryptedPrisonRehabilitation is ZamaEthereumConfig, Ownable, Reentranc
     event ParoleDecision(uint256 indexed hearingId, bool approved);
     event FundAllocated(bytes32 indexed inmateHash);
 
-    constructor(externalEuint64 encPool, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encPool, bytes memory proof) Ownable(msg.sender) {
         _totalReintegrationPool = FHE.fromExternal(encPool, proof);
         FHE.allowThis(_totalReintegrationPool);
         isCaseworker[msg.sender] = true;
