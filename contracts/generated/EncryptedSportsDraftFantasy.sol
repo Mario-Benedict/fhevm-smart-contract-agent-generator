@@ -61,7 +61,7 @@ contract EncryptedSportsDraftFantasy is ZamaEthereumConfig, Ownable, ReentrancyG
     event ScoresUpdated(uint256 indexed weekNumber);
     event MatchupCreated(uint256 indexed matchupId);
 
-    constructor(externalEuint32 encSalaryCap, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint32 encSalaryCap, bytes memory proof) Ownable(msg.sender) {
         _salaryCap = FHE.fromExternal(encSalaryCap, proof);
         FHE.allowThis(_salaryCap);
         isCommissioner[msg.sender] = true;

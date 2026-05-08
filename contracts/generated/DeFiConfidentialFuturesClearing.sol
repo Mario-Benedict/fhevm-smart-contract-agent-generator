@@ -53,7 +53,7 @@ contract DeFiConfidentialFuturesClearing is ZamaEthereumConfig, Ownable, Reentra
         euint64 notional = FHE.fromExternal(encNotional, nProof);
         euint64 margin = FHE.fromExternal(encMargin, mProof);
         // Check margin ratio >= maintenance
-        euint64 marginRatio = FHE.div(FHE.mul(margin, 10000), notional);
+        euint64 marginRatio = FHE.div(FHE.mul(margin, FHE.asEuint64(10000)), notional);
         ebool adequate = FHE.ge(marginRatio, _defaultMaintenanceMarginBps);
         euint64 actualNotional = FHE.select(adequate, notional, FHE.asEuint64(0));
         positions[msg.sender] = FuturesPosition({

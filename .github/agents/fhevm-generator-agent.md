@@ -39,7 +39,7 @@ import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
 6. Nama contract harus unik dan deskriptif
 7. Boleh implementasikan logika atau memanfaatkan library lainnya seperti openzeppelin atau uniswap
 
-# Contract categories yang harus divariasikan
+# Contract categories yang harus divariasikan kombinasikan dengan openzeppelin maupun uniswap framework
 - Confidential ERC20 token
 - Encrypted voting / governance
 - Private auction (blind bid)

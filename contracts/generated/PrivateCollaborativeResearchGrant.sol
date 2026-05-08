@@ -55,7 +55,7 @@ contract PrivateCollaborativeResearchGrant is ZamaEthereumConfig, Ownable, Reent
     event ReviewCompleted(uint256 indexed grantId);
     event DeliverableScoreUpdated(uint256 indexed grantId, address institution);
 
-    constructor(externalEuint64 encPool, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encPool, bytes memory proof) Ownable(msg.sender) {
         _totalGrantPool = FHE.fromExternal(encPool, proof);
         FHE.allowThis(_totalGrantPool);
         isProgramOfficer[msg.sender] = true;
