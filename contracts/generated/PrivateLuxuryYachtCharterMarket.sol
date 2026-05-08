@@ -112,13 +112,13 @@ contract PrivateLuxuryYachtCharterMarket is ZamaEthereumConfig, Ownable, Reentra
         euint64 agreedRate = FHE.fromExternal(encAgreedRate, rProof);
         euint64 apaAllowance = FHE.fromExternal(encAPA, aProof);
         euint64 commission = FHE.fromExternal(encCommission, cProof);
-        euint32 weeks = FHE.fromExternal(encWeeks, wProof);
+        euint32 charterWeekCount = FHE.fromExternal(encWeeks, wProof);
         euint64 total = FHE.add(FHE.add(agreedRate, apaAllowance), commission);
         id = bookingCount++;
         bookings[id] = CharterBooking({
             yachtId: yachtId, charterer: msg.sender,
             agreedRateUSD: agreedRate, apaAllowanceUSD: apaAllowance,
-            brokerCommissionUSD: commission, charterWeeks: weeks,
+            brokerCommissionUSD: commission, charterWeeks: charterWeekCount,
             totalCharterCostUSD: total,
             embarked: embarkDate, disembarked: 0, status: CharterStatus.Confirmed
         });

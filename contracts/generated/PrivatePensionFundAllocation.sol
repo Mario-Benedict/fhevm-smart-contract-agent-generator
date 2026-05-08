@@ -48,9 +48,9 @@ contract PrivatePensionFundAllocation is ZamaEthereumConfig, Ownable, Reentrancy
     event MemberRetired(address indexed member);
 
     constructor(
-        externalEuint64 encEquities, bytes calldata eqProof,
-        externalEuint64 encFixed, bytes calldata fProof,
-        externalEuint64 encCash, bytes calldata cProof
+        externalEuint64 encEquities, bytes memory eqProof,
+        externalEuint64 encFixed, bytes memory fProof,
+        externalEuint64 encCash, bytes memory cProof
     ) Ownable(msg.sender) {
         euint64 eq = FHE.fromExternal(encEquities, eqProof);
         euint64 fi = FHE.fromExternal(encFixed, fProof);

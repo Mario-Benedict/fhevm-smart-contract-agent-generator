@@ -55,7 +55,7 @@ contract EncryptedElectricVehicleChargingMarket is ZamaEthereumConfig, Ownable, 
     event DemandResponseUpdated(uint256 indexed stationId);
     event VehicleTopUp(address indexed vehicle);
 
-    constructor(externalEuint64 encBaseRate, bytes calldata brProof) Ownable(msg.sender) {
+    constructor(externalEuint64 encBaseRate, bytes memory brProof) Ownable(msg.sender) {
         _baseRateUSDPerKWh = FHE.fromExternal(encBaseRate, brProof);
         _networkTotalEnergyKWh = FHE.asEuint64(0);
         FHE.allowThis(_baseRateUSDPerKWh);

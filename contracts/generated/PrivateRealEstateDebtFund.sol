@@ -63,7 +63,7 @@ contract PrivateRealEstateDebtFund is ZamaEthereumConfig, Ownable, ReentrancyGua
     event InvestorCommitted(address indexed investor);
 
     constructor(
-        externalEuint64 encInitialNAV, bytes calldata proof
+        externalEuint64 encInitialNAV, bytes memory proof
     ) Ownable(msg.sender) {
         _totalFundNAV = FHE.fromExternal(encInitialNAV, proof);
         fundMetrics = FundMetrics({

@@ -98,7 +98,8 @@ contract DeFiConfidentialFuturesClearing is ZamaEthereumConfig, Ownable, Reentra
         FuturesPosition storage p = positions[trader];
         require(p.open && !p.liquidated, "Not active");
         euint64 effectiveMargin = FHE.add(p.margin, p.unrealizedPnL);
-        euint64 marginRatio = FHE.div(FHE.mul(effectiveMargin, 10000), p.notionalValue);
+        euint64 effectiveMarginScaled = FHE.mul(effectiveMargin, 10000);
+        euint64 marginRatio = FHE.div(effectiveMarginScaled, p.notionalValue);
         ebool belowMaintenance = FHE.lt(marginRatio, p.maintenanceMarginBps);
         bool isMarginCall = FHE.isInitialized(belowMaintenance);
         if (isMarginCall) emit MarginCall(trader);

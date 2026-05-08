@@ -55,8 +55,8 @@ contract GameBlindPokerCashTable is ZamaEthereumConfig, Ownable, ReentrancyGuard
     event PlayerLeft(address indexed player, uint8 seat);
 
     constructor(
-        externalEuint64 encBigBlind, bytes calldata bbProof,
-        externalEuint64 encSmallBlind, bytes calldata sbProof
+        externalEuint64 encBigBlind, bytes memory bbProof,
+        externalEuint64 encSmallBlind, bytes memory sbProof
     ) Ownable(msg.sender) {
         euint64 bb = FHE.fromExternal(encBigBlind, bbProof);
         euint64 sb = FHE.fromExternal(encSmallBlind, sbProof);

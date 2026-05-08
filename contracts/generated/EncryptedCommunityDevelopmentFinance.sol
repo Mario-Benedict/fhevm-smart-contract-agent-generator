@@ -56,7 +56,7 @@ contract EncryptedCommunityDevelopmentFinance is ZamaEthereumConfig, Ownable, Re
     event RepaymentReceived(uint256 indexed loanId);
     event ImpactMetricsSubmitted(uint256 indexed metricsId, uint256 loanId);
 
-    constructor(externalEuint64 encCapital, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encCapital, bytes memory proof) Ownable(msg.sender) {
         _availableLoanCapital = FHE.fromExternal(encCapital, proof);
         _totalLoanBook = FHE.asEuint64(0);
         _totalDefaulted = FHE.asEuint64(0);
