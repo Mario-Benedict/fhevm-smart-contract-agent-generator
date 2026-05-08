@@ -48,9 +48,9 @@ contract PrivatePensionFundAllocation is ZamaEthereumConfig, Ownable, Reentrancy
     event MemberRetired(address indexed member);
 
     constructor(
-        externalEuint64 encEquities, bytes calldata eqProof,
-        externalEuint64 encFixed, bytes calldata fProof,
-        externalEuint64 encCash, bytes calldata cProof
+        externalEuint64 encEquities, bytes memory eqProof,
+        externalEuint64 encFixed, bytes memory fProof,
+        externalEuint64 encCash, bytes memory cProof
     ) Ownable(msg.sender) {
         euint64 eq = FHE.fromExternal(encEquities, eqProof);
         euint64 fi = FHE.fromExternal(encFixed, fProof);
@@ -149,7 +149,7 @@ contract PrivatePensionFundAllocation is ZamaEthereumConfig, Ownable, Reentrancy
         allocation.liabilitiesUSD = _totalMemberLiabilities;
         ebool hasLiabilities = FHE.gt(allocation.liabilitiesUSD, FHE.asEuint64(0));
         allocation.fundingRatioBps = FHE.select(hasLiabilities,
-            FHE.div(FHE.mul(allocation.totalAUMUSD, FHE.asEuint64(10000)), allocation.liabilitiesUSD),
+            FHE.div(FHE.mul(allocation.totalAUMUSD, 10000), allocation.liabilitiesUSD),
             FHE.asEuint64(0));
         FHE.allowThis(allocation.fundingRatioBps);
         FHE.allow(allocation.fundingRatioBps, owner());

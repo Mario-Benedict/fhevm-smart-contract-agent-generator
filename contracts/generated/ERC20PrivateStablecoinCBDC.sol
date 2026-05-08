@@ -46,8 +46,8 @@ contract ERC20PrivateStablecoinCBDC is ZamaEthereumConfig, Ownable, ReentrancyGu
     event AMLAlert(address indexed account);
 
     constructor(
-        externalEuint64 encInitialSupply, bytes calldata isProof,
-        externalEuint64 encReserveRatio, bytes calldata rrProof
+        externalEuint64 encInitialSupply, bytes memory isProof,
+        externalEuint64 encReserveRatio, bytes memory rrProof
     ) Ownable(msg.sender) {
         euint64 supply = FHE.fromExternal(encInitialSupply, isProof);
         euint64 reserve = FHE.fromExternal(encReserveRatio, rrProof);

@@ -69,7 +69,7 @@ contract DeFiPrivateRevenueSplit is ZamaEthereumConfig, Ownable {
             Contributor storage contrib = contributors[c];
             if (!contrib.active) continue;
             // share = revenue * splitBps / 10000 (euint16 to euint64 approximation)
-            euint64 share = FHE.div(FHE.mul(revenue, FHE.asEuint64(1)), 10000);
+            euint64 share = FHE.div(FHE.mul(revenue, 1), 10000);
             contrib.accumulated = FHE.add(contrib.accumulated, share);
             _totalDistributed = FHE.add(_totalDistributed, share);
             FHE.allowThis(contrib.accumulated);

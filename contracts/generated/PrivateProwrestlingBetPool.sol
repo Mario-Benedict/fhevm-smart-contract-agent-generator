@@ -93,7 +93,7 @@ contract PrivateProwrestlingBetPool is ZamaEthereumConfig, Ownable {
         ebool hasBet = FHE.gt(userBet, FHE.asEuint64(0));
         // Proportional payout: payout = userBet * 1_000_000 / totalPool (caller interprets scale)
         euint64 payout = FHE.select(hasBet,
-            FHE.div(FHE.mul(userBet, FHE.asEuint64(1_000_000)), 1_000_000),
+            FHE.div(FHE.mul(userBet, 1_000_000), 1_000_000),
             FHE.asEuint64(0));
         _winnings[msg.sender] = FHE.add(_winnings[msg.sender], payout);
         FHE.allowThis(_winnings[msg.sender]);

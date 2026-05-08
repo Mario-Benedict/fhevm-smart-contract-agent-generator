@@ -55,7 +55,7 @@ contract EncryptedLuxuryWatchAuthentication is ZamaEthereumConfig, Ownable, Reen
     euint64 private _totalRegisteredValue;
     euint64 private _totalSalesVolume;
 
-    event WatchRegistered(uint256 indexed id, WatchBrand brand, string reference);
+    event WatchRegistered(uint256 indexed id, WatchBrand brand, string refNumber);
     event WatchAuthenticated(uint256 indexed id);
     event WatchTransferred(uint256 indexed id, address from, address to);
     event WatchFlaggedStolen(uint256 indexed id);
@@ -81,7 +81,7 @@ contract EncryptedLuxuryWatchAuthentication is ZamaEthereumConfig, Ownable, Reen
     function registerWatch(
         WatchBrand brand,
         string calldata modelName,
-        string calldata reference,
+        string calldata refNumber,
         uint256 manufactureYear,
         externalEuint32 encSerial, bytes calldata sProof,
         externalEuint64 encRetail, bytes calldata rProof,
@@ -95,7 +95,7 @@ contract EncryptedLuxuryWatchAuthentication is ZamaEthereumConfig, Ownable, Reen
         id = watchCount++;
         watches[id] = LuxuryWatch({
             currentOwner: msg.sender, brand: brand, modelName: modelName,
-            referenceNumber: reference, serialHash: serial,
+            referenceNumber: refNumber, serialHash: serial,
             originalRetailUSD: retail, currentInsuredValueUSD: insured,
             lastServiceCostUSD: FHE.asEuint64(0), conditionScore: condition,
             manufactureYear: manufactureYear, status: AuthStatus.Unverified
@@ -111,7 +111,7 @@ contract EncryptedLuxuryWatchAuthentication is ZamaEthereumConfig, Ownable, Reen
         FHE.allowThis(watches[id].conditionScore);
         FHE.allow(watches[id].conditionScore, msg.sender);
         FHE.allowThis(_totalRegisteredValue);
-        emit WatchRegistered(id, brand, reference);
+        emit WatchRegistered(id, brand, refNumber);
     }
 
     function authenticateWatch(uint256 watchId) external onlyAuthenticator {

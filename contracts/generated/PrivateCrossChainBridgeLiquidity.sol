@@ -133,7 +133,7 @@ contract PrivateCrossChainBridgeLiquidity is ZamaEthereumConfig, Ownable, Reentr
         euint64 bond = FHE.fromExternal(encBond, proof);
         relayers[relayer_] = Relayer({
             relayer: relayer_, bondAmountUSD: bond,
-            slashableAmount: FHE.div(bond, FHE.asEuint64(2)),
+            slashableAmount: FHE.div(bond, 2),
             successfulRelays: FHE.asEuint64(0), failedRelays: FHE.asEuint64(0),
             authorized: true
         });

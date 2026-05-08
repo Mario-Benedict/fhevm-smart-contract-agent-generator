@@ -106,7 +106,7 @@ contract VotingCooperativeDividend is ZamaEthereumConfig, Ownable {
         for (uint256 i = 0; i < memberList.length; i++) {
             address mAddr = memberList[i];
             Member storage mem = members[mAddr];
-            euint64 share = FHE.div(FHE.mul(r.totalProfit, FHE.asEuint64(1)), uint64(memberList.length));
+            euint64 share = FHE.div(FHE.mul(r.totalProfit, 1), uint64(memberList.length));
             mem.dividendBalance = FHE.add(mem.dividendBalance, share);
             FHE.allowThis(mem.dividendBalance);
             FHE.allow(mem.dividendBalance, mAddr);

@@ -61,7 +61,7 @@ contract EncryptedPrisonRehabilitation is ZamaEthereumConfig, Ownable, Reentranc
     event ParoleDecision(uint256 indexed hearingId, bool approved);
     event FundAllocated(bytes32 indexed inmateHash);
 
-    constructor(externalEuint64 encPool, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encPool, bytes memory proof) Ownable(msg.sender) {
         _totalReintegrationPool = FHE.fromExternal(encPool, proof);
         FHE.allowThis(_totalReintegrationPool);
         isCaseworker[msg.sender] = true;
@@ -197,7 +197,7 @@ contract EncryptedPrisonRehabilitation is ZamaEthereumConfig, Ownable, Reentranc
         // Final = (board*60 + victim*40) / 100
         euint8 paroleRec = records[h.inmateHash].paroleRecommendation;
         euint8 finalScore = FHE.div(
-            FHE.add(FHE.mul(boardScore, FHE.asEuint8(60)), FHE.mul(victimScore, FHE.asEuint8(40))),
+            FHE.add(FHE.mul(boardScore, 60), FHE.mul(victimScore, FHE.asEuint8(40))),
             100
         );
         h.boardScore = boardScore;

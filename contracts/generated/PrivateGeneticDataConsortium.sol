@@ -127,7 +127,7 @@ contract PrivateGeneticDataConsortium is ZamaEthereumConfig, Ownable, Reentrancy
             active: true
         });
         // Distribute 70% to contributor, 30% to pool
-        euint64 contributorShare = FHE.div(FHE.mul(actual, FHE.asEuint64(7000)), 10000);
+        euint64 contributorShare = FHE.div(FHE.mul(actual, 7000), 10000);
         euint64 poolShare = FHE.sub(actual, contributorShare);
         rewards[ds.contributor].totalFeeShare = FHE.add(rewards[ds.contributor].totalFeeShare, contributorShare);
         _totalFundPool = FHE.add(_totalFundPool, poolShare);

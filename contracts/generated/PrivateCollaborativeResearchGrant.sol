@@ -55,7 +55,7 @@ contract PrivateCollaborativeResearchGrant is ZamaEthereumConfig, Ownable, Reent
     event ReviewCompleted(uint256 indexed grantId);
     event DeliverableScoreUpdated(uint256 indexed grantId, address institution);
 
-    constructor(externalEuint64 encPool, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encPool, bytes memory proof) Ownable(msg.sender) {
         _totalGrantPool = FHE.fromExternal(encPool, proof);
         FHE.allowThis(_totalGrantPool);
         isProgramOfficer[msg.sender] = true;
@@ -150,7 +150,7 @@ contract PrivateCollaborativeResearchGrant is ZamaEthereumConfig, Ownable, Reent
         euint64 imp = FHE.fromExternal(encImpact, impProof);
         // Composite: 40% scientific + 30% feasibility + 30% impact
         euint64 composite = FHE.div(
-            FHE.add(FHE.add(FHE.mul(sci, FHE.asEuint64(40)), FHE.mul(feas, FHE.asEuint64(30))), FHE.mul(imp, FHE.asEuint64(30))),
+            FHE.add(FHE.add(FHE.mul(sci, 40), FHE.mul(feas, FHE.asEuint64(30))), FHE.mul(imp, FHE.asEuint64(30))),
             100
         );
         reviews[grantId] = PeerReviewPanel({

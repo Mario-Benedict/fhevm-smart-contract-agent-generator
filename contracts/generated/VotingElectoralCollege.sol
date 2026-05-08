@@ -32,7 +32,7 @@ contract VotingElectoralCollege is ZamaEthereumConfig, Ownable {
     event VoteCast(address indexed delegate, uint256 candidateId);
     event ElectionClosed();
 
-    constructor(euint32 threshold) {
+    constructor(euint32 threshold) Ownable(msg.sender) {
         _majorityThreshold = threshold;
         FHE.allowThis(_majorityThreshold);
         electionOpen = false;

@@ -107,7 +107,7 @@ contract PrivateEquipmentRentalPlatform is ZamaEthereumConfig, Ownable, Reentran
             startDate: block.timestamp, endDate: endDate, returned: false, deposited: true
         });
         eq.available = false;
-        euint64 platformFee = FHE.div(totalRent, FHE.asEuint64(20)); // 5% fee
+        euint64 platformFee = FHE.div(totalRent, 20); // 5% fee
         _totalPlatformRevenue = FHE.add(_totalPlatformRevenue, platformFee);
         FHE.allowThis(rentals[rentalId].totalRentUSD);
         FHE.allowThis(rentals[rentalId].depositPaid);

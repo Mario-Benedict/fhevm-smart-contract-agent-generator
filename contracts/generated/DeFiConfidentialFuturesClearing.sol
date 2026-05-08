@@ -52,9 +52,10 @@ contract DeFiConfidentialFuturesClearing is ZamaEthereumConfig, Ownable, Reentra
         require(!positions[msg.sender].open, "Position exists");
         euint64 notional = FHE.fromExternal(encNotional, nProof);
         euint64 margin = FHE.fromExternal(encMargin, mProof);
-        // Check margin ratio >= maintenance
-        euint64 marginRatio = FHE.div(FHE.mul(margin, 10000), notional);
-        ebool adequate = FHE.ge(marginRatio, _defaultMaintenanceMarginBps);
+        // Check margin >= maintenance threshold (simplified: margin * 10000 >= notional * maintenanceBps)
+        euint64 marginScaled = FHE.mul(margin, FHE.asEuint64(10000));
+        euint64 requiredMargin = FHE.mul(notional, _defaultMaintenanceMarginBps);
+        ebool adequate = FHE.ge(marginScaled, requiredMargin);
         euint64 actualNotional = FHE.select(adequate, notional, FHE.asEuint64(0));
         positions[msg.sender] = FuturesPosition({
             notionalValue: actualNotional,
@@ -98,8 +99,9 @@ contract DeFiConfidentialFuturesClearing is ZamaEthereumConfig, Ownable, Reentra
         FuturesPosition storage p = positions[trader];
         require(p.open && !p.liquidated, "Not active");
         euint64 effectiveMargin = FHE.add(p.margin, p.unrealizedPnL);
-        euint64 marginRatio = FHE.div(FHE.mul(effectiveMargin, 10000), p.notionalValue);
-        ebool belowMaintenance = FHE.lt(marginRatio, p.maintenanceMarginBps);
+        euint64 effectiveMarginScaled = FHE.mul(FHE.add(p.margin, p.unrealizedPnL), FHE.asEuint64(10000));
+        euint64 requiredMargin = FHE.mul(p.notionalValue, p.maintenanceMarginBps);
+        ebool belowMaintenance = FHE.lt(effectiveMarginScaled, requiredMargin);
         bool isMarginCall = FHE.isInitialized(belowMaintenance);
         if (isMarginCall) emit MarginCall(trader);
         return isMarginCall;

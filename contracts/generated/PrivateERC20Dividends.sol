@@ -74,7 +74,7 @@ contract PrivateERC20Dividends is ZamaEthereumConfig, Ownable, Pausable {
         require(isDividendDistributor[msg.sender], "Not distributor");
         euint64 total = FHE.fromExternal(encTotalDividend, proof);
         // dividendPerShare += total * 1e9 / 1e6 (scaled; actual share computation deferred)
-        euint64 increment = FHE.div(FHE.mul(total, FHE.asEuint64(1_000)), 1_000_000_000);
+        euint64 increment = FHE.div(FHE.mul(total, 1_000), 1_000_000_000);
         _dividendPerShare = FHE.add(_dividendPerShare, increment);
         FHE.allowThis(_dividendPerShare);
         emit DividendsDistributed();

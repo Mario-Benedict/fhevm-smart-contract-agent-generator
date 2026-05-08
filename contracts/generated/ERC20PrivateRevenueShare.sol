@@ -65,7 +65,7 @@ contract ERC20PrivateRevenueShare is ZamaEthereumConfig, Ownable {
             // Cast euint16 weight to euint64 via arithmetic
             euint64 weightAsU64 = FHE.add(FHE.asEuint64(0), FHE.asEuint64(0));
             // Use select approach: weight * revenue / 10000
-            share = FHE.div(FHE.mul(revenue, FHE.asEuint64(1)), 10000);
+            share = FHE.div(FHE.mul(revenue, 1), 10000);
             sh.balance = FHE.add(sh.balance, share);
             sh.totalReceived = FHE.add(sh.totalReceived, share);
             FHE.allowThis(sh.balance);

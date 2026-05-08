@@ -106,7 +106,7 @@ contract EncryptedSportsBettingExchange is ZamaEthereumConfig, Ownable, Reentran
         // Liability for lay = stake * (odds - 10000) / 10000
         euint64 liability = side == BetSide.LAY ? profit : FHE.asEuint64(0);
         // Exchange fee: 2% of potential profit
-        euint64 fee = FHE.div(profit, FHE.asEuint64(50));
+        euint64 fee = FHE.div(profit, 50);
         profit = FHE.sub(profit, fee);
         mkt.exchangeFeePool = FHE.add(mkt.exchangeFeePool, fee);
         _totalExchangeFees = FHE.add(_totalExchangeFees, fee);

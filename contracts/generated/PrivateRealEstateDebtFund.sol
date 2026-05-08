@@ -63,7 +63,7 @@ contract PrivateRealEstateDebtFund is ZamaEthereumConfig, Ownable, ReentrancyGua
     event InvestorCommitted(address indexed investor);
 
     constructor(
-        externalEuint64 encInitialNAV, bytes calldata proof
+        externalEuint64 encInitialNAV, bytes memory proof
     ) Ownable(msg.sender) {
         _totalFundNAV = FHE.fromExternal(encInitialNAV, proof);
         fundMetrics = FundMetrics({
@@ -100,7 +100,7 @@ contract PrivateRealEstateDebtFund is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 fee = FHE.fromExternal(encFee, fProof);
         euint64 dscr = FHE.fromExternal(encDSCR, dscrProof);
         euint64 credit = FHE.fromExternal(encCredit, crProof);
-        euint64 ltv = FHE.div(FHE.mul(loanAmt, FHE.asEuint64(10000)), propValue);
+        euint64 ltv = FHE.div(FHE.mul(loanAmt, 10000), propValue);
         id = loanCount++;
         loans[id] = RealEstateLoan({
             loanId: loanId, borrower: borrower, propertyType: ptype,
@@ -141,7 +141,7 @@ contract PrivateRealEstateDebtFund is ZamaEthereumConfig, Ownable, ReentrancyGua
         RealEstateLoan storage loan = loans[loanId];
         loan.status = newStatus;
         if (newStatus == LoanStatus.DEFAULTED) {
-            euint64 provision = FHE.div(loan.loanAmountUSD, FHE.asEuint64(2));
+            euint64 provision = FHE.div(loan.loanAmountUSD, 2);
             fundMetrics.lossProvision = FHE.add(fundMetrics.lossProvision, provision);
             FHE.allowThis(fundMetrics.lossProvision);
         }

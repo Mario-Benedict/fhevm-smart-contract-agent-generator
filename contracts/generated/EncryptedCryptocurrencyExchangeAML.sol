@@ -110,7 +110,7 @@ contract EncryptedCryptocurrencyExchangeAML is ZamaEthereumConfig, Ownable, Reen
         UserProfile storage senderProfile = profiles[sender];
         if (FHE.isInitialized(senderProfile.transactionVolume30d)) {
             senderProfile.transactionVolume30d = FHE.add(senderProfile.transactionVolume30d, amount);
-            senderProfile.riskScore = FHE.add(senderProfile.riskScore, FHE.div(mlScore, FHE.asEuint64(10)));
+            senderProfile.riskScore = FHE.add(senderProfile.riskScore, FHE.div(mlScore, 10));
             FHE.allowThis(senderProfile.transactionVolume30d);
             FHE.allowThis(senderProfile.riskScore);
         }
