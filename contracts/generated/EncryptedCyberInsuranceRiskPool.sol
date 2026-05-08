@@ -109,7 +109,7 @@ contract EncryptedCyberInsuranceRiskPool is ZamaEthereumConfig, Ownable, Reentra
         });
         _totalPremiumPool = FHE.add(_totalPremiumPool, premium);
         // Reserve 40% for claims
-        euint64 reserve = FHE.div(FHE.mul(premium, FHE.asEuint64(4000)), 10000);
+        euint64 reserve = FHE.div(FHE.mul(premium, 4000), 10000);
         _totalClaimReserve = FHE.add(_totalClaimReserve, reserve);
         FHE.allowThis(policies[id].premiumUSD);
         FHE.allowThis(policies[id].coverageLimitUSD);

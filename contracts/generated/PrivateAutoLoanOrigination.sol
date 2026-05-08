@@ -72,7 +72,7 @@ contract PrivateAutoLoanOrigination is ZamaEthereumConfig, Ownable, ReentrancyGu
         euint8 creditScore = FHE.fromExternal(encCreditScore, csProof);
         euint64 annualRate = FHE.fromExternal(encAnnualRate, arProof);
         euint64 loanAmt = FHE.sub(price, downPmt);
-        euint64 ltv = FHE.div(FHE.mul(loanAmt, FHE.asEuint64(100)), uint64(1)); // simplified ltv calc
+        euint64 ltv = FHE.div(FHE.mul(loanAmt, 100), uint64(1)); // simplified ltv calc
         // Monthly payment = loanAmt * monthlyRate / (1 - (1+r)^-n) approximated
         euint64 monthlyPayment = FHE.div(loanAmt, uint64(termMonths));
         loanId = loanCount++;

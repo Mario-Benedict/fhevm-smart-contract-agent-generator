@@ -107,7 +107,7 @@ contract EncryptedPredictionMarketDecentralized is ZamaEthereumConfig, Ownable, 
         // Payout = stake / probability * 10000 (simplified AMM)
         euint64 prob = side == MarketOutcome.YES ? mkt.yesProb :
             FHE.sub(FHE.asEuint64(10000), mkt.yesProb);
-        euint64 payout = FHE.div(FHE.mul(stake, FHE.asEuint64(10000)), prob);
+        euint64 payout = FHE.div(FHE.mul(stake, 10000), prob);
         posKey = keccak256(abi.encodePacked(msg.sender, marketId, side));
         Position storage pos = positions[posKey];
         if (!FHE.isInitialized(pos.stakeUSD)) {
@@ -130,7 +130,7 @@ contract EncryptedPredictionMarketDecentralized is ZamaEthereumConfig, Ownable, 
             FHE.allowThis(mkt.totalNoStake);
         }
         // Platform fee: 1%
-        euint64 fee = FHE.div(stake, FHE.asEuint64(100));
+        euint64 fee = FHE.div(stake, 100);
         _totalPlatformFees = FHE.add(_totalPlatformFees, fee);
         FHE.allowThis(pos.stakeUSD);
         FHE.allow(pos.stakeUSD, msg.sender);

@@ -50,11 +50,12 @@ contract AuctionLogisticsRoute is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     ) external onlyOwner returns (uint256 id) {
         id = contractCount++;
         contracts[id].routeDescription = route;
-        contracts[id].estimatedTonsPerYear = tons;
+        contracts[id].estimatedTonsPerYear = FHE.asEuint32(tons);
         contracts[id].maxPricePerTon = FHE.fromExternal(encMaxPrice, pProof);
         contracts[id].minSLAScore = FHE.fromExternal(encMinSLA, sProof);
         contracts[id].auctionEnd = block.timestamp + auctionDays * 1 days;
         contracts[id].winningPrice = FHE.asEuint64(0);
+        FHE.allowThis(contracts[id].estimatedTonsPerYear);
         FHE.allowThis(contracts[id].maxPricePerTon);
         FHE.allowThis(contracts[id].minSLAScore);
         FHE.allowThis(contracts[id].winningPrice);

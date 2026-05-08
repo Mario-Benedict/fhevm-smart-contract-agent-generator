@@ -108,7 +108,7 @@ contract NuclearFacilityClearance is ZamaEthereumConfig, Ownable, ReentrancyGuar
         zoneEntryLog[worker][zoneId] = true;
         // Update alert level
         ebool nearLimit = FHE.ge(workers[worker].cumulativeExposureMSv,
-            FHE.div(FHE.mul(workers[worker].annualLimitMSv, FHE.asEuint32(80)), 100));
+            FHE.div(FHE.mul(workers[worker].annualLimitMSv, 80), 100));
         ebool atLimit = FHE.ge(workers[worker].cumulativeExposureMSv, workers[worker].annualLimitMSv);
         workers[worker].alertLevel = FHE.select(atLimit, FHE.asEuint8(3),
             FHE.select(nearLimit, FHE.asEuint8(2), FHE.asEuint8(1)));

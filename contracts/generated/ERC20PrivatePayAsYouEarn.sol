@@ -107,7 +107,7 @@ contract ERC20PrivatePayAsYouEarn is ZamaEthereumConfig, Ownable, ReentrancyGuar
         require(emp.active, "Inactive employee");
         euint64 gross = emp.grossSalaryMonthly;
         // Personal allowance credit: taxCode * 100 / 12 months
-        euint64 personalAllowanceMonthly = FHE.div(FHE.mul(emp.taxCodeMultiplier, FHE.asEuint64(100)), 12);
+        euint64 personalAllowanceMonthly = FHE.div(FHE.mul(emp.taxCodeMultiplier, 100), 12);
         euint64 taxableIncome = FHE.select(
             FHE.ge(gross, personalAllowanceMonthly),
             FHE.sub(gross, personalAllowanceMonthly),
@@ -117,9 +117,9 @@ contract ERC20PrivatePayAsYouEarn is ZamaEthereumConfig, Ownable, ReentrancyGuar
         euint64 taxDue = FHE.div(FHE.mul(taxableIncome, FHE.isInitialized(taxBrackets[0].rateBps) ?
             taxBrackets[0].rateBps : FHE.asEuint64(2000)), 10000);
         // NI employee: 12% on earnings above threshold (simplified: 8% of gross)
-        euint64 niEmployee = FHE.div(FHE.mul(gross, FHE.asEuint64(800)), 10000);
+        euint64 niEmployee = FHE.div(FHE.mul(gross, 800), 10000);
         // NI employer: 13.8% of gross (simplified as 1380 bps)
-        euint64 niEmployer = FHE.div(FHE.mul(gross, FHE.asEuint64(1380)), 10000);
+        euint64 niEmployer = FHE.div(FHE.mul(gross, 1380), 10000);
         euint64 netPay = FHE.sub(FHE.sub(gross, taxDue), niEmployee);
         // Mint net pay as tokens to employee
         emp.tokenBalance = FHE.add(emp.tokenBalance, netPay);
