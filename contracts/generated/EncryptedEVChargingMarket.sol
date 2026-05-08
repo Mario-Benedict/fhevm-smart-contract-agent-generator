@@ -148,7 +148,7 @@ contract EncryptedElectricVehicleChargingMarket is ZamaEthereumConfig, Ownable, 
         );
         // Apply DR surcharge: if demand signal > 5000, bill *= 1.2
         ebool highDemand = FHE.gt(st.demandResponseSig, FHE.asEuint64(5000));
-        euint64 adjustedBill = FHE.select(highDemand, FHE.div(FHE.mul(bill, FHE.asEuint64(12000)), 10000), bill);
+        euint64 adjustedBill = FHE.select(highDemand, FHE.div(FHE.mul(bill, 12000), 10000), bill);
         sess.finalBillUSD = adjustedBill;
         // Deduct from prepaid balance
         ebool hasFunds = FHE.ge(vehicles[msg.sender].prepaidBalance, adjustedBill);

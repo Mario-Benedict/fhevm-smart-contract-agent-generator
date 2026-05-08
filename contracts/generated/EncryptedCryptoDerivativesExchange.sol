@@ -127,8 +127,8 @@ contract EncryptedCryptoDerivativesExchange is ZamaEthereumConfig, Ownable, Reen
         euint64 actualMargin = FHE.select(hasMargin, margin, accounts[msg.sender].availableMargin);
         // Liquidation price: for LONG = entryPrice * (1 - 1/leverage), SHORT = entryPrice * (1 + 1/leverage)
         euint64 liqPrice = direction == Direction.LONG ?
-            FHE.div(FHE.mul(mkt.markPriceUSD, FHE.asEuint64(9000)), 10000) :
-            FHE.div(FHE.mul(mkt.markPriceUSD, FHE.asEuint64(11000)), 10000);
+            FHE.div(FHE.mul(mkt.markPriceUSD, 9000), 10000) :
+            FHE.div(FHE.mul(mkt.markPriceUSD, 11000), 10000);
         bytes32 posKey = keccak256(abi.encodePacked(msg.sender, marketId));
         positions[posKey] = Position({
             marketId: marketId, direction: direction,

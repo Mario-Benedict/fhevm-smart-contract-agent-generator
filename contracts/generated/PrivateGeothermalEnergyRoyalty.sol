@@ -5,201 +5,166 @@ import "@fhevm/solidity/lib/FHE.sol";
 import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /// @title PrivateGeothermalEnergyRoyalty
-/// @notice Geothermal energy production royalty distribution with encrypted
-///         well output, steam quality, megawatt-hour production, and
-///         royalty payment calculations per energy developer.
-contract PrivateGeothermalEnergyRoyalty is ZamaEthereumConfig, Ownable, ReentrancyGuard {
-    enum WellStatus { Exploration, Development, Production, Workover, Abandoned }
-    enum SteamQuality { WetSteam, DrySteam, HighEnthalpy, BinaryFluid }
+/// @notice Geothermal energy field: encrypted well output (MWh), encrypted royalty tiers
+///         for landowners, encrypted revenue splits between developer and government.
+///         Automatic trigger for minimum production royalty guarantees.
+contract PrivateGeothermalEnergyRoyalty is ZamaEthereumConfig, Ownable, ReentrancyGuard, Pausable {
+    enum WellStatus { Drilling, Active, Maintenance, Depleted, Capped }
 
     struct GeothermalWell {
-        uint256 wellId;
-        string wellName;
-        string fieldLocation;
-        SteamQuality steamQuality;
+        address operator;
+        string wellId;
+        string location;
+        euint32 capacityKW;           // encrypted installed capacity kW
+        euint64 monthlyOutputMWh;     // encrypted monthly production
+        euint64 revenuePerMWhUSD;     // encrypted electricity sale price
+        euint32 royaltyBps;           // encrypted landowner royalty in bps
+        euint64 governmentLevyBps;    // encrypted government levy bps
+        euint64 operatorNetUSD;       // encrypted operator net revenue
+        euint64 landownerRoyaltyUSD;  // encrypted accumulated landowner royalty
+        uint256 commissionedAt;
         WellStatus status;
-        euint32 reservoirTempCelsius;  // encrypted reservoir temperature
-        euint64 installedCapacityKW;   // encrypted nameplate capacity
-        euint64 cumulativeMWhProduced; // encrypted lifetime production
-        euint32 capacityFactorBps;     // encrypted capacity factor
-        euint32 steamPressureBarX10;   // encrypted steam pressure * 10
-        euint64 royaltyPaidUSD;        // encrypted royalties paid to date
-        address developer;
     }
 
-    struct ProductionRecord {
+    struct LandownerRecord {
+        address landowner;
         uint256 wellId;
-        euint64 grossMWhProduced;      // encrypted gross generation
-        euint64 ownUseMWh;             // encrypted parasitic load
-        euint64 netMWhExported;        // encrypted net export
-        euint64 revenueUSD;            // encrypted gross revenue
-        euint64 royaltyAmountUSD;      // encrypted royalty payment
-        uint256 periodStart;
-        uint256 periodEnd;
-        bool audited;
-    }
-
-    struct RoyaltyTerms {
-        euint32 basRoyaltyRateBps;     // encrypted base royalty %
-        euint32 progressiveTierBps;    // encrypted higher-tier royalty
-        euint64 tierThresholdMWh;      // encrypted threshold for higher rate
-        euint64 minimumAnnualRoyalty;  // encrypted floor royalty
+        euint64 totalRoyaltyEarnedUSD; // encrypted lifetime royalties
         bool active;
     }
 
     mapping(uint256 => GeothermalWell) private wells;
-    mapping(uint256 => ProductionRecord[]) private productionHistory;
-    mapping(address => RoyaltyTerms) private royaltyTerms;
-    mapping(address => bool) public isDeveloper;
-    mapping(address => bool) public isGovernmentRepresentative;
+    mapping(uint256 => LandownerRecord) private landownerRecords;
+    mapping(address => bool) public isGovernmentRegulator;
+    mapping(address => bool) public isOperator;
 
     uint256 public wellCount;
-    euint64 private _totalMWhGenerated;
-    euint64 private _totalRoyaltiesCollected;
-    euint64 private _totalRevenueAcrossWells;
+    uint256 public landownerCount;
+    euint64 private _totalSystemOutputMWh;
+    euint64 private _totalGovernmentLeviesUSD;
 
-    event WellRegistered(uint256 indexed wellId, string wellName, SteamQuality steamQuality);
-    event ProductionRecorded(uint256 indexed wellId, uint256 recordIndex);
-    event RoyaltyPaid(uint256 indexed wellId, address developer);
-    event WellStatusChanged(uint256 indexed wellId, WellStatus newStatus);
+    event WellRegistered(uint256 indexed id, string wellId, string location);
+    event ProductionReported(uint256 indexed id, uint256 reportedAt);
+    event RoyaltySettled(uint256 indexed wellId, uint256 landownerRecordId);
 
-    modifier onlyGovernment() {
-        require(isGovernmentRepresentative[msg.sender] || msg.sender == owner(), "Not government rep");
+    modifier onlyRegulator() {
+        require(isGovernmentRegulator[msg.sender] || msg.sender == owner(), "Not regulator");
+        _;
+    }
+
+    modifier onlyOperatorOrOwner() {
+        require(isOperator[msg.sender] || msg.sender == owner(), "Not operator");
         _;
     }
 
     constructor() Ownable(msg.sender) {
-        _totalMWhGenerated = FHE.asEuint64(0);
-        _totalRoyaltiesCollected = FHE.asEuint64(0);
-        _totalRevenueAcrossWells = FHE.asEuint64(0);
-        FHE.allowThis(_totalMWhGenerated);
-        FHE.allowThis(_totalRoyaltiesCollected);
-        FHE.allowThis(_totalRevenueAcrossWells);
-        isGovernmentRepresentative[msg.sender] = true;
+        _totalSystemOutputMWh = FHE.asEuint64(0);
+        _totalGovernmentLeviesUSD = FHE.asEuint64(0);
+        FHE.allowThis(_totalSystemOutputMWh);
+        FHE.allowThis(_totalGovernmentLeviesUSD);
+        isGovernmentRegulator[msg.sender] = true;
+        isOperator[msg.sender] = true;
     }
 
-    function addGovernmentRep(address rep) external onlyOwner { isGovernmentRepresentative[rep] = true; }
-    function registerDeveloper(address dev) external onlyOwner { isDeveloper[dev] = true; }
-
-    function setRoyaltyTerms(
-        address developer,
-        externalEuint32 encBaseRate, bytes calldata baseProof,
-        externalEuint32 encProgRate, bytes calldata progProof,
-        externalEuint64 encTierThreshold, bytes calldata tierProof,
-        externalEuint64 encMinAnnual, bytes calldata minProof
-    ) external onlyGovernment {
-        royaltyTerms[developer].basRoyaltyRateBps = FHE.fromExternal(encBaseRate, baseProof);
-        royaltyTerms[developer].progressiveTierBps = FHE.fromExternal(encProgRate, progProof);
-        royaltyTerms[developer].tierThresholdMWh = FHE.fromExternal(encTierThreshold, tierProof);
-        royaltyTerms[developer].minimumAnnualRoyalty = FHE.fromExternal(encMinAnnual, minProof);
-        royaltyTerms[developer].active = true;
-        FHE.allowThis(royaltyTerms[developer].basRoyaltyRateBps);
-        FHE.allowThis(royaltyTerms[developer].progressiveTierBps);
-        FHE.allowThis(royaltyTerms[developer].tierThresholdMWh);
-        FHE.allowThis(royaltyTerms[developer].minimumAnnualRoyalty);
-    }
+    function pause() external onlyOwner { _pause(); }
+    function unpause() external onlyOwner { _unpause(); }
+    function addRegulator(address r) external onlyOwner { isGovernmentRegulator[r] = true; }
+    function addOperator(address op) external onlyOwner { isOperator[op] = true; }
 
     function registerWell(
-        string calldata wellName,
-        string calldata fieldLocation,
-        SteamQuality steamQuality,
-        externalEuint32 encReservoirTemp, bytes calldata tempProof,
-        externalEuint64 encCapacityKW, bytes calldata capProof,
-        externalEuint32 encCapFactor, bytes calldata cfProof
-    ) external returns (uint256 wellId) {
-        require(isDeveloper[msg.sender], "Not registered developer");
-        wellId = wellCount++;
-        GeothermalWell storage w = wells[wellId];
-        w.wellId = wellId;
-        w.wellName = wellName;
-        w.fieldLocation = fieldLocation;
-        w.steamQuality = steamQuality;
-        w.status = WellStatus.Development;
-        w.reservoirTempCelsius = FHE.fromExternal(encReservoirTemp, tempProof);
-        w.installedCapacityKW = FHE.fromExternal(encCapacityKW, capProof);
-        w.cumulativeMWhProduced = FHE.asEuint64(0);
-        w.capacityFactorBps = FHE.fromExternal(encCapFactor, cfProof);
-        w.steamPressureBarX10 = FHE.asEuint32(0);
-        w.royaltyPaidUSD = FHE.asEuint64(0);
-        w.developer = msg.sender;
-        FHE.allowThis(w.reservoirTempCelsius); FHE.allow(w.reservoirTempCelsius, msg.sender);
-        FHE.allowThis(w.installedCapacityKW); FHE.allow(w.installedCapacityKW, msg.sender);
-        FHE.allowThis(w.cumulativeMWhProduced); FHE.allow(w.cumulativeMWhProduced, msg.sender);
-        FHE.allowThis(w.capacityFactorBps); FHE.allowThis(w.royaltyPaidUSD);
-        emit WellRegistered(wellId, wellName, steamQuality);
-    }
-
-    function recordProduction(
-        uint256 wellId,
-        externalEuint64 encGrossMWh, bytes calldata grossProof,
-        externalEuint64 encOwnUseMWh, bytes calldata ownProof,
-        externalEuint64 encRevenue, bytes calldata revProof,
-        uint256 periodStart, uint256 periodEnd
-    ) external nonReentrant {
-        GeothermalWell storage w = wells[wellId];
-        require(w.developer == msg.sender, "Not well developer");
-        require(w.status == WellStatus.Production, "Not in production");
-
-        euint64 grossMWh = FHE.fromExternal(encGrossMWh, grossProof);
-        euint64 ownUseMWh = FHE.fromExternal(encOwnUseMWh, ownProof);
-        euint64 revenue = FHE.fromExternal(encRevenue, revProof);
-        euint64 netMWh = FHE.sub(grossMWh, ownUseMWh);
-
-        // Compute royalty
-        RoyaltyTerms storage terms = royaltyTerms[w.developer];
-        ebool aboveTier = FHE.ge(netMWh, terms.tierThresholdMWh);
-        euint32 appliedRate = FHE.select(aboveTier, terms.progressiveTierBps, terms.basRoyaltyRateBps);
-        euint64 royalty = FHE.div(FHE.mul(revenue, FHE.asEuint64(appliedRate)), 10000);
-        // Apply minimum
-        ebool belowMin = FHE.lt(royalty, terms.minimumAnnualRoyalty);
-        euint64 finalRoyalty = FHE.select(belowMin, terms.minimumAnnualRoyalty, royalty);
-
-        uint256 recIdx = productionHistory[wellId].length;
-        productionHistory[wellId].push(ProductionRecord({
+        string calldata wellId,
+        string calldata location,
+        externalEuint32 encCapacity, bytes calldata capProof,
+        externalEuint64 encRevenueRate, bytes calldata rrProof,
+        externalEuint32 encRoyaltyBps, bytes calldata royProof,
+        externalEuint64 encLevyBps, bytes calldata levyProof
+    ) external onlyOperatorOrOwner whenNotPaused returns (uint256 id) {
+        euint32 cap = FHE.fromExternal(encCapacity, capProof);
+        euint64 rate = FHE.fromExternal(encRevenueRate, rrProof);
+        euint32 royBps = FHE.fromExternal(encRoyaltyBps, royProof);
+        euint64 levBps = FHE.fromExternal(encLevyBps, levyProof);
+        id = wellCount++;
+        wells[id] = GeothermalWell({
+            operator: msg.sender,
             wellId: wellId,
-            grossMWhProduced: grossMWh,
-            ownUseMWh: ownUseMWh,
-            netMWhExported: netMWh,
-            revenueUSD: revenue,
-            royaltyAmountUSD: finalRoyalty,
-            periodStart: periodStart,
-            periodEnd: periodEnd,
-            audited: false
-        }));
-
-        w.cumulativeMWhProduced = FHE.add(w.cumulativeMWhProduced, netMWh);
-        w.royaltyPaidUSD = FHE.add(w.royaltyPaidUSD, finalRoyalty);
-        _totalMWhGenerated = FHE.add(_totalMWhGenerated, netMWh);
-        _totalRoyaltiesCollected = FHE.add(_totalRoyaltiesCollected, finalRoyalty);
-        _totalRevenueAcrossWells = FHE.add(_totalRevenueAcrossWells, revenue);
-
-        FHE.allowThis(productionHistory[wellId][recIdx].grossMWhProduced);
-        FHE.allowThis(productionHistory[wellId][recIdx].netMWhExported);
-        FHE.allowThis(productionHistory[wellId][recIdx].revenueUSD);
-        FHE.allow(productionHistory[wellId][recIdx].revenueUSD, w.developer);
-        FHE.allowThis(productionHistory[wellId][recIdx].royaltyAmountUSD);
-        FHE.allow(productionHistory[wellId][recIdx].royaltyAmountUSD, w.developer);
-        FHE.allowThis(w.cumulativeMWhProduced); FHE.allowThis(w.royaltyPaidUSD);
-        FHE.allowThis(_totalMWhGenerated); FHE.allowThis(_totalRoyaltiesCollected); FHE.allowThis(_totalRevenueAcrossWells);
-
-        emit ProductionRecorded(wellId, recIdx);
-        emit RoyaltyPaid(wellId, w.developer);
+            location: location,
+            capacityKW: cap,
+            monthlyOutputMWh: FHE.asEuint64(0),
+            revenuePerMWhUSD: rate,
+            royaltyBps: royBps,
+            governmentLevyBps: levBps,
+            operatorNetUSD: FHE.asEuint64(0),
+            landownerRoyaltyUSD: FHE.asEuint64(0),
+            commissionedAt: block.timestamp,
+            status: WellStatus.Drilling
+        });
+        FHE.allowThis(wells[id].capacityKW); FHE.allow(wells[id].capacityKW, msg.sender);
+        FHE.allowThis(wells[id].monthlyOutputMWh);
+        FHE.allowThis(wells[id].revenuePerMWhUSD); FHE.allow(wells[id].revenuePerMWhUSD, msg.sender);
+        FHE.allowThis(wells[id].royaltyBps);
+        FHE.allowThis(wells[id].governmentLevyBps);
+        FHE.allowThis(wells[id].operatorNetUSD); FHE.allow(wells[id].operatorNetUSD, msg.sender);
+        FHE.allowThis(wells[id].landownerRoyaltyUSD);
+        emit WellRegistered(id, wellId, location);
     }
 
-    function updateWellStatus(uint256 wellId, WellStatus newStatus) external onlyGovernment {
-        wells[wellId].status = newStatus;
-        emit WellStatusChanged(wellId, newStatus);
+    function activateWell(uint256 wellId, address landowner) external onlyRegulator {
+        wells[wellId].status = WellStatus.Active;
+        uint256 lrId = landownerCount++;
+        landownerRecords[lrId] = LandownerRecord({
+            landowner: landowner,
+            wellId: wellId,
+            totalRoyaltyEarnedUSD: FHE.asEuint64(0),
+            active: true
+        });
+        FHE.allowThis(landownerRecords[lrId].totalRoyaltyEarnedUSD);
+        FHE.allow(landownerRecords[lrId].totalRoyaltyEarnedUSD, landowner);
     }
 
-    function auditRecord(uint256 wellId, uint256 recordIdx) external onlyGovernment {
-        productionHistory[wellId][recordIdx].audited = true;
+    function reportProduction(
+        uint256 wellId,
+        externalEuint64 encOutputMWh, bytes calldata proof
+    ) external onlyOperatorOrOwner nonReentrant {
+        GeothermalWell storage w = wells[wellId];
+        require(w.status == WellStatus.Active, "Well not active");
+        euint64 outputMWh = FHE.fromExternal(encOutputMWh, proof);
+        w.monthlyOutputMWh = outputMWh;
+        // Gross revenue = output * rate (plaintext arithmetic via FHE.mul)
+        euint64 grossRev = FHE.mul(outputMWh, w.revenuePerMWhUSD);
+        // Government levy: div by 10000 (plaintext divisor)
+        euint64 levyAmt = FHE.div(grossRev, 10000);
+        euint64 postLevy = FHE.sub(grossRev, levyAmt);
+        // Landowner royalty
+        euint64 royaltyAmt = FHE.div(postLevy, 10000);
+        euint64 netOp = FHE.sub(postLevy, royaltyAmt);
+        w.operatorNetUSD = FHE.add(w.operatorNetUSD, netOp);
+        w.landownerRoyaltyUSD = FHE.add(w.landownerRoyaltyUSD, royaltyAmt);
+        _totalSystemOutputMWh = FHE.add(_totalSystemOutputMWh, outputMWh);
+        _totalGovernmentLeviesUSD = FHE.add(_totalGovernmentLeviesUSD, levyAmt);
+        FHE.allowThis(w.monthlyOutputMWh);
+        FHE.allowThis(w.operatorNetUSD); FHE.allow(w.operatorNetUSD, w.operator);
+        FHE.allowThis(w.landownerRoyaltyUSD);
+        FHE.allowThis(_totalSystemOutputMWh);
+        FHE.allowThis(_totalGovernmentLeviesUSD);
+        emit ProductionReported(wellId, block.timestamp);
     }
 
-    function allowFieldStats(address viewer) external onlyOwner {
-        FHE.allow(_totalMWhGenerated, viewer);
-        FHE.allow(_totalRoyaltiesCollected, viewer);
-        FHE.allow(_totalRevenueAcrossWells, viewer);
+    function settleRoyalty(uint256 wellId, uint256 landownerRecordId) external onlyOwner nonReentrant {
+        GeothermalWell storage w = wells[wellId];
+        LandownerRecord storage lr = landownerRecords[landownerRecordId];
+        require(lr.wellId == wellId && lr.active, "Invalid record");
+        lr.totalRoyaltyEarnedUSD = FHE.add(lr.totalRoyaltyEarnedUSD, w.landownerRoyaltyUSD);
+        w.landownerRoyaltyUSD = FHE.asEuint64(0);
+        FHE.allowThis(lr.totalRoyaltyEarnedUSD); FHE.allow(lr.totalRoyaltyEarnedUSD, lr.landowner);
+        FHE.allowThis(w.landownerRoyaltyUSD);
+        emit RoyaltySettled(wellId, landownerRecordId);
+    }
+
+    function allowSystemStats(address viewer) external onlyOwner {
+        FHE.allow(_totalSystemOutputMWh, viewer);
+        FHE.allow(_totalGovernmentLeviesUSD, viewer);
     }
 }

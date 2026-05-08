@@ -165,7 +165,7 @@ contract PrivateMiningRoyaltyStream is ZamaEthereumConfig, Ownable, ReentrancyGu
             euint64 share = FHE.div(FHE.mul(rpt.royaltyPayableUSD, inv.royaltyEntitlementBps), 10000);
             inv.totalReceivedUSD = FHE.add(inv.totalReceivedUSD, share);
             // Update yield = totalReceived / upfront * 10000
-            inv.yieldBps = FHE.div(FHE.mul(inv.totalReceivedUSD, FHE.asEuint64(10000)), inv.upfrontPaymentUSD);
+            inv.yieldBps = FHE.div(FHE.mul(inv.totalReceivedUSD, 10000), inv.upfrontPaymentUSD);
             FHE.allowThis(inv.totalReceivedUSD);
             FHE.allow(inv.totalReceivedUSD, streamInvestors[i]);
             FHE.allowThis(inv.yieldBps);

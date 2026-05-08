@@ -82,7 +82,7 @@ contract PrivateMiningPoolReward is ZamaEthereumConfig, Ownable, ReentrancyGuard
     function receiveBlockReward(externalEuint64 encReward, bytes calldata proof) external {
         require(isPoolAdmin[msg.sender], "Not admin");
         euint64 reward = FHE.fromExternal(encReward, proof);
-        euint64 fee = FHE.div(FHE.mul(reward, FHE.asEuint64(250)), 10000); // 2.5% pool fee
+        euint64 fee = FHE.div(FHE.mul(reward, 250), 10000); // 2.5% pool fee
         euint64 netReward = FHE.sub(reward, fee);
         _totalBlockRewards = FHE.add(_totalBlockRewards, reward);
         _undistributed = FHE.add(_undistributed, netReward);

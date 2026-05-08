@@ -55,6 +55,7 @@ contract AuctionLogisticsRoute is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         contracts[id].minSLAScore = FHE.fromExternal(encMinSLA, sProof);
         contracts[id].auctionEnd = block.timestamp + auctionDays * 1 days;
         contracts[id].winningPrice = FHE.asEuint64(0);
+        FHE.allowThis(contracts[id].estimatedTonsPerYear);
         FHE.allowThis(contracts[id].maxPricePerTon);
         FHE.allowThis(contracts[id].minSLAScore);
         FHE.allowThis(contracts[id].winningPrice);
