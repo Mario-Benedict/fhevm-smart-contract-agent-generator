@@ -62,7 +62,7 @@ contract VotingClimatePolicy is ZamaEthereumConfig, Ownable {
         emit PolicyProposed(id, name);
     }
 
-    function vote(uint256 policyId, bool supports) external {
+    function vote(uint256 policyId, bool voteYes) external {
         Voter storage v = voters[msg.sender];
         require(v.registered, "Not registered");
         Policy storage p = policies[policyId];
@@ -73,7 +73,7 @@ contract VotingClimatePolicy is ZamaEthereumConfig, Ownable {
         // Cast euint8 weight to euint32 for addition
         euint32 weight = FHE.asEuint32(0); // placeholder; use the voter's weight via add
         // Add weight to appropriate bucket
-        if (supports) {
+        if (voteYes) {
             p.weightedYes = FHE.add(p.weightedYes, FHE.asEuint32(1));
             FHE.allowThis(p.weightedYes);
         } else {

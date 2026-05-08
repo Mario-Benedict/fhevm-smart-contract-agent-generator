@@ -7,148 +7,187 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title PrivateFoodSafetyTraceability
-/// @notice Farm-to-table traceability: encrypted batch temperatures, encrypted
-///         contamination scores, private recall triggers, and retailer access gating.
+/// @notice Farm-to-fork food safety: encrypted contamination test scores, encrypted batch origin hashes,
+///         encrypted temperature compliance logs, and confidential recall probability scoring.
 contract PrivateFoodSafetyTraceability is ZamaEthereumConfig, Ownable, ReentrancyGuard {
-    enum FoodCategory { FreshProduce, Meat, Dairy, Seafood, Grains, Processed }
-    enum BatchStatus { Harvested, Processing, PackagingQC, InTransit, Distributed, Recalled }
+    enum FoodCategory { PRODUCE, MEAT, DAIRY, SEAFOOD, PROCESSED, BEVERAGE }
+    enum ContaminantType { BACTERIA, PESTICIDE, ALLERGEN, HEAVY_METAL, MYCOTOXIN }
 
     struct FoodBatch {
-        string lotNumber;
+        string batchId;
         FoodCategory category;
         address producer;
-        euint8  contaminationScore;    // encrypted 0=safe,100=dangerous
-        euint16 temperatureMin;        // encrypted min temp observed (C * 10)
-        euint16 temperatureMax;        // encrypted max temp observed (C * 10)
-        euint32 weightKg;              // encrypted total weight
-        euint8  qualityGrade;          // encrypted A/B/C grade (1/2/3)
-        uint256 producedAt;
-        BatchStatus status;
-        bool recallIssued;
+        euint64 quantityKg;         // encrypted quantity
+        euint8 safetyScore;         // encrypted safety score 0-100
+        euint64 temperatureMin;     // encrypted min recorded temp (scaled Celsius * 10)
+        euint64 temperatureMax;     // encrypted max recorded temp
+        euint8 contaminationRisk;   // encrypted contamination risk 0-100
+        euint64 recallProbBps;      // encrypted probability of recall
+        uint256 harvestDate;
+        uint256 expiryDate;
+        bool quarantined;
+        bool recalled;
     }
 
-    struct SupplyChainEvent {
+    struct TestResult {
         uint256 batchId;
-        string eventType;              // "HARVEST","PROCESS","PACK","SHIP","RECEIVE"
-        address actor;
-        euint16 temperature;           // encrypted temp at event
+        ContaminantType contaminant;
+        euint8 levelScore;          // encrypted detected level 0-100
+        euint64 detectedPpm;        // encrypted concentration in PPM
+        euint8 passThreshold;       // encrypted regulatory threshold 0-100
+        bool passed;
+        uint256 testDate;
+        address laboratory;
+    }
+
+    struct TemperatureLog {
+        uint256 batchId;
+        euint64 temperature;        // encrypted temperature reading
+        euint64 humidity;           // encrypted humidity
         uint256 timestamp;
+        string location;
+        bool compliant;
     }
 
     mapping(uint256 => FoodBatch) private batches;
-    mapping(uint256 => SupplyChainEvent[]) private batchEvents;
-    mapping(address => bool) public isInspector;
-    mapping(address => bool) public isRetailer;
-    mapping(address => bool) public isProducer;
+    mapping(uint256 => TestResult[]) private testResults;
+    mapping(uint256 => TemperatureLog[]) private tempLogs;
     uint256 public batchCount;
-    euint8 private _recallThreshold;   // encrypted contamination score above which recall triggered
-    euint32 private _totalBatchesRecalled;
+    euint64 private _totalRecalledKg;
+    mapping(address => bool) public isInspector;
+    mapping(address => bool) public isLaboratory;
+    mapping(address => bool) public isRegulator;
 
-    event BatchCreated(uint256 indexed id, string lot, FoodCategory category);
-    event QualityEventLogged(uint256 indexed batchId, string eventType);
-    event RecallIssued(uint256 indexed batchId, string lot);
-    event BatchCleared(uint256 indexed batchId);
+    event BatchRegistered(uint256 indexed id, string batchId, FoodCategory category);
+    event TestSubmitted(uint256 indexed batchId, ContaminantType contaminant, bool passed);
+    event BatchQuarantined(uint256 indexed batchId);
+    event RecallIssued(uint256 indexed batchId);
+    event TemperatureLogged(uint256 indexed batchId, string location);
 
-    modifier onlyInspector() {
-        require(isInspector[msg.sender] || msg.sender == owner(), "Not inspector");
-        _;
-    }
-
-    constructor(externalEuint8 encRecallThreshold, bytes memory proof) Ownable(msg.sender) {
-        _recallThreshold = FHE.fromExternal(encRecallThreshold, proof);
-        _totalBatchesRecalled = FHE.asEuint32(0);
-        FHE.allowThis(_recallThreshold);
-        FHE.allowThis(_totalBatchesRecalled);
+    constructor() Ownable(msg.sender) {
+        _totalRecalledKg = FHE.asEuint64(0);
+        FHE.allowThis(_totalRecalledKg);
         isInspector[msg.sender] = true;
+        isLaboratory[msg.sender] = true;
+        isRegulator[msg.sender] = true;
     }
 
     function addInspector(address i) external onlyOwner { isInspector[i] = true; }
-    function addRetailer(address r) external onlyOwner { isRetailer[r] = true; }
-    function addProducer(address p) external onlyOwner { isProducer[p] = true; }
+    function addLaboratory(address l) external onlyOwner { isLaboratory[l] = true; }
+    function addRegulator(address r) external onlyOwner { isRegulator[r] = true; }
 
-    function createBatch(
-        string calldata lot, FoodCategory category,
-        externalEuint32 encWeight, bytes calldata wPf,
-        externalEuint8 encGrade, bytes calldata gPf,
-        externalEuint16 encTempMin, bytes calldata tMinPf,
-        externalEuint16 encTempMax, bytes calldata tMaxPf
+    function registerBatch(
+        string calldata batchId, FoodCategory category,
+        externalEuint64 encQty, bytes calldata qProof,
+        externalEuint64 encRecallProb, bytes calldata rpProof,
+        uint256 harvestDate, uint256 expiryDate
     ) external returns (uint256 id) {
-        require(isProducer[msg.sender], "Not producer");
-        euint32 weight = FHE.fromExternal(encWeight, wPf);
-        euint8 grade = FHE.fromExternal(encGrade, gPf);
-        euint16 tempMin = FHE.fromExternal(encTempMin, tMinPf);
-        euint16 tempMax = FHE.fromExternal(encTempMax, tMaxPf);
+        euint64 qty = FHE.fromExternal(encQty, qProof);
+        euint64 recallProb = FHE.fromExternal(encRecallProb, rpProof);
         id = batchCount++;
         batches[id] = FoodBatch({
-            lotNumber: lot, category: category, producer: msg.sender,
-            contaminationScore: FHE.asEuint8(0),
-            temperatureMin: tempMin, temperatureMax: tempMax,
-            weightKg: weight, qualityGrade: grade,
-            producedAt: block.timestamp, status: BatchStatus.Harvested, recallIssued: false
+            batchId: batchId, category: category, producer: msg.sender,
+            quantityKg: qty, safetyScore: FHE.asEuint8(100),
+            temperatureMin: FHE.asEuint64(99999), temperatureMax: FHE.asEuint64(0),
+            contaminationRisk: FHE.asEuint8(0),
+            recallProbBps: recallProb,
+            harvestDate: harvestDate, expiryDate: expiryDate,
+            quarantined: false, recalled: false
         });
-        FHE.allowThis(batches[id].contaminationScore);
+        FHE.allowThis(batches[id].quantityKg);
+        FHE.allowThis(batches[id].safetyScore);
         FHE.allowThis(batches[id].temperatureMin);
-        FHE.allow(batches[id].temperatureMin, msg.sender);
         FHE.allowThis(batches[id].temperatureMax);
-        FHE.allow(batches[id].temperatureMax, msg.sender);
-        FHE.allowThis(batches[id].weightKg);
-        FHE.allow(batches[id].weightKg, msg.sender);
-        FHE.allowThis(batches[id].qualityGrade);
-        FHE.allow(batches[id].qualityGrade, msg.sender);
-        emit BatchCreated(id, lot, category);
+        FHE.allowThis(batches[id].contaminationRisk);
+        FHE.allowThis(batches[id].recallProbBps);
+        emit BatchRegistered(id, batchId, category);
     }
 
-    function logSupplyEvent(
-        uint256 batchId, string calldata eventType, BatchStatus newStatus,
-        externalEuint16 encTemp, bytes calldata proof
-    ) external {
-        require(isProducer[msg.sender] || isRetailer[msg.sender] || isInspector[msg.sender], "Unauthorized");
-        euint16 temp = FHE.fromExternal(encTemp, proof);
-        batchEvents[batchId].push(SupplyChainEvent({
-            batchId: batchId, eventType: eventType, actor: msg.sender,
-            temperature: temp, timestamp: block.timestamp
+    function submitTestResult(
+        uint256 batchId, ContaminantType contaminant,
+        externalEuint8 encLevel, bytes calldata lProof,
+        externalEuint64 encPpm, bytes calldata ppmProof,
+        externalEuint8 encThreshold, bytes calldata thProof
+    ) external returns (bool passed) {
+        require(isLaboratory[msg.sender], "Not lab");
+        euint8 level = FHE.fromExternal(encLevel, lProof);
+        euint64 ppm = FHE.fromExternal(encPpm, ppmProof);
+        euint8 threshold = FHE.fromExternal(encThreshold, thProof);
+        ebool passBool = FHE.le(level, threshold);
+        testResults[batchId].push(TestResult({
+            batchId: batchId, contaminant: contaminant,
+            levelScore: level, detectedPpm: ppm,
+            passThreshold: threshold, passed: true,
+            testDate: block.timestamp, laboratory: msg.sender
         }));
-        batches[batchId].status = newStatus;
-        FHE.allowThis(batchEvents[batchId][batchEvents[batchId].length - 1].temperature);
-        emit QualityEventLogged(batchId, eventType);
+        uint256 idx = testResults[batchId].length - 1;
+        FHE.allowThis(testResults[batchId][idx].levelScore);
+        FHE.allowThis(testResults[batchId][idx].detectedPpm);
+        FHE.allowThis(testResults[batchId][idx].passThreshold);
+        // Update batch safety score
+        FoodBatch storage batch = batches[batchId];
+        ebool failed = FHE.gt(level, threshold);
+        euint8 newSafety = FHE.select(failed,
+            FHE.sub(batch.safetyScore, FHE.asEuint8(20)),
+            batch.safetyScore);
+        batch.safetyScore = newSafety;
+        batch.contaminationRisk = FHE.select(failed,
+            FHE.add(batch.contaminationRisk, FHE.asEuint8(25)),
+            batch.contaminationRisk);
+        FHE.allowThis(batch.safetyScore);
+        FHE.allowThis(batch.contaminationRisk);
+        passed = true;
+        emit TestSubmitted(batchId, contaminant, true);
     }
 
-    function recordContamination(
-        uint256 batchId,
-        externalEuint8 encScore, bytes calldata proof
-    ) external onlyInspector {
-        euint8 score = FHE.fromExternal(encScore, proof);
-        batches[batchId].contaminationScore = score;
-        FHE.allowThis(batches[batchId].contaminationScore);
-        FHE.allow(batches[batchId].contaminationScore, batches[batchId].producer);
-        // Auto-recall if above threshold
-        ebool needsRecall = FHE.ge(score, _recallThreshold);
-        if (FHE.isInitialized(needsRecall) && !batches[batchId].recallIssued) {
-            batches[batchId].recallIssued = true;
-            batches[batchId].status = BatchStatus.Recalled;
-            _totalBatchesRecalled = FHE.add(_totalBatchesRecalled, FHE.asEuint32(1));
-            FHE.allowThis(_totalBatchesRecalled);
-            emit RecallIssued(batchId, batches[batchId].lotNumber);
-        }
+    function logTemperature(
+        uint256 batchId, string calldata location,
+        externalEuint64 encTemp, bytes calldata tProof,
+        externalEuint64 encHumidity, bytes calldata hProof
+    ) external {
+        require(isInspector[msg.sender] || batches[batchId].producer == msg.sender, "Not authorized");
+        euint64 temp = FHE.fromExternal(encTemp, tProof);
+        euint64 humidity = FHE.fromExternal(encHumidity, hProof);
+        // Update min/max
+        FoodBatch storage batch = batches[batchId];
+        ebool newMin = FHE.lt(temp, batch.temperatureMin);
+        batch.temperatureMin = FHE.select(newMin, temp, batch.temperatureMin);
+        ebool newMax = FHE.gt(temp, batch.temperatureMax);
+        batch.temperatureMax = FHE.select(newMax, temp, batch.temperatureMax);
+        // Cold chain compliance: temp should be < 400 (40.0 Celsius for perishables)
+        ebool compliant = FHE.le(temp, FHE.asEuint64(400));
+        tempLogs[batchId].push(TemperatureLog({
+            batchId: batchId, temperature: temp, humidity: humidity,
+            timestamp: block.timestamp, location: location, compliant: true
+        }));
+        uint256 idx = tempLogs[batchId].length - 1;
+        FHE.allowThis(tempLogs[batchId][idx].temperature);
+        FHE.allowThis(tempLogs[batchId][idx].humidity);
+        FHE.allowThis(batch.temperatureMin);
+        FHE.allowThis(batch.temperatureMax);
+        emit TemperatureLogged(batchId, location);
     }
 
-    function clearBatch(uint256 batchId) external onlyInspector {
-        batches[batchId].recallIssued = false;
-        batches[batchId].contaminationScore = FHE.asEuint8(0);
-        FHE.allowThis(batches[batchId].contaminationScore);
-        emit BatchCleared(batchId);
+    function quarantineBatch(uint256 batchId) external {
+        require(isRegulator[msg.sender] || isInspector[msg.sender], "Not authorized");
+        batches[batchId].quarantined = true;
+        emit BatchQuarantined(batchId);
     }
 
-    function allowBatchDetails(uint256 batchId, address viewer) external {
-        FoodBatch storage b = batches[batchId];
-        require(msg.sender == b.producer || isInspector[msg.sender] || isRetailer[msg.sender], "Unauthorized");
-        FHE.allow(b.contaminationScore, viewer);
-        FHE.allow(b.temperatureMin, viewer);
-        FHE.allow(b.temperatureMax, viewer);
-        FHE.allow(b.qualityGrade, viewer);
+    function issueRecall(uint256 batchId) external {
+        require(isRegulator[msg.sender], "Not regulator");
+        FoodBatch storage batch = batches[batchId];
+        batch.recalled = true;
+        _totalRecalledKg = FHE.add(_totalRecalledKg, batch.quantityKg);
+        FHE.allowThis(_totalRecalledKg);
+        emit RecallIssued(batchId);
     }
 
-    function allowSafetyStats(address viewer) external onlyOwner {
-        FHE.allow(_totalBatchesRecalled, viewer);
+    function grantRegulatorView(uint256 batchId, address regulator) external {
+        require(isRegulator[msg.sender], "Not regulator");
+        FHE.allow(batches[batchId].safetyScore, regulator);
+        FHE.allow(batches[batchId].contaminationRisk, regulator);
+        FHE.allow(batches[batchId].recallProbBps, regulator);
+        FHE.allow(batches[batchId].quantityKg, regulator);
     }
 }
