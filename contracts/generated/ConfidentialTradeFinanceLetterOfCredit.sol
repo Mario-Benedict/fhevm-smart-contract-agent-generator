@@ -5,114 +5,207 @@ import "@fhevm/solidity/lib/FHE.sol";
 import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /// @title ConfidentialTradeFinanceLetterOfCredit
-/// @notice Encrypted letter of credit: hidden LC amounts, private trade terms,
-///         confidential bank margin requirements, and encrypted document
-///         compliance verification scoring.
-contract ConfidentialTradeFinanceLetterOfCredit is ZamaEthereumConfig, Ownable, ReentrancyGuard, Pausable {
-    enum LCType { Sight, Usance, Standby, BackToBack, Revolving }
-    enum LCStatus { Issued, Confirmed, Presented, Accepted, Paid, Expired, Cancelled }
+/// @notice Letter of credit with encrypted trade amounts, compliance checks,
+///         and payment terms between importer, exporter, issuing/confirming banks.
+contract ConfidentialTradeFinanceLetterOfCredit is ZamaEthereumConfig, Ownable, ReentrancyGuard {
+    enum LCType { SIGHT, USANCE, REVOLVING, STANDBY, TRANSFERABLE }
+    enum LCStatus { ISSUED, CONFIRMED, PRESENTED, COMPLIANT, NON_COMPLIANT, PAID, EXPIRED }
 
     struct LetterOfCredit {
-        address applicant;             // buyer
-        address beneficiary;           // seller
+        string  lcNumber;
+        address importer;
+        address exporter;
         address issuingBank;
         address confirmingBank;
         LCType  lcType;
-        string  lcRef;
-        string  goodsDescription;
-        euint64 lcAmountUSD;           // encrypted LC amount
-        euint64 bankMarginBps;         // encrypted bank margin
-        euint64 bankFeeUSD;            // encrypted bank fee
-        euint64 insurancePremiumUSD;   // encrypted insurance
-        euint16 documentComplianceScore; // encrypted doc score
-        LCStatus status;
-        uint256 issueDate;
+        euint64 lcAmountUSD;          // encrypted LC value
+        euint64 tolerancePctBps;      // encrypted ±% tolerance
+        euint64 bankCommissionUSD;    // encrypted bank fees
+        euint64 discountRateBps;      // encrypted usance discount rate
+        euint64 amountPaidUSD;        // encrypted amount drawn
+        euint32 usanceDays;           // encrypted payment tenor
+        uint256 issuedDate;
         uint256 expiryDate;
+        LCStatus status;
+        bool documentaryCompliant;
     }
 
-    mapping(uint256 => LetterOfCredit) private lcs;
+    struct DocumentPresentation {
+        uint256 lcId;
+        address presenter;
+        euint64 presentedAmountUSD;   // encrypted drawing amount
+        euint64 discountedAmountUSD;  // encrypted post-discount amount
+        euint8  documentScore;        // encrypted compliance score 0-100
+        uint256 presentedDate;
+        bool    examined;
+        bool    compliant;
+    }
+
+    mapping(uint256 => LetterOfCredit)       private lcs;
+    mapping(uint256 => DocumentPresentation) private presentations;
     mapping(address => bool) public isTradeBank;
-
     uint256 public lcCount;
-    euint64 private _totalLCVolumeUSD;
-    euint64 private _totalBankFeesUSD;
+    uint256 public presentationCount;
+    euint64 private _totalLCVolume;
+    euint64 private _totalBankCommissions;
+    euint64 private _totalPaidOut;
 
-    event LCIssued(uint256 indexed id, LCType lcType, address applicant, address beneficiary);
-    event LCPresented(uint256 indexed id, uint256 presentedAt);
-    event LCPaid(uint256 indexed id, uint256 paidAt);
-
-    modifier onlyTradeBank() {
-        require(isTradeBank[msg.sender] || msg.sender == owner(), "Not trade bank");
-        _;
-    }
+    event LCIssued(uint256 indexed lcId, string lcNum);
+    event LCConfirmed(uint256 indexed lcId, address confirmingBank);
+    event DocumentsPresented(uint256 indexed lcId, uint256 presentId);
+    event LCPaid(uint256 indexed lcId);
 
     constructor() Ownable(msg.sender) {
-        _totalLCVolumeUSD = FHE.asEuint64(0);
-        _totalBankFeesUSD = FHE.asEuint64(0);
-        FHE.allowThis(_totalLCVolumeUSD);
-        FHE.allowThis(_totalBankFeesUSD);
+        _totalLCVolume       = FHE.asEuint64(0);
+        _totalBankCommissions= FHE.asEuint64(0);
+        _totalPaidOut        = FHE.asEuint64(0);
+        FHE.allowThis(_totalLCVolume);
+        FHE.allowThis(_totalBankCommissions);
+        FHE.allowThis(_totalPaidOut);
         isTradeBank[msg.sender] = true;
     }
 
-    function pause() external onlyOwner { _pause(); }
-    function unpause() external onlyOwner { _unpause(); }
-    function addTradeBank(address b) external onlyOwner { isTradeBank[b] = true; }
+    function addBank(address b) external onlyOwner { isTradeBank[b] = true; }
 
     function issueLC(
-        address applicant, address beneficiary, address confirmingBank,
-        LCType lcType, string calldata lcRef, string calldata goodsDescription,
-        externalEuint64 encLCAmount, bytes calldata lcaProof,
-        externalEuint64 encMargin,   bytes calldata mProof,
-        externalEuint64 encInsurance,bytes calldata insProof,
+        string calldata lcNum,
+        address importer, address exporter,
+        LCType lcType,
+        externalEuint64 encAmount,     bytes calldata amtProof,
+        externalEuint64 encTolerance,  bytes calldata tolProof,
+        externalEuint64 encCommission, bytes calldata comProof,
+        externalEuint64 encDiscount,   bytes calldata disProof,
+        externalEuint32 encUsanceDays, bytes calldata udProof,
         uint256 expiryDays
-    ) external onlyTradeBank whenNotPaused returns (uint256 id) {
-        euint64 lcAmount  = FHE.fromExternal(encLCAmount, lcaProof);
-        euint64 margin    = FHE.fromExternal(encMargin, mProof);
-        euint64 insurance = FHE.fromExternal(encInsurance, insProof);
-        euint64 bankFee   = FHE.div(FHE.mul(lcAmount, margin), 10000);
-        id = lcCount++;
-        lcs[id] = LetterOfCredit({
-            applicant: applicant, beneficiary: beneficiary, issuingBank: msg.sender,
-            confirmingBank: confirmingBank, lcType: lcType, lcRef: lcRef,
-            goodsDescription: goodsDescription, lcAmountUSD: lcAmount, bankMarginBps: margin,
-            bankFeeUSD: bankFee, insurancePremiumUSD: insurance,
-            documentComplianceScore: FHE.asEuint16(0), status: LCStatus.Issued,
-            issueDate: block.timestamp, expiryDate: block.timestamp + expiryDays * 1 days
+    ) external returns (uint256 lcId) {
+        require(isTradeBank[msg.sender], "Not bank");
+        euint64 amount     = FHE.fromExternal(encAmount,     amtProof);
+        euint64 tolerance  = FHE.fromExternal(encTolerance,  tolProof);
+        euint64 commission = FHE.fromExternal(encCommission, comProof);
+        euint64 discount   = FHE.fromExternal(encDiscount,   disProof);
+        euint32 usanceDays = FHE.fromExternal(encUsanceDays, udProof);
+
+        lcId = lcCount++;
+        lcs[lcId] = LetterOfCredit({
+            lcNumber: lcNum,
+            importer: importer, exporter: exporter,
+            issuingBank: msg.sender, confirmingBank: address(0),
+            lcType: lcType,
+            lcAmountUSD: amount,
+            tolerancePctBps: tolerance,
+            bankCommissionUSD: commission,
+            discountRateBps: discount,
+            amountPaidUSD: FHE.asEuint64(0),
+            usanceDays: usanceDays,
+            issuedDate: block.timestamp,
+            expiryDate: block.timestamp + expiryDays * 1 days,
+            status: LCStatus.ISSUED,
+            documentaryCompliant: false
         });
-        _totalLCVolumeUSD = FHE.add(_totalLCVolumeUSD, lcAmount);
-        _totalBankFeesUSD = FHE.add(_totalBankFeesUSD, bankFee);
-        FHE.allowThis(lcs[id].lcAmountUSD); FHE.allow(lcs[id].lcAmountUSD, applicant); FHE.allow(lcs[id].lcAmountUSD, beneficiary);
-        FHE.allowThis(lcs[id].bankMarginBps);
-        FHE.allowThis(lcs[id].bankFeeUSD); FHE.allow(lcs[id].bankFeeUSD, applicant);
-        FHE.allowThis(lcs[id].insurancePremiumUSD); FHE.allow(lcs[id].insurancePremiumUSD, applicant);
-        FHE.allowThis(lcs[id].documentComplianceScore);
-        FHE.allowThis(_totalLCVolumeUSD); FHE.allowThis(_totalBankFeesUSD);
-        emit LCIssued(id, lcType, applicant, beneficiary);
+        _totalLCVolume       = FHE.add(_totalLCVolume, amount);
+        _totalBankCommissions= FHE.add(_totalBankCommissions, commission);
+
+        FHE.allowThis(lcs[lcId].lcAmountUSD);
+        FHE.allow(lcs[lcId].lcAmountUSD, importer);
+        FHE.allow(lcs[lcId].lcAmountUSD, exporter);
+        FHE.allowThis(lcs[lcId].tolerancePctBps);
+        FHE.allow(lcs[lcId].tolerancePctBps, exporter);
+        FHE.allowThis(lcs[lcId].bankCommissionUSD);
+        FHE.allow(lcs[lcId].bankCommissionUSD, importer);
+        FHE.allowThis(lcs[lcId].discountRateBps);
+        FHE.allow(lcs[lcId].discountRateBps, exporter);
+        FHE.allowThis(lcs[lcId].amountPaidUSD);
+        FHE.allow(lcs[lcId].amountPaidUSD, exporter);
+        FHE.allowThis(lcs[lcId].usanceDays);
+        FHE.allowThis(_totalLCVolume);
+        FHE.allowThis(_totalBankCommissions);
+        emit LCIssued(lcId, lcNum);
     }
 
-    function presentDocuments(uint256 lcId, externalEuint16 encDocScore, bytes calldata proof) external whenNotPaused {
-        LetterOfCredit storage lc = lcs[lcId];
-        require(msg.sender == lc.beneficiary && lc.status == LCStatus.Issued, "Cannot present");
-        euint16 docScore = FHE.fromExternal(encDocScore, proof);
-        lc.documentComplianceScore = docScore;
-        lc.status = LCStatus.Presented;
-        FHE.allowThis(lc.documentComplianceScore); FHE.allow(lc.documentComplianceScore, lc.issuingBank);
-        emit LCPresented(lcId, block.timestamp);
+    function confirmLC(uint256 lcId) external {
+        require(isTradeBank[msg.sender], "Not bank");
+        require(lcs[lcId].status == LCStatus.ISSUED, "Not issued");
+        lcs[lcId].confirmingBank = msg.sender;
+        lcs[lcId].status = LCStatus.CONFIRMED;
+        emit LCConfirmed(lcId, msg.sender);
     }
 
-    function payLC(uint256 lcId) external onlyTradeBank nonReentrant {
-        LetterOfCredit storage lc = lcs[lcId];
-        require(lc.status == LCStatus.Presented && block.timestamp < lc.expiryDate, "Cannot pay");
-        ebool docsCompliant = FHE.ge(lc.documentComplianceScore, FHE.asEuint16(7000));
-        lc.status = LCStatus.Paid;
-        FHE.allow(lc.lcAmountUSD, lc.beneficiary);
-        emit LCPaid(lcId, block.timestamp);
+    function presentDocuments(
+        uint256 lcId,
+        externalEuint64 encPresentAmount, bytes calldata amtProof,
+        externalEuint8  encDocScore,      bytes calldata scoreProof
+    ) external returns (uint256 presentId) {
+        require(lcs[lcId].exporter == msg.sender, "Not exporter");
+        require(lcs[lcId].status == LCStatus.CONFIRMED, "Not confirmed");
+        require(block.timestamp < lcs[lcId].expiryDate, "Expired");
+
+        euint64 presentAmount = FHE.fromExternal(encPresentAmount, amtProof);
+        euint8  docScore      = FHE.fromExternal(encDocScore,      scoreProof);
+
+        // Check within tolerance band
+        euint64 minAllowed = FHE.sub(lcs[lcId].lcAmountUSD,
+            FHE.div(FHE.mul(lcs[lcId].lcAmountUSD, lcs[lcId].tolerancePctBps), 10000));
+        euint64 maxAllowed = FHE.add(lcs[lcId].lcAmountUSD,
+            FHE.div(FHE.mul(lcs[lcId].lcAmountUSD, lcs[lcId].tolerancePctBps), 10000));
+        ebool withinTolerance = FHE.and(
+            FHE.ge(presentAmount, minAllowed),
+            FHE.le(presentAmount, maxAllowed)
+        );
+
+        // Discounted amount for usance LCs
+        euint64 discounted = FHE.select(
+            FHE.eq(FHE.asEuint64(uint64(lcs[lcId].lcType)), FHE.asEuint64(1)), // USANCE
+            FHE.sub(presentAmount, FHE.div(FHE.mul(presentAmount, lcs[lcId].discountRateBps), 10000)),
+            presentAmount
+        );
+
+        presentId = presentationCount++;
+        presentations[presentId] = DocumentPresentation({
+            lcId: lcId,
+            presenter: msg.sender,
+            presentedAmountUSD: presentAmount,
+            discountedAmountUSD: discounted,
+            documentScore: docScore,
+            presentedDate: block.timestamp,
+            examined: false,
+            compliant: false
+        });
+        lcs[lcId].status = LCStatus.PRESENTED;
+
+        FHE.allowThis(presentations[presentId].presentedAmountUSD);
+        FHE.allow(presentations[presentId].presentedAmountUSD, msg.sender);
+        FHE.allowThis(presentations[presentId].discountedAmountUSD);
+        FHE.allow(presentations[presentId].discountedAmountUSD, msg.sender);
+        FHE.allowThis(presentations[presentId].documentScore);
+        emit DocumentsPresented(lcId, presentId);
     }
 
-    function allowTradeStats(address viewer) external onlyOwner {
-        FHE.allow(_totalLCVolumeUSD, viewer); FHE.allow(_totalBankFeesUSD, viewer);
+    function examineAndPay(uint256 presentId) external nonReentrant {
+        require(isTradeBank[msg.sender], "Not bank");
+        DocumentPresentation storage p = presentations[presentId];
+        LetterOfCredit storage lc = lcs[p.lcId];
+        require(lc.status == LCStatus.PRESENTED, "Not presented");
+        require(!p.examined, "Already examined");
+
+        p.examined = true;
+        ebool docOk = FHE.ge(p.documentScore, FHE.asEuint8(70));
+        p.compliant = FHE.isInitialized(docOk);
+        lc.amountPaidUSD  = FHE.add(lc.amountPaidUSD, p.discountedAmountUSD);
+        lc.documentaryCompliant = p.compliant;
+        lc.status = p.compliant ? LCStatus.PAID : LCStatus.NON_COMPLIANT;
+        _totalPaidOut = FHE.add(_totalPaidOut, p.discountedAmountUSD);
+
+        FHE.allowThis(lc.amountPaidUSD);
+        FHE.allow(lc.amountPaidUSD, lc.exporter);
+        FHE.allowThis(_totalPaidOut);
+        emit LCPaid(p.lcId);
+    }
+
+    function allowBankView(address viewer) external onlyOwner {
+        FHE.allow(_totalLCVolume, viewer);
+        FHE.allow(_totalBankCommissions, viewer);
+        FHE.allow(_totalPaidOut, viewer);
     }
 }
