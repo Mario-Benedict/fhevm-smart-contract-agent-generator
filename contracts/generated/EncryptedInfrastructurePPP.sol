@@ -93,7 +93,7 @@ contract EncryptedInfrastructurePPP is ZamaEthereumConfig, Ownable, ReentrancyGu
         euint64 capex = FHE.fromExternal(encCapex, capProof);
         euint64 vgf = FHE.fromExternal(encVGF, vgfProof);
         euint64 revProj = FHE.fromExternal(encRevProj, rProof);
-        euint32 concessionYearsVal = FHE.fromExternal(encYears, yProof);
+        euint32 concessionYrs = FHE.fromExternal(encYears, yProof);
         euint16 irr = FHE.fromExternal(encIRR, irrProof);
         id = projectCount++;
         projects[id] = PPPProject({
@@ -101,7 +101,7 @@ contract EncryptedInfrastructurePPP is ZamaEthereumConfig, Ownable, ReentrancyGu
             infraType: iType, pppModel: model, projectName: name,
             capexUSD: capex, viabilityGapFundUSD: vgf,
             annualRevenueProjection: revProj, actualAnnualRevenue: FHE.asEuint64(0),
-            concessionYears: concessionYearsVal, irr_Bps: irr,
+            concessionYears: concessionYrs, irr_Bps: irr,
             debtServiceCoverageRatioBps: FHE.asEuint64(0),
             constructionStart: block.timestamp + constructionDays * 1 days,
             operationsStart: 0, status: ProjectStatus.RFP
