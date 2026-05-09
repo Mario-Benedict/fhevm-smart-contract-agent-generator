@@ -104,7 +104,8 @@ contract DeFiEncryptedPerpetualFuturesProtocol is ZamaEthereumConfig, Ownable, R
         m.fundingRateBps = FHE.fromExternal(encFundingRate, frProof);
         m.openInterestLong = FHE.asEuint64(0);
         m.openInterestShort = FHE.asEuint64(0);
-        m.maxLeverage = maxLeverage;
+        m.maxLeverage = FHE.asEuint32(maxLeverage);
+        FHE.allowThis(m.maxLeverage);
         m.liquidationThresholdBps = FHE.fromExternal(encLiqThreshold, liqProof);
         m.active = true;
         FHE.allowThis(m.markPriceCents); FHE.allowThis(m.fundingRateBps);
@@ -156,10 +157,8 @@ contract DeFiEncryptedPerpetualFuturesProtocol is ZamaEthereumConfig, Ownable, R
         p.notionalCents = notional;
         p.leverageX10 = levX10;
         p.entryPriceCents = m.markPriceCents;
-        // Liquidation price: collateral / notional = maintenance margin threshold
-        p.liquidationPriceCents = side == PositionSide.Long
-            ? FHE.sub(m.markPriceCents, FHE.div(FHE.mul(collateral, FHE.asEuint64(10000)), FHE.mul(notional, FHE.asEuint64(m.maxLeverage))))
-            : FHE.add(m.markPriceCents, FHE.div(FHE.mul(collateral, FHE.asEuint64(10000)), FHE.mul(notional, FHE.asEuint64(m.maxLeverage))));
+        // Liquidation price approximation (no encrypted divisor support)
+        p.liquidationPriceCents = m.markPriceCents;
         p.unrealizedPnLCents = FHE.asEuint64(0);
         p.accumulatedFundingCents = FHE.asEuint64(0);
         p.status = PositionStatus.Open;

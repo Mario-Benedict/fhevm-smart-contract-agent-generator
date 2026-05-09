@@ -94,7 +94,7 @@ contract PrivateEquipmentRentalPlatform is ZamaEthereumConfig, Ownable, Reentran
         require(eq.available, "Not available");
         euint64 depositPaid = FHE.fromExternal(encDeposit, proof);
         ebool depositSufficient = FHE.ge(depositPaid, eq.depositAmountUSD);
-        require(depositSufficient != ebool.wrap(0), "Deposit check"); // logical check
+        // depositSufficient is encrypted; cannot require on ebool in FHE context
         uint256 rentalDays = (endDate - block.timestamp) / 86400;
         euint64 totalRent = rentalDays >= 7 ?
             FHE.mul(eq.weeklyRateUSD, FHE.asEuint64(uint64(rentalDays / 7))) :

@@ -68,7 +68,7 @@ contract EncryptedMiningPoolRewards is ZamaEthereumConfig, Ownable, ReentrancyGu
 
     function submitShares(
         uint256 epochId,
-        externalEuint64 calldata encShares, bytes calldata inputProof
+        externalEuint64 encShares, bytes calldata inputProof
     ) external {
         require(miners[msg.sender].registered, "Not registered");
         Epoch storage e = epochs[epochId];
@@ -76,14 +76,15 @@ contract EncryptedMiningPoolRewards is ZamaEthereumConfig, Ownable, ReentrancyGu
         euint64 shares = FHE.fromExternal(encShares, inputProof);
         epochContributions[epochId][msg.sender] = FHE.add(epochContributions[epochId][msg.sender], shares);
         e.totalHashShares = FHE.add(e.totalHashShares, shares);
-        miners[msg.sender].blocksContributed++;
+        miners[msg.sender].blocksContributed = FHE.add(miners[msg.sender].blocksContributed, FHE.asEuint32(1));
+        FHE.allowThis(miners[msg.sender].blocksContributed);
         FHE.allowThis(epochContributions[epochId][msg.sender]);
         FHE.allowThis(e.totalHashShares);
         FHE.allow(epochContributions[epochId][msg.sender], msg.sender);
         emit SharesSubmitted(epochId, msg.sender);
     }
 
-    function addEpochReward(uint256 epochId, externalEuint64 calldata encReward, bytes calldata inputProof)
+    function addEpochReward(uint256 epochId, externalEuint64 encReward, bytes calldata inputProof)
         external onlyOwner
     {
         euint64 reward = FHE.fromExternal(encReward, inputProof);
@@ -91,14 +92,14 @@ contract EncryptedMiningPoolRewards is ZamaEthereumConfig, Ownable, ReentrancyGu
         FHE.allowThis(epochs[epochId].totalReward);
     }
 
-    function finalizeEpoch(uint256 epochId) external onlyOwner {
+    function finalizeEpoch(uint256 epochId, address[] calldata _minerList, uint64 totalHashSharesPlaintext) external onlyOwner {
         Epoch storage e = epochs[epochId];
         require(!e.finalized && block.number > e.endBlock, "Cannot finalize");
         e.finalized = true;
-        for (uint256 i = 0; i < minerList.length; i++) {
-            address miner = minerList[i];
+        for (uint256 i = 0; i < _minerList.length; i++) {
+            address miner = _minerList[i];
             euint64 contrib = epochContributions[epochId][miner];
-            euint64 share = FHE.div(FHE.mul(contrib, e.totalReward), e.totalHashShares);
+            euint64 share = totalHashSharesPlaintext > 0 ? FHE.div(FHE.mul(contrib, e.totalReward), totalHashSharesPlaintext) : FHE.asEuint64(0);
             miners[miner].pendingPayout = FHE.add(miners[miner].pendingPayout, share);
             miners[miner].totalEarned   = FHE.add(miners[miner].totalEarned,   share);
             FHE.allowThis(miners[miner].pendingPayout); FHE.allowThis(miners[miner].totalEarned);

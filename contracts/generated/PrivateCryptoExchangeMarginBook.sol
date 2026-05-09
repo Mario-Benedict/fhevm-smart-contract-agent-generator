@@ -88,7 +88,7 @@ contract PrivateCryptoExchangeMarginBook is ZamaEthereumConfig, Ownable, Reentra
             _totalOpenInterestShort = FHE.add(_totalOpenInterestShort, p.positionSizeUSD);
             FHE.allowThis(_totalOpenInterestShort);
         }
-        if (tradingFeeAccrued[msg.sender].eq(FHE.asEuint64(0)) == FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
+        if (!FHE.isInitialized(tradingFeeAccrued[msg.sender])) {
             tradingFeeAccrued[msg.sender] = FHE.asEuint64(0);
             FHE.allowThis(tradingFeeAccrued[msg.sender]);
         }
@@ -106,7 +106,7 @@ contract PrivateCryptoExchangeMarginBook is ZamaEthereumConfig, Ownable, Reentra
         emit PositionOpened(msg.sender, isLong);
     }
 
-    function closePosition(externalEuint64 encExitPrice, bytes calldata proof) external nonReentrant {
+    function closePosition(externalEuint64 encExitPrice, bytes calldata proof, uint64 exitPricePlaintext) external nonReentrant {
         MarginPosition storage p = positions[msg.sender];
         require(p.active, "No active position");
         euint64 exitPrice = FHE.fromExternal(encExitPrice, proof);
@@ -117,7 +117,9 @@ contract PrivateCryptoExchangeMarginBook is ZamaEthereumConfig, Ownable, Reentra
             FHE.sub(exitPrice, p.entryPrice),
             FHE.sub(p.entryPrice, exitPrice)
         );
-        euint64 pnl = FHE.div(FHE.mul(priceDiff, p.positionSizeUSD), exitPrice);
+        euint64 pnl = exitPricePlaintext > 0
+            ? FHE.div(FHE.mul(priceDiff, p.positionSizeUSD), exitPricePlaintext)
+            : FHE.asEuint64(0);
         euint64 netReturn = FHE.select(profitableExit,
             FHE.add(p.collateralUSD, pnl),
             FHE.sub(p.collateralUSD, FHE.select(FHE.le(pnl, p.collateralUSD), pnl, p.collateralUSD))

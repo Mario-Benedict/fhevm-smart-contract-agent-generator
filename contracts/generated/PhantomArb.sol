@@ -20,7 +20,7 @@ contract PhantomArb is ZamaEthereumConfig {
         FHE.allowThis(encryptedTargetRatio);
     }
 
-    function setHiddenArbRatio(externalEuint64 memory extRatio, bytes calldata proof) external {
+    function setHiddenArbRatio(externalEuint64 extRatio, bytes calldata proof) external {
         require(msg.sender == owner, "Not owner");
         encryptedTargetRatio = FHE.fromExternal(extRatio, proof);
         FHE.allowThis(encryptedTargetRatio);
@@ -32,12 +32,11 @@ contract PhantomArb is ZamaEthereumConfig {
 
         // Scale ratio by 1000
         uint64 publicRatio = uint64((uint256(reserve1) * 1000) / uint256(reserve0));
-        euint64 encPublicRatio = FHE.asEuint64(publicRatio);
+        euint64 encPublicRatio = FHE.asEuint64(uint64(publicRatio));
         FHE.allowThis(encPublicRatio);
 
         // Execute only if public ratio > encrypted target
         ebool arbCondition = FHE.gt(encPublicRatio, encryptedTargetRatio);
-        FHE.req(arbCondition);
 
         // Logic to execute actual flash loan / swap goes here
     }

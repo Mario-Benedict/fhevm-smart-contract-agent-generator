@@ -20,8 +20,8 @@ contract FogOfWarArena is ZamaEthereumConfig {
 
     // Deploy a ship to a hidden coordinate (0-255 grid)
     function deployShip(
-        externalEuint8 memory extX,
-        externalEuint8 memory extY,
+        externalEuint8 extX,
+        externalEuint8 extY,
         bytes calldata proofX,
         bytes calldata proofY
     ) external {
@@ -48,8 +48,8 @@ contract FogOfWarArena is ZamaEthereumConfig {
 
     // Launch an attack at a specific coordinate
     function launchEncryptedAttack(
-        externalEuint8 memory extTargetX,
-        externalEuint8 memory extTargetY,
+        externalEuint8 extTargetX,
+        externalEuint8 extTargetY,
         bytes calldata proofX,
         bytes calldata proofY
     ) external {

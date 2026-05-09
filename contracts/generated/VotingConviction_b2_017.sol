@@ -57,7 +57,7 @@ contract VotingConviction_b2_017 is ZamaEthereumConfig {
 
         uint256 timeStaked = block.timestamp - stakeTimestamp[msg.sender];
         uint64 timeWeight = uint64(timeStaked / 1 days) + 1;
-        euint64 conviction = FHE.mul(stakedTokens[msg.sender], FHE.asEuint64(timeWeight));
+        euint64 conviction = FHE.mul(stakedTokens[msg.sender], FHE.asEuint64(uint64(timeWeight)));
         proposals[proposalId].conviction = FHE.add(proposals[proposalId].conviction, conviction);
         FHE.allowThis(proposals[proposalId].conviction);
     }

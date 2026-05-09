@@ -24,6 +24,7 @@ contract PrivateAPIGateway is ZamaEthereumConfig, Ownable {
     mapping(address => Subscription) public subscriptions;
     mapping(uint256 => APIEndpoint) public endpoints;
     mapping(address => euint32) public totalRequestsMade;
+    mapping(address => bool) private _requestsInitialized;
     uint256 public endpointCount;
 
     event SubscriptionCreated(address indexed subscriber);
@@ -35,9 +36,9 @@ contract PrivateAPIGateway is ZamaEthereumConfig, Ownable {
 
     function registerEndpoint(
         string calldata path,
-        externalEuint8 calldata encTier,
+        externalEuint8 encTier,
         bytes calldata tierProof,
-        externalEuint32 calldata encCost,
+        externalEuint32 encCost,
         bytes calldata costProof
     ) external onlyOwner returns (uint256 endpointId) {
         endpointId = endpointCount++;
@@ -53,9 +54,9 @@ contract PrivateAPIGateway is ZamaEthereumConfig, Ownable {
 
     function createSubscription(
         address subscriber,
-        externalEuint8 calldata encTier,
+        externalEuint8 encTier,
         bytes calldata tierProof,
-        externalEuint32 calldata encRequests,
+        externalEuint32 encRequests,
         bytes calldata requestsProof,
         uint32 durationDays
     ) external onlyOwner {
@@ -70,9 +71,10 @@ contract PrivateAPIGateway is ZamaEthereumConfig, Ownable {
         FHE.allow(s.tierLevel, subscriber);
         FHE.allow(s.requestsRemaining, subscriber);
         FHE.allow(s.expiresAt, subscriber);
-        if (totalRequestsMade[subscriber].unwrap() == 0) {
+        if (!_requestsInitialized[subscriber]) {
             totalRequestsMade[subscriber] = FHE.asEuint32(0);
             FHE.allowThis(totalRequestsMade[subscriber]);
+            _requestsInitialized[subscriber] = true;
         }
         emit SubscriptionCreated(subscriber);
     }

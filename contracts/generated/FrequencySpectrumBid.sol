@@ -12,7 +12,8 @@ contract FrequencySpectrumBid is ZamaEthereumConfig, Ownable {
         string region;
         uint256 licenseYears;
         euint64 winningBid;
-        address winner;
+        eaddress encWinner;
+        address revealedWinner;
         uint256 auctionEnd;
         bool awarded;
     }
@@ -36,7 +37,7 @@ contract FrequencySpectrumBid is ZamaEthereumConfig, Ownable {
 
     function qualifyBidder(
         address bidder,
-        externalEuint64 calldata encDeposit,
+        externalEuint64 encDeposit,
         bytes calldata inputProof
     ) external onlyOwner {
         euint64 deposit = FHE.fromExternal(encDeposit, inputProof);
@@ -61,14 +62,16 @@ contract FrequencySpectrumBid is ZamaEthereumConfig, Ownable {
         l.region = region;
         l.licenseYears = _years;
         l.winningBid = FHE.asEuint64(0);
+        l.encWinner = FHE.asEaddress(address(0));
         l.auctionEnd = block.timestamp + duration;
         FHE.allowThis(l.winningBid);
+        FHE.allowThis(l.encWinner);
         emit LicenseOffered(licenseId, band, region);
     }
 
     function placeBid(
         uint256 licenseId,
-        externalEuint64 calldata encBid,
+        externalEuint64 encBid,
         bytes calldata inputProof
     ) external {
         require(bidders[msg.sender].qualified, "Not qualified");
@@ -82,21 +85,21 @@ contract FrequencySpectrumBid is ZamaEthereumConfig, Ownable {
 
         ebool isHigher = FHE.gt(bid, l.winningBid);
         l.winningBid = FHE.select(isHigher, bid, l.winningBid);
+        l.encWinner = FHE.select(isHigher, FHE.asEaddress(msg.sender), l.encWinner);
         FHE.allowThis(l.winningBid);
-
-        if (isHigher.unwrap() != 0) {
-            l.winner = msg.sender;
-        }
+        FHE.allowThis(l.encWinner);
         emit BidPlaced(licenseId, msg.sender);
     }
 
-    function awardLicense(uint256 licenseId) external onlyOwner {
+    function awardLicense(uint256 licenseId, address winner) external onlyOwner {
         SpectrumLicense storage l = licenses[licenseId];
         require(block.timestamp > l.auctionEnd, "Not ended");
         require(!l.awarded, "Done");
         l.awarded = true;
-        FHE.allow(l.winningBid, l.winner);
+        l.revealedWinner = winner;
+        FHE.allow(l.winningBid, winner);
         FHE.allow(l.winningBid, owner());
-        emit LicenseAwarded(licenseId, l.winner);
+        FHE.allow(l.encWinner, owner());
+        emit LicenseAwarded(licenseId, winner);
     }
 }

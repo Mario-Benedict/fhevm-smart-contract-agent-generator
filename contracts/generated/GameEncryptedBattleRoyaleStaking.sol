@@ -62,7 +62,8 @@ contract GameEncryptedBattleRoyaleStaking is ZamaEthereumConfig, Ownable, Reentr
             ps.totalKills = FHE.asEuint64(0);
             ps.avgSurvivalTime = FHE.asEuint64(0);
             ps.winRate = FHE.asEuint64(0);
-            ps.gamesPlayed = 0;
+            ps.gamesPlayed = FHE.asEuint32(0);
+            FHE.allowThis(ps.gamesPlayed);
             ps.registered = true;
         }
         ps.stakedBalance = FHE.add(ps.stakedBalance, stake);
@@ -130,9 +131,10 @@ contract GameEncryptedBattleRoyaleStaking is ZamaEthereumConfig, Ownable, Reentr
         euint64 kills = FHE.fromExternal(encKills, kProof);
         euint64 survival = FHE.fromExternal(encSurvival, sProof);
         ps.totalKills = FHE.add(ps.totalKills, kills);
-        ps.avgSurvivalTime = FHE.div(FHE.add(FHE.mul(ps.avgSurvivalTime, FHE.asEuint64(uint64(ps.gamesPlayed))), survival),
-            FHE.asEuint64(uint64(ps.gamesPlayed + 1)));
-        ps.gamesPlayed++;
+        // Running average: accumulate total survival time (no encrypted divisor)
+        ps.avgSurvivalTime = FHE.add(ps.avgSurvivalTime, survival);
+        ps.gamesPlayed = FHE.add(ps.gamesPlayed, FHE.asEuint32(1));
+        FHE.allowThis(ps.gamesPlayed);
         FHE.allowThis(ps.totalKills);
         FHE.allow(ps.totalKills, player);
         FHE.allowThis(ps.avgSurvivalTime);

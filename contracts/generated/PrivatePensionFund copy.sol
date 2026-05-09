@@ -46,8 +46,8 @@ contract PrivatePensionFund is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     function enrollMember(
         address member,
         uint256 retirementDate,
-        externalEuint64 calldata encSalary, bytes calldata salaryProof,
-        externalEuint8  calldata encFactor, bytes calldata factorProof
+        externalEuint64 encSalary, bytes calldata salaryProof,
+        externalEuint8 encFactor, bytes calldata factorProof
     ) external {
         require(sponsorEmployers[msg.sender], "Not sponsor");
         require(!members[member].enrolled,    "Already enrolled");
@@ -70,7 +70,7 @@ contract PrivatePensionFund is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function recordContribution(
         address member, bool isEmployer,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external {
         require(sponsorEmployers[msg.sender] || msg.sender == member, "Unauthorized");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -95,8 +95,8 @@ contract PrivatePensionFund is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         m.yearsOfService = FHE.add(m.yearsOfService, FHE.asEuint16(1));
         // benefit = salary * yearsOfService * benefitFactor / 100
         euint64 benefit = FHE.div(
-            FHE.mul(m.finalSalary, FHE.asEuint64(uint64(m.yearsOfService.unwrap()) * uint64(m.benefitFactor.unwrap()))),
-            FHE.asEuint64(100)
+            FHE.mul(FHE.mul(m.finalSalary, m.yearsOfService), m.benefitFactor),
+            100
         );
         m.accruedBenefit = benefit;
         totalLiabilities = FHE.add(totalLiabilities, FHE.asEuint64(1));

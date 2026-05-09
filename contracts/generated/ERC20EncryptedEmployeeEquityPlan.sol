@@ -162,7 +162,7 @@ contract ERC20EncryptedEmployeeEquityPlan is ZamaEthereumConfig, Ownable, Reentr
 
         euint64 proceeds = FHE.mul(actual, g.strikePriceCentsUSD);
         euint64 gain = FHE.mul(actual, FHE.sub(g.currentFMVCentsUSD, g.strikePriceCentsUSD));
-        euint64 taxWithholding = FHE.div(FHE.mul(gain, FHE.asEuint64(2400)), 10000); // ~24% bracket
+        euint64 taxWithholding = FHE.div(FHE.mul(gain, 2400), 10000); // ~24% bracket
 
         g.sharesExercised = FHE.add(g.sharesExercised, actual);
         g.taxWithholdingCents = FHE.add(g.taxWithholdingCents, taxWithholding);

@@ -44,7 +44,7 @@ contract PrivateElectionCommission is ZamaEthereumConfig, AccessControl {
         _grantRole(COMMISSIONER_ROLE,   msg.sender);
     }
 
-    function registerVoter(address voter, externalEuint8 calldata encId, bytes calldata inputProof)
+    function registerVoter(address voter, externalEuint8 encId, bytes calldata inputProof)
         external onlyRole(COMMISSIONER_ROLE)
     {
         voterIdHash[voter] = FHE.fromExternal(encId, inputProof);
@@ -82,7 +82,7 @@ contract PrivateElectionCommission is ZamaEthereumConfig, AccessControl {
         emit CandidateAdded(electionId, idx, name);
     }
 
-    function castVote(uint256 electionId, externalEuint8 calldata encChoice, bytes calldata inputProof)
+    function castVote(uint256 electionId, externalEuint8 encChoice, bytes calldata inputProof)
         external onlyRole(VOTER_ROLE)
     {
         require(!hasVoted[electionId][msg.sender], "Already voted");

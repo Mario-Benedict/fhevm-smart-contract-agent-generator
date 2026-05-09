@@ -136,8 +136,8 @@ contract EncryptedDrugSafetyPhaseIITrial is ZamaEthereumConfig, Ownable, Reentra
         p.efficacyResponse = FHE.fromExternal(encEfficacy, effProof);
         p.biomarkerLevel = FHE.fromExternal(encBiomarker, bioProof);
         _avgEfficacyScore = FHE.add(
-            FHE.div(_avgEfficacyScore, FHE.asEuint32(2)),
-            FHE.div(FHE.asEuint32(uint32(p.efficacyResponse)), FHE.asEuint32(2))
+            FHE.div(_avgEfficacyScore, 2),
+            FHE.div(FHE.asEuint32(p.efficacyResponse), 2)
         );
         FHE.allowThis(p.currentHealthScore);
         FHE.allowThis(p.efficacyResponse);
@@ -160,7 +160,7 @@ contract EncryptedDrugSafetyPhaseIITrial is ZamaEthereumConfig, Ownable, Reentra
             participantId: pid,
             grade: grade,
             severityScore: severity,
-            reportedAt: FHE.asEuint64(block.timestamp),
+            reportedAt: FHE.asEuint64(uint64(block.timestamp)),
             adjudicated: false,
             causedWithdrawal: causedWithdrawal
         }));

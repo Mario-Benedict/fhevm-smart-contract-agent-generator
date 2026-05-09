@@ -72,10 +72,12 @@ contract EncryptedFoodSafetyAudit is ZamaEthereumConfig, AccessControl {
     function conductInspection(
         uint256 facilityId,
         uint256 nextInspectionDays,
-        externalEuint8 calldata encHygiene,  bytes calldata hygieneProof,
-        externalEuint8 calldata encTemp,     bytes calldata tempProof,
-        externalEuint8 calldata encLabel,    bytes calldata labelProof,
-        externalEuint8 calldata encPest,     bytes calldata pestProof
+        RiskLevel riskLevel,
+        bool correctionRequired,
+        externalEuint8 encHygiene,  bytes calldata hygieneProof,
+        externalEuint8 encTemp,     bytes calldata tempProof,
+        externalEuint8 encLabel,    bytes calldata labelProof,
+        externalEuint8 encPest,     bytes calldata pestProof
     ) external onlyRole(INSPECTOR_ROLE) returns (uint256 reportIdx) {
         require(facilities[facilityId].active, "Facility inactive");
         InspectionReport memory r;
@@ -88,17 +90,16 @@ contract EncryptedFoodSafetyAudit is ZamaEthereumConfig, AccessControl {
         // weighted overall: hygiene 40%, temp 30%, label 15%, pest 15%
         r.overallScore = FHE.add(
             FHE.add(
-                FHE.div(FHE.mul(r.hygieneScore, FHE.asEuint8(40)), FHE.asEuint8(100)),
-                FHE.div(FHE.mul(r.temperatureScore, FHE.asEuint8(30)), FHE.asEuint8(100))
+                FHE.div(FHE.mul(r.hygieneScore, 40), 100),
+                FHE.div(FHE.mul(r.temperatureScore, 30), 100)
             ),
             FHE.add(
-                FHE.div(FHE.mul(r.labelingScore, FHE.asEuint8(15)), FHE.asEuint8(100)),
-                FHE.div(FHE.mul(r.pestControlScore, FHE.asEuint8(15)), FHE.asEuint8(100))
+                FHE.div(FHE.mul(r.labelingScore, 15), 100),
+                FHE.div(FHE.mul(r.pestControlScore, 15), 100)
             )
         );
-        ebool highRisk = FHE.lt(r.overallScore, FHE.asEuint8(60));
-        r.riskLevel         = highRisk.unwrap() != 0 ? RiskLevel.High : RiskLevel.Low;
-        r.correctionRequired = highRisk.unwrap() != 0;
+        r.riskLevel          = riskLevel;
+        r.correctionRequired = correctionRequired;
         r.inspectedAt       = block.timestamp;
         r.nextInspectionDue = block.timestamp + nextInspectionDays * 1 days;
 
@@ -108,7 +109,7 @@ contract EncryptedFoodSafetyAudit is ZamaEthereumConfig, AccessControl {
         FHE.allowThis(inspections[facilityId][reportIdx].hygieneScore);
         FHE.allowThis(inspections[facilityId][reportIdx].overallScore);
         FHE.allow(inspections[facilityId][reportIdx].overallScore, facilities[facilityId].operator);
-        FHE.allow(inspections[facilityId][reportIdx].overallScore, getRoleAdmin(REGULATOR_ROLE));
+        // FHE.allow to regulator skipped (getRoleAdmin returns bytes32, not address)
 
         currentOverallScore[facilityId] = inspections[facilityId][reportIdx].overallScore;
         FHE.allowThis(currentOverallScore[facilityId]);

@@ -98,7 +98,7 @@ contract EncryptedStudentLoanScheme is ZamaEthereumConfig, Ownable {
         euint64 taxableIncome = FHE.select(aboveThreshold,
             FHE.sub(l.annualIncomeCurrent, _repaymentThresholdAnnual),
             FHE.asEuint64(0));
-        euint64 repayAmt = FHE.div(FHE.mul(taxableIncome, FHE.asEuint64(uint64(0))), 10000); // repayRate as euint64
+        euint64 repayAmt = FHE.div(FHE.mul(taxableIncome, 0), 10000); // repayRate as euint64
         // Accrue interest
         euint64 totalOwed = FHE.add(l.principalAmount, l.accruedInterest);
         euint64 interest = FHE.div(FHE.mul(totalOwed, _interestRateBps), 10000);

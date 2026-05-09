@@ -95,7 +95,7 @@ contract PrivateCarbonCreditForwardSettlement is ZamaEthereumConfig, Ownable, Re
         euint64 strikePrice = FHE.fromExternal(encStrikePrice, spProof);
         euint64 volume = FHE.fromExternal(encVolume, volProof);
         euint64 totalNotional = FHE.mul(strikePrice, volume);
-        euint64 margin = FHE.div(FHE.mul(totalNotional, _initialMarginRateBps), FHE.asEuint64(10000));
+        euint64 margin = FHE.div(FHE.mul(totalNotional, _initialMarginRateBps), 10000);
 
         address buyer = isBuyer ? msg.sender : counterparty;
         address seller = isBuyer ? counterparty : msg.sender;

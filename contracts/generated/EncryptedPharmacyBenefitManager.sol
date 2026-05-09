@@ -56,9 +56,9 @@ contract EncryptedPharmacyBenefitManager is ZamaEthereumConfig, AccessControl, R
 
     function addDrug(
         string calldata ndc, string calldata name,
-        externalEuint8  calldata encTier,  bytes calldata tierProof,
-        externalEuint64 calldata encPrice, bytes calldata priceProof,
-        externalEuint16 calldata encCopay, bytes calldata copayProof
+        externalEuint8 encTier,  bytes calldata tierProof,
+        externalEuint64 encPrice, bytes calldata priceProof,
+        externalEuint16 encCopay, bytes calldata copayProof
     ) external onlyRole(PBM_ROLE) returns (uint256 drugId) {
         drugId = drugCount++;
         Drug storage d = formulary[drugId];
@@ -74,9 +74,9 @@ contract EncryptedPharmacyBenefitManager is ZamaEthereumConfig, AccessControl, R
 
     function enrollPatient(
         address patient,
-        externalEuint64 calldata encDeductible, bytes calldata deductProof,
-        externalEuint64 calldata encOOP,        bytes calldata oopProof,
-        externalEuint8  calldata encPlanTier,   bytes calldata planProof
+        externalEuint64 encDeductible, bytes calldata deductProof,
+        externalEuint64 encOOP,        bytes calldata oopProof,
+        externalEuint8 encPlanTier,   bytes calldata planProof
     ) external onlyRole(PBM_ROLE) {
         PatientBenefits storage p = patientBenefits[patient];
         p.deductibleRemaining  = FHE.fromExternal(encDeductible, deductProof);
@@ -101,12 +101,11 @@ contract EncryptedPharmacyBenefitManager is ZamaEthereumConfig, AccessControl, R
         Claim storage c = claims[claimId];
         c.drugId       = drugId;
         c.claimAmount  = d.negotiatedPrice;
-        c.patientPays  = FHE.div(FHE.mul(d.negotiatedPrice, FHE.asEuint64(d.copayBps.unwrap())), FHE.asEuint64(10000));
+        c.patientPays  = FHE.div(FHE.mul(d.negotiatedPrice, d.copayBps), 10000);
         c.planPays     = FHE.sub(d.negotiatedPrice, c.patientPays);
         c.adjudicated  = true;
         FHE.allowThis(c.claimAmount); FHE.allowThis(c.patientPays); FHE.allowThis(c.planPays);
-        FHE.allow(c.patientPays, msg.sender);
-        FHE.allow(c.planPays, getRoleAdmin(PBM_ROLE));
+        FHE.allow(c.patientPays, msg.sender);        // FHE.allow to role admin skipped (getRoleAdmin returns bytes32, not address)
         emit ClaimAdjudicated(claimId, msg.sender);
     }
 }

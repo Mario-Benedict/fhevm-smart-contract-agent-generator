@@ -81,10 +81,10 @@ contract EncryptedPeerReviewJournal is ZamaEthereumConfig, AccessControl {
 
     function submitReview(
         uint256 msId, uint8 reviewSlot,
-        externalEuint8 calldata encNovelty,      bytes calldata noveltyProof,
-        externalEuint8 calldata encMethodology,  bytes calldata methodProof,
-        externalEuint8 calldata encClarity,      bytes calldata clarityProof,
-        externalEuint8 calldata encRecommend,    bytes calldata recommendProof
+        externalEuint8 encNovelty,      bytes calldata noveltyProof,
+        externalEuint8 encMethodology,  bytes calldata methodProof,
+        externalEuint8 encClarity,      bytes calldata clarityProof,
+        externalEuint8 encRecommend,    bytes calldata recommendProof
     ) external onlyRole(REVIEWER_ROLE) {
         require(assignedReviewer[msId][msg.sender], "Not assigned");
         ReviewRecord storage r = reviews[msId][reviewSlot];
@@ -95,14 +95,12 @@ contract EncryptedPeerReviewJournal is ZamaEthereumConfig, AccessControl {
         r.recommendation    = FHE.fromExternal(encRecommend,   recommendProof);
         r.submitted         = true;
         FHE.allowThis(r.scoreNovelty); FHE.allowThis(r.scoreMethodology);
-        FHE.allowThis(r.scoreClarity); FHE.allowThis(r.recommendation);
-        FHE.allow(r.scoreNovelty, getRoleAdmin(EDITOR_ROLE));
+        FHE.allowThis(r.scoreClarity); FHE.allowThis(r.recommendation);        // FHE.allow to role admin skipped (getRoleAdmin returns bytes32, not address)
         Manuscript storage m = manuscripts[msId];
-        euint8 avg = FHE.div(FHE.add(FHE.add(r.scoreNovelty, r.scoreMethodology), r.scoreClarity), FHE.asEuint8(3));
+        euint8 avg = FHE.div(FHE.add(FHE.add(r.scoreNovelty, r.scoreMethodology), r.scoreClarity), 3);
         m.overallScore = FHE.add(m.overallScore, avg);
         m.reviewerCount = FHE.add(m.reviewerCount, FHE.asEuint8(1));
-        FHE.allowThis(m.overallScore); FHE.allowThis(m.reviewerCount);
-        FHE.allow(m.overallScore, getRoleAdmin(EDITOR_ROLE));
+        FHE.allowThis(m.overallScore); FHE.allowThis(m.reviewerCount);        // FHE.allow to role admin skipped (getRoleAdmin returns bytes32, not address)
         emit ReviewSubmitted(msId, msg.sender);
     }
 

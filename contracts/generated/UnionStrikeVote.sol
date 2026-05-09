@@ -52,7 +52,7 @@ contract UnionStrikeVote is ZamaEthereumConfig, Ownable {
     }
 
     // choice: 0=yes, 1=no, 2=abstain
-    function castVote(uint256 ballotId, externalEuint32 calldata encChoice, bytes calldata inputProof) external {
+    function castVote(uint256 ballotId, externalEuint32 encChoice, bytes calldata inputProof) external {
         require(members[msg.sender], "Not a member");
         require(!voted[ballotId][msg.sender], "Already voted");
         Ballot storage b = ballots[ballotId];

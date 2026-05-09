@@ -42,9 +42,9 @@ contract PrivateDebtMarketplace is ZamaEthereumConfig, Ownable, ReentrancyGuard 
 
     function originateNote(
         address borrower,
-        externalEuint64 calldata encFace,   bytes calldata faceProof,
-        externalEuint8  calldata encRating, bytes calldata ratingProof,
-        externalEuint16 calldata encCoupon, bytes calldata couponProof,
+        externalEuint64 encFace,   bytes calldata faceProof,
+        externalEuint8 encRating, bytes calldata ratingProof,
+        externalEuint16 encCoupon, bytes calldata couponProof,
         uint256 maturityDays
     ) external onlyOwner returns (uint256 noteId) {
         noteId = noteCount++;
@@ -65,7 +65,7 @@ contract PrivateDebtMarketplace is ZamaEthereumConfig, Ownable, ReentrancyGuard 
 
     function listNote(
         uint256 noteId,
-        externalEuint64 calldata encAsk, bytes calldata askProof
+        externalEuint64 encAsk, bytes calldata askProof
     ) external returns (uint256 listingId) {
         DebtNote storage n = notes[noteId];
         require(n.currentHolder == msg.sender, "Not holder");

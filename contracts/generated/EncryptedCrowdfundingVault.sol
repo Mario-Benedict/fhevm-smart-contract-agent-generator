@@ -36,7 +36,7 @@ contract EncryptedCrowdfundingVault is ZamaEthereumConfig, Ownable, ReentrancyGu
         string calldata title,
         string calldata description,
         uint256 durationDays,
-        externalEuint64 calldata encGoal,
+        externalEuint64 encGoal,
         bytes calldata inputProof
     ) external returns (uint256 campaignId) {
         campaignId = campaignCount++;
@@ -53,7 +53,7 @@ contract EncryptedCrowdfundingVault is ZamaEthereumConfig, Ownable, ReentrancyGu
         emit CampaignLaunched(campaignId, msg.sender, title);
     }
 
-    function contribute(uint256 campaignId, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function contribute(uint256 campaignId, externalEuint64 encAmount, bytes calldata inputProof)
         external
         nonReentrant
     {
@@ -77,15 +77,17 @@ contract EncryptedCrowdfundingVault is ZamaEthereumConfig, Ownable, ReentrancyGu
         emit ContributionMade(campaignId, msg.sender);
     }
 
-    function finalizeCampaign(uint256 campaignId) external nonReentrant {
+    function finalizeCampaign(uint256 campaignId, bool goalReached) external nonReentrant {
         Campaign storage c = campaigns[campaignId];
         require(block.timestamp > c.deadline, "Not ended");
         require(!c.finalized, "Done");
         require(msg.sender == c.creator || msg.sender == owner(), "Unauthorized");
         c.finalized = true;
+        c.goalReached = goalReached;
         ebool reached = FHE.ge(c.raisedAmount, c.goalAmount);
-        c.goalReached = reached.unwrap() != 0;
+        FHE.allowThis(reached);
         FHE.allow(c.raisedAmount, c.creator);
+        FHE.allow(reached, c.creator);
         emit CampaignFinalized(campaignId, c.goalReached);
     }
 

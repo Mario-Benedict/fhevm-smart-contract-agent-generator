@@ -28,7 +28,7 @@ contract FrostVaultToken is ZamaEthereumConfig, Ownable {
     function createVesting(
         address beneficiary,
         uint64 duration,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -48,7 +48,7 @@ contract FrostVaultToken is ZamaEthereumConfig, Ownable {
         uint64 elapsed = uint64(block.timestamp) - schedule.startTime;
         uint64 vestingProgress = elapsed >= schedule.duration ? 10000 : uint64((elapsed * 10000) / schedule.duration);
 
-        euint64 vestedAmount = FHE.div(FHE.mul(schedule.totalAmount, FHE.asEuint64(vestingProgress)), FHE.asEuint64(10000));
+        euint64 vestedAmount = FHE.div(FHE.mul(schedule.totalAmount, FHE.asEuint64(uint64(vestingProgress))), 10000);
         euint64 releasable = FHE.sub(vestedAmount, schedule.released);
 
         schedule.released = FHE.add(schedule.released, releasable);

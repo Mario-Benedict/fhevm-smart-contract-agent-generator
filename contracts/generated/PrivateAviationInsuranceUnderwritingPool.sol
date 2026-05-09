@@ -108,7 +108,7 @@ contract PrivateAviationInsuranceUnderwritingPool is ZamaEthereumConfig, Ownable
         euint64 deductible = FHE.fromExternal(encDeductible, dedProof);
         euint64 riCession = FHE.fromExternal(encRICession, ricProof);
         euint64 totalPremium = FHE.add(hullPremium, liabPremium);
-        euint64 netRetention = FHE.div(FHE.mul(totalPremium, FHE.sub(FHE.asEuint64(10000), riCession)), FHE.asEuint64(10000));
+        euint64 netRetention = FHE.div(FHE.mul(totalPremium, FHE.sub(FHE.asEuint64(10000), riCession)), 10000);
 
         policyId = keccak256(abi.encodePacked(insured, category, policyStart, block.timestamp));
         policies[policyId] = AircraftPolicy({
@@ -154,7 +154,7 @@ contract PrivateAviationInsuranceUnderwritingPool is ZamaEthereumConfig, Ownable
         euint64 netLoss = FHE.select(FHE.ge(grossLoss, FHE.add(pol.deductibleAmount, salvageValue)),
             FHE.sub(grossLoss, FHE.add(pol.deductibleAmount, salvageValue)),
             FHE.asEuint64(0));
-        euint64 riRecovery = FHE.div(FHE.mul(netLoss, pol.reinsuranceCession), FHE.asEuint64(10000));
+        euint64 riRecovery = FHE.div(FHE.mul(netLoss, pol.reinsuranceCession), 10000);
         euint64 netClaimCost = FHE.sub(netLoss, riRecovery);
 
         claimId = keccak256(abi.encodePacked(policyId, dateOfLoss, block.timestamp));

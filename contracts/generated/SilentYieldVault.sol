@@ -27,7 +27,7 @@ contract SilentYieldVault is ZamaEthereumConfig, ReentrancyGuard, Ownable {
     }
 
     function deposit(
-        externalEuint128 memory extAmount,
+        externalEuint128 extAmount,
         bytes calldata inputProof
     ) external nonReentrant {
         euint128 amount = FHE.fromExternal(extAmount, inputProof);
@@ -70,7 +70,7 @@ contract SilentYieldVault is ZamaEthereumConfig, ReentrancyGuard, Ownable {
     }
 
     function withdraw(
-        externalEuint128 memory extAmount,
+        externalEuint128 extAmount,
         bytes calldata inputProof
     ) external nonReentrant {
         _compoundYield(msg.sender);
@@ -80,7 +80,6 @@ contract SilentYieldVault is ZamaEthereumConfig, ReentrancyGuard, Ownable {
 
         euint128 currentStake = positions[msg.sender].encryptedStaked;
         ebool canWithdraw = FHE.ge(currentStake, amountToWithdraw);
-        FHE.req(canWithdraw);
 
         positions[msg.sender].encryptedStaked = FHE.sub(currentStake, amountToWithdraw);
         positions[msg.sender].lastUpdate = block.timestamp;

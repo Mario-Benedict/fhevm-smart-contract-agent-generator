@@ -74,7 +74,7 @@ contract EncryptedWillExecution is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         for (uint256 i = 0; i < beneficiaries[willId].length; i++) {
             Beneficiary storage b = beneficiaries[willId][i];
             b.shareAmount = FHE.div(
-                FHE.mul(w.totalEstate, FHE.asEuint64(uint64(0))),
+                FHE.mul(w.totalEstate, 0),
                 100
             );
             FHE.allowThis(b.shareAmount);

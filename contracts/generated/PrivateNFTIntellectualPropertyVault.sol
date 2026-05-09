@@ -136,7 +136,7 @@ contract PrivateNFTIntellectualPropertyVault is ZamaEthereumConfig, Ownable, Ree
         euint64 revenue = FHE.fromExternal(encRevenue, proof);
         lic.revenueReportedUSD = FHE.add(lic.revenueReportedUSD, revenue);
         // Royalty = revenue * royaltyRateBps / 10000
-        euint64 royalty = FHE.div(FHE.mul(revenue, FHE.asEuint64(500)), 10000); // 5% fixed proxy rate (plaintext divisor)
+        euint64 royalty = FHE.div(FHE.mul(revenue, 500), 10000); // 5% fixed proxy rate (plaintext divisor)
         lic.royaltyOwedUSD = FHE.add(lic.royaltyOwedUSD, royalty);
         IPAsset storage asset = ipAssets[lic.assetId];
         asset.totalLicenseRevenueUSD = FHE.add(asset.totalLicenseRevenueUSD, revenue);

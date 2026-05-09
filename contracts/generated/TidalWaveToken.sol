@@ -17,7 +17,7 @@ contract TidalWaveToken is ZamaEthereumConfig, Ownable {
 
     event Transfer(address indexed from, address indexed to);
 
-    constructor(externalEuint64 calldata encLimit, bytes calldata inputProof) Ownable(msg.sender) {
+    constructor(externalEuint64 encLimit, bytes memory inputProof) Ownable(msg.sender) {
         dailyLimit = FHE.fromExternal(encLimit, inputProof);
         FHE.allowThis(dailyLimit);
     }
@@ -31,14 +31,14 @@ contract TidalWaveToken is ZamaEthereumConfig, Ownable {
         }
     }
 
-    function mint(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function mint(address to, externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[to] = FHE.add(_balances[to], amount);
         FHE.allowThis(_balances[to]);
         FHE.allow(_balances[to], to);
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _resetDailyIfNeeded(msg.sender);
 
@@ -62,7 +62,7 @@ contract TidalWaveToken is ZamaEthereumConfig, Ownable {
         return _balances[account];
     }
 
-    function setDailyLimit(externalEuint64 calldata encLimit, bytes calldata inputProof) external onlyOwner {
+    function setDailyLimit(externalEuint64 encLimit, bytes calldata inputProof) external onlyOwner {
         dailyLimit = FHE.fromExternal(encLimit, inputProof);
         FHE.allowThis(dailyLimit);
     }

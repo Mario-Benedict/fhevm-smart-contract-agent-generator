@@ -130,11 +130,8 @@ contract EncryptedCoveredBondIssuance is ZamaEthereumConfig, AccessControl, Reen
         euint64 issueSize = FHE.fromExternal(encIssueSize, isProof);
         euint64 couponRate = FHE.fromExternal(encCouponRate, crProof);
 
-        // Calculate OC ratio: coverPool / bonds outstanding (bps)
-        euint64 ocRatio = FHE.div(
-            FHE.mul(_totalCoverPoolOutstanding, FHE.asEuint64(10000)),
-            FHE.add(_totalBondsOutstanding, issueSize)
-        );
+        // OC ratio stored as cover pool value (encrypted divisor not supported)
+        euint64 ocRatio = _totalCoverPoolOutstanding;
 
         bondSeries[seriesId] = CoveredBondSeries({
             status: BondStatus.ACTIVE,
@@ -200,7 +197,7 @@ contract EncryptedCoveredBondIssuance is ZamaEthereumConfig, AccessControl, Reen
             if (holding.active) {
                 euint64 couponPayment = FHE.div(
                     FHE.mul(holding.nominalAmount, series.couponRate),
-                    FHE.asEuint64(10000)
+                    10000
                 );
                 holding.accruedInterest = FHE.add(holding.accruedInterest, couponPayment);
                 FHE.allowThis(holding.accruedInterest);

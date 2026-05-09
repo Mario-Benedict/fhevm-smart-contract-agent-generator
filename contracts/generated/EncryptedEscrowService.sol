@@ -43,7 +43,7 @@ contract EncryptedEscrowService is ZamaEthereumConfig, Ownable, ReentrancyGuard 
     function createEscrow(
         address payee,
         address arbitrator,
-        externalEuint64 calldata encTotal,
+        externalEuint64 encTotal,
         bytes calldata inputProof
     ) external returns (uint256 escrowId) {
         escrowId = escrowCount++;
@@ -63,7 +63,7 @@ contract EncryptedEscrowService is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         uint256 escrowId,
         string calldata description,
         uint256 deadlineDays,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external {
         Escrow storage e = escrows[escrowId];

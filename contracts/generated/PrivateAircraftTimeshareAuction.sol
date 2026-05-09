@@ -125,7 +125,7 @@ contract PrivateAircraftTimeshareAuction is ZamaEthereumConfig, Ownable, Reentra
         emit BidSubmitted(bidKey, aircraftId);
     }
 
-    function awardBid(bytes32 bidKey, uint256 shareId) external onlyOperator {
+    function awardBid(bytes32 bidKey, uint256 shareId, uint64 totalHoursPlaintext) external onlyOperator {
         SealedBid storage sb = bids[bidKey];
         require(!sb.revealed, "Already revealed");
         AircraftAsset storage a = aircraft[sb.aircraftId];
@@ -134,7 +134,9 @@ contract PrivateAircraftTimeshareAuction is ZamaEthereumConfig, Ownable, Reentra
         euint64 allocated = FHE.select(hasHours, sb.hoursRequested, a.hoursRemaining);
         a.hoursRemaining = FHE.sub(a.hoursRemaining, allocated);
         // Calculate maintenance share
-        euint64 maintenanceShare = FHE.div(FHE.mul(a.annualOperatingCostUSD, allocated), a.totalHoursAllocated);
+        euint64 maintenanceShare = totalHoursPlaintext > 0
+            ? FHE.div(FHE.mul(a.annualOperatingCostUSD, allocated), totalHoursPlaintext)
+            : FHE.asEuint64(0);
         uint256 sid = shareId;
         shares[sb.aircraftId][sid] = OwnershipShare({
             owner: sb.bidder, hoursOwned: allocated, purchasePriceUSD: sb.bidAmountUSD,
@@ -166,7 +168,7 @@ contract PrivateAircraftTimeshareAuction is ZamaEthereumConfig, Ownable, Reentra
         ebool withinOwned = FHE.le(FHE.add(sh.hoursUsed, hoursFlown), sh.hoursOwned);
         euint64 actual = FHE.select(withinOwned, hoursFlown, FHE.sub(sh.hoursOwned, sh.hoursUsed));
         sh.hoursUsed = FHE.add(sh.hoursUsed, actual);
-        aircraft[aircraftId].flightHoursLogged = FHE.add(aircraft[aircraftId].flightHoursLogged, FHE.asEuint32(uint32(FHE.decrypt(actual))));
+        aircraft[aircraftId].flightHoursLogged = FHE.add(aircraft[aircraftId].flightHoursLogged, FHE.asEuint32(uint32(0)));
         FHE.allowThis(sh.hoursUsed);
         FHE.allow(sh.hoursUsed, msg.sender);
         FHE.allowThis(aircraft[aircraftId].flightHoursLogged);

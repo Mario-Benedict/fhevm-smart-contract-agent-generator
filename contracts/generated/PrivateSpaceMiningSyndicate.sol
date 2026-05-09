@@ -142,7 +142,7 @@ contract PrivateSpaceMiningSyndicate is ZamaEthereumConfig, Ownable, ReentrancyG
         require(c.status == MissionStatus.ReturnTrip, "Not in return trip");
         euint64 actualRevenue = FHE.fromExternal(encActualRevenue, proof);
         // Royalty = revenue * ROYALTY_BPS / 10000 — plaintext divisors
-        euint64 royaltyAmt = FHE.div(FHE.mul(actualRevenue, FHE.asEuint64(ROYALTY_BPS)), 10000);
+        euint64 royaltyAmt = FHE.div(FHE.mul(actualRevenue, FHE.asEuint64(uint64(ROYALTY_BPS))), 10000);
         euint64 netRev = FHE.sub(actualRevenue, royaltyAmt);
         c.netRevenueUSD = netRev;
         c.status = MissionStatus.Settled;

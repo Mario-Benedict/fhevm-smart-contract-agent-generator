@@ -41,7 +41,7 @@ contract RoleBasedContentGating is ZamaEthereumConfig, AccessControl {
 
     function publishContent(
         string calldata contentId,
-        externalEuint8 calldata encLevel,
+        externalEuint8 encLevel,
         bytes calldata inputProof
     ) external onlyRole(CONTENT_ADMIN) returns (uint256 id) {
         id = contentCount++;
@@ -59,7 +59,7 @@ contract RoleBasedContentGating is ZamaEthereumConfig, AccessControl {
 
     function setupUserProfile(
         address user,
-        externalEuint8 calldata encLevel,
+        externalEuint8 encLevel,
         bytes calldata inputProof,
         uint256 subscriptionDays
     ) external onlyRole(CONTENT_ADMIN) {
@@ -75,7 +75,7 @@ contract RoleBasedContentGating is ZamaEthereumConfig, AccessControl {
         FHE.allow(p.contentConsumed, user);
     }
 
-    function accessContent(uint256 contentId, externalEuint64 calldata encPayment, bytes calldata inputProof) external {
+    function accessContent(uint256 contentId, externalEuint64 encPayment, bytes calldata inputProof) external {
         UserProfile storage p = userProfiles[msg.sender];
         ContentItem storage c = content[contentId];
         require(c.active, "Not active");

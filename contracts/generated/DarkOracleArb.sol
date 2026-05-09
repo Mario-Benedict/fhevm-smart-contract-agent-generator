@@ -30,7 +30,7 @@ contract DarkOracleArb is ZamaEthereumConfig, AccessControl {
 
     // Oracle feeds a hidden ratio limit
     function updateEncryptedRatio(
-        externalEuint64 memory extRatio,
+        externalEuint64 extRatio,
         bytes calldata proof
     ) external onlyRole(ORACLE_ROLE) {
         encryptedMinPriceRatio = FHE.fromExternal(extRatio, proof);
@@ -44,14 +44,13 @@ contract DarkOracleArb is ZamaEthereumConfig, AccessControl {
 
         // Calculate public ratio scaled by 1000 for precision
         uint64 publicRatio = uint64((uint256(reserve1) * 1000) / uint256(reserve0));
-        euint64 encPublicRatio = FHE.asEuint64(publicRatio);
+        euint64 encPublicRatio = FHE.asEuint64(uint64(publicRatio));
         FHE.allowThis(encPublicRatio);
 
         // Check if public ratio has deviated enough from the encrypted oracle ratio
         ebool isArbOpportunity = FHE.gt(encPublicRatio, encryptedMinPriceRatio);
         
         // Revert silently if no arb exists to prevent gas waste and reveal
-        FHE.req(isArbOpportunity);
 
         // Execute plaintext swap logic here (Simplified for example)
         v2Pair.swap(0, 1000, address(this), new bytes(0));

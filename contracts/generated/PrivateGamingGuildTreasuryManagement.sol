@@ -116,7 +116,7 @@ contract PrivateGamingGuildTreasuryManagement is ZamaEthereumConfig, Ownable, Re
     ) external nonReentrant {
         require(isGuildOfficer[msg.sender], "Not officer");
         euint64 earnings = FHE.fromExternal(encEarnings, proof);
-        euint64 tax = FHE.div(FHE.mul(earnings, FHE.asEuint64(uint64(0))), 10000);
+        euint64 tax = FHE.div(FHE.mul(earnings, 0), 10000);
         euint64 netEarnings = FHE.sub(earnings, tax);
         euint64 scholarPay = FHE.div(FHE.mul(netEarnings, members[member].scholarShareBps), 10000);
         members[member].weeklyEarningsUSD = FHE.add(members[member].weeklyEarningsUSD, scholarPay);

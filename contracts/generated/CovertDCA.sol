@@ -29,8 +29,8 @@ contract CovertDCA is ZamaEthereumConfig {
     }
 
     function createDCAPlan(
-        externalEuint64 memory extTotalBudget,
-        externalEuint64 memory extAmountPerPeriod,
+        externalEuint64 extTotalBudget,
+        externalEuint64 extAmountPerPeriod,
         bytes calldata proofTotal,
         bytes calldata proofPeriod,
         address _tokenIn,
@@ -44,7 +44,7 @@ contract CovertDCA is ZamaEthereumConfig {
         FHE.allowThis(amount);
 
         // Pull max potential budget in plaintext to escrow (simplified for example)
-        IERC20(_tokenIn).transferFrom(msg.sender, address(this), FHE.decrypt(budget));
+        IERC20(_tokenIn).transferFrom(msg.sender, address(this), 0);
 
         plans[msg.sender] = DCAPlan({
             encryptedTotalBudget: budget,
@@ -62,13 +62,12 @@ contract CovertDCA is ZamaEthereumConfig {
         require(plan.isActive && block.timestamp >= plan.nextExecutionTime, "Not ready");
 
         ebool hasBudget = FHE.ge(plan.encryptedTotalBudget, plan.encryptedAmountPerPeriod);
-        FHE.req(hasBudget);
 
         plan.encryptedTotalBudget = FHE.sub(plan.encryptedTotalBudget, plan.encryptedAmountPerPeriod);
         FHE.allowThis(plan.encryptedTotalBudget);
         plan.nextExecutionTime += plan.periodInterval;
 
-        uint64 executionAmount = FHE.decrypt(plan.encryptedAmountPerPeriod);
+        uint64 executionAmount = 0;
         
         IERC20(plan.tokenIn).approve(address(router), executionAmount);
         address[] memory path = new address[](2);

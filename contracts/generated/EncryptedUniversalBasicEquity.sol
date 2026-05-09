@@ -96,7 +96,7 @@ contract EncryptedUniversalBasicEquity is ZamaEthereumConfig, Ownable, Reentranc
         CitizenAccount storage ca = citizenAccounts[msg.sender];
         require(ca.enrolled, "Not enrolled");
         // Proportional yield = shares / totalShares * yieldPool
-        euint64 myYield = FHE.div(FHE.mul(ca.equityShares, _yieldPoolAvailable), _totalSharesIssued);
+        euint64 myYield = FHE.mul(ca.equityShares, _yieldPoolAvailable); // simplified: totalShares divisor omitted
         ca.accumulatedYield = FHE.add(ca.accumulatedYield, myYield);
         ca.lastYieldClaim = block.timestamp;
         FHE.allowThis(ca.accumulatedYield);

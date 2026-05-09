@@ -127,7 +127,7 @@ contract EncryptedTaxiFleetDynamicPricing is ZamaEthereumConfig, Ownable, Reentr
         euint64 baseFare = FHE.fromExternal(encBaseFare, proof);
         euint64 surge = zones[zoneId].currentSurgeBps;
         euint64 finalFare = FHE.div(FHE.mul(baseFare, surge), 10000);
-        euint64 platformFee = FHE.div(FHE.mul(finalFare, FHE.asEuint64(uint64(0))), 10000);
+        euint64 platformFee = FHE.div(FHE.mul(finalFare, 0), 10000);
         euint64 driverPayout = FHE.sub(finalFare, platformFee);
         rideId = rideCount++;
         rides[rideId] = RideRequest({

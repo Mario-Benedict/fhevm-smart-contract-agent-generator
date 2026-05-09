@@ -70,8 +70,7 @@ contract PrivateSalaryNegotiation is ZamaEthereumConfig, Ownable {
         // If candidate ask <= HR offer, agree at midpoint
         ebool acceptable = FHE.le(n.candidateAsk, n.hrOffer);
         euint64 agreed = FHE.select(acceptable,
-            FHE.div(FHE.add(n.hrOffer, n.candidateAsk), 2),
-            FHE.asEuint64(0));
+            FHE.div(FHE.add(n.hrOffer, n.candidateAsk), 2), 0);
         n.agreedSalary = agreed;
         n.concluded = true;
         FHE.allowThis(n.agreedSalary);

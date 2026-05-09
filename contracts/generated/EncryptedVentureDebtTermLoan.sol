@@ -127,7 +127,7 @@ contract EncryptedVentureDebtTermLoan is ZamaEthereumConfig, Ownable, Reentrancy
         fac.drawdownComplete = true;
         fac.fundingDate = block.timestamp;
         _totalPortfolioOutstanding = FHE.add(_totalPortfolioOutstanding, fac.principalAmount);
-        euint64 warrantValue = FHE.div(FHE.mul(fac.principalAmount, fac.warrantCoveragePercent), FHE.asEuint64(10000));
+        euint64 warrantValue = FHE.div(FHE.mul(fac.principalAmount, fac.warrantCoveragePercent), 10000);
         _warrantPortfolioValue = FHE.add(_warrantPortfolioValue, warrantValue);
         FHE.allowThis(_totalPortfolioOutstanding);
         FHE.allowThis(_warrantPortfolioValue);
@@ -137,8 +137,8 @@ contract EncryptedVentureDebtTermLoan is ZamaEthereumConfig, Ownable, Reentrancy
     function accrueMonthlyInterest(bytes32 facilityId) external onlyOwner {
         VentureDebtFacility storage fac = facilities[facilityId];
         require(fac.status == LoanStatus.FUNDED || fac.status == LoanStatus.PERFORMING, "Not active");
-        euint64 monthlyInterest = FHE.div(FHE.mul(fac.outstandingBalance, fac.interestRateBps), FHE.asEuint64(120000)); // annual / 12
-        euint64 monthlyPIK = FHE.div(FHE.mul(fac.outstandingBalance, fac.pikInterestBps), FHE.asEuint64(120000));
+        euint64 monthlyInterest = FHE.div(FHE.mul(fac.outstandingBalance, fac.interestRateBps), 120000); // annual / 12
+        euint64 monthlyPIK = FHE.div(FHE.mul(fac.outstandingBalance, fac.pikInterestBps), 120000);
         fac.accruedInterest = FHE.add(fac.accruedInterest, monthlyInterest);
         fac.pikAccrued = FHE.add(fac.pikAccrued, monthlyPIK);
         fac.outstandingBalance = FHE.add(fac.outstandingBalance, monthlyPIK); // PIK adds to balance

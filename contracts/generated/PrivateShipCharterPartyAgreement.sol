@@ -167,7 +167,7 @@ contract PrivateShipCharterPartyAgreement is ZamaEthereumConfig, Ownable, Reentr
         euint64 savedHours = FHE.select(overLaytime,
             FHE.asEuint64(0),
             FHE.sub(cp.laytimeAllowedHours, cp.laytimeUsedHours));
-        euint64 despatchRate = FHE.div(cp.demurrageRatePerHour, FHE.asEuint64(2));
+        euint64 despatchRate = FHE.div(cp.demurrageRatePerHour, 2);
         cp.despatchEarned = FHE.mul(savedHours, despatchRate);
 
         FHE.allowThis(cp.laytimeUsedHours);
@@ -195,7 +195,7 @@ contract PrivateShipCharterPartyAgreement is ZamaEthereumConfig, Ownable, Reentr
         shipownerEarnings[cp.shipowner] = FHE.add(shipownerEarnings[cp.shipowner], netEarnings);
         chartererLiabilities[cp.charterer] = FHE.add(chartererLiabilities[cp.charterer], cp.demurrageAccrued);
 
-        euint64 brokerage = FHE.div(FHE.mul(cp.totalFreight, FHE.asEuint64(125)), FHE.asEuint64(10000)); // 1.25%
+        euint64 brokerage = FHE.div(FHE.mul(cp.totalFreight, 125), 10000); // 1.25%
         _platformBrokerageAccrued = FHE.add(_platformBrokerageAccrued, brokerage);
 
         FHE.allowThis(shipownerEarnings[cp.shipowner]);

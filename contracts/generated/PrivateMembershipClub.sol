@@ -40,9 +40,9 @@ contract PrivateMembershipClub is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function enrollMember(
         address member,
-        externalEuint8 calldata encTier,
+        externalEuint8 encTier,
         bytes calldata tierProof,
-        externalEuint32 calldata encPoints,
+        externalEuint32 encPoints,
         bytes calldata pointsProof,
         uint256 renewalDays
     ) external onlyOwner {
@@ -66,9 +66,9 @@ contract PrivateMembershipClub is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function addBenefit(
         string calldata name,
-        externalEuint8 calldata encMinTier,
+        externalEuint8 encMinTier,
         bytes calldata tierProof,
-        externalEuint16 calldata encCost,
+        externalEuint16 encCost,
         bytes calldata costProof,
         uint32 usageLimit
     ) external onlyOwner returns (uint256 benefitId) {
@@ -106,7 +106,7 @@ contract PrivateMembershipClub is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit BenefitRedeemed(msg.sender, benefitId);
     }
 
-    function awardPoints(address member, externalEuint32 calldata encPoints, bytes calldata inputProof)
+    function awardPoints(address member, externalEuint32 encPoints, bytes calldata inputProof)
         external
         onlyOwner
     {

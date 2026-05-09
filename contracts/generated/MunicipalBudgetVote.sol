@@ -48,7 +48,7 @@ contract MunicipalBudgetVote is ZamaEthereumConfig, Ownable {
     function castVote(
         uint256 proposalId,
         Department department,
-        externalEuint32 calldata encWeight,
+        externalEuint32 encWeight,
         bytes calldata inputProof
     ) external {
         require(registeredVoters[msg.sender], "Not registered");

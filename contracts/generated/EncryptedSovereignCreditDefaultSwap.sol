@@ -93,7 +93,7 @@ contract EncryptedSovereignCreditDefaultSwap is ZamaEthereumConfig, AccessContro
         // premium = notional * bps * elapsed / (365 days * 10000)
         // Simplified: store accrual encrypted
         euint64 quarterlyPremium = FHE.div(
-            FHE.mul(s.notionalUSD, FHE.asEuint64(uint64(s.premiumBps))),
+            FHE.mul(s.notionalUSD, FHE.asEuint64(s.premiumBps)),
             40000
         );
         s.accruedPremium = FHE.add(s.accruedPremium, quarterlyPremium);

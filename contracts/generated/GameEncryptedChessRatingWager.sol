@@ -99,7 +99,7 @@ contract GameEncryptedChessRatingWager is ZamaEthereumConfig, Ownable, Reentranc
         p.totalWonUSD = FHE.asEuint64(0);
         p.registered = true;
         playerCount++;
-        _averageEloRating = FHE.add(FHE.div(_averageEloRating, FHE.asEuint32(2)), FHE.div(elo, FHE.asEuint32(2)));
+        _averageEloRating = FHE.add(FHE.div(_averageEloRating, 2), FHE.div(elo, 2));
         FHE.allowThis(p.eloRating); FHE.allow(p.eloRating, msg.sender);
         FHE.allowThis(p.performanceRating); FHE.allow(p.performanceRating, msg.sender);
         FHE.allowThis(p.winCount); FHE.allowThis(p.drawCount); FHE.allowThis(p.lossCount);

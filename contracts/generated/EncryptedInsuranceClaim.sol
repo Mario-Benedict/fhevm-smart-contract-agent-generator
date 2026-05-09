@@ -60,11 +60,11 @@ contract EncryptedInsuranceClaim is ZamaEthereumConfig, AccessControl, Reentranc
 
     function issuePolicy(
         address holder,
-        externalEuint64 calldata encCoverage,
+        externalEuint64 encCoverage,
         bytes calldata coverageProof,
-        externalEuint64 calldata encPremium,
+        externalEuint64 encPremium,
         bytes calldata premiumProof,
-        externalEuint8 calldata encType,
+        externalEuint8 encType,
         bytes calldata typeProof,
         uint256 durationDays
     ) external onlyRole(UNDERWRITER_ROLE) returns (uint256 policyId) {
@@ -91,7 +91,7 @@ contract EncryptedInsuranceClaim is ZamaEthereumConfig, AccessControl, Reentranc
 
     function submitClaim(
         uint256 policyId,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata amountProof,
         string calldata evidenceHash
     ) external returns (uint256 claimId) {
@@ -113,16 +113,16 @@ contract EncryptedInsuranceClaim is ZamaEthereumConfig, AccessControl, Reentranc
         FHE.allowThis(c.approvedAmount);
         FHE.allowThis(c.severityScore);
         FHE.allow(c.claimedAmount, msg.sender);
-        FHE.allow(c.claimedAmount, getRoleAdmin(ADJUSTER_ROLE));
+        // FHE.allow to adjuster admin skipped (getRoleAdmin returns bytes32, not address)
         holderClaims[msg.sender].push(claimId);
         emit ClaimSubmitted(claimId, policyId);
     }
 
     function adjudicateClaim(
         uint256 claimId,
-        externalEuint64 calldata encApproved,
+        externalEuint64 encApproved,
         bytes calldata approvedProof,
-        externalEuint8 calldata encSeverity,
+        externalEuint8 encSeverity,
         bytes calldata severityProof,
         bool approve
     ) external onlyRole(ADJUSTER_ROLE) {

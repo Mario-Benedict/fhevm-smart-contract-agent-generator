@@ -38,8 +38,8 @@ contract GamePrivateCasino is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     event GamePlayed(uint256 indexed sessionId, address player, GameType gameType);
 
     constructor(
-        externalEuint64 encSlotsEdge, bytes memory sProof,
-        externalEuint64 encRouletteEdge, bytes memory rProof
+        externalEuint16 encSlotsEdge, bytes memory sProof,
+        externalEuint16 encRouletteEdge, bytes memory rProof
     ) Ownable(msg.sender) {
         _casinoReserve = FHE.asEuint64(0);
         _totalWagered = FHE.asEuint64(0);
@@ -93,7 +93,7 @@ contract GamePrivateCasino is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         euint64 validBet = FHE.select(betInRange, bet, FHE.asEuint64(0));
         // Generate random outcome
         euint64 rand = FHE.randEuint64();
-        euint64 threshold = FHE.sub(FHE.asEuint64(10000), configs[gType].houseEdgeBps);
+        euint64 threshold = FHE.sub(FHE.asEuint64(10000), FHE.asEuint64(configs[gType].houseEdgeBps));
         euint64 randMod = FHE.rem(rand, 10000);
         ebool playerWins = FHE.lt(randMod, threshold);
         // Payout: 2x on win (simplified)

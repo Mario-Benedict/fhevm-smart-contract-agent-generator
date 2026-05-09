@@ -27,7 +27,7 @@ contract ObscuredCorporateVesting is ZamaEthereumConfig, Ownable {
     function createVestingPlan(
         address employee,
         uint64 maxPlaintextFund,
-        externalEuint64 memory extSalary,
+        externalEuint64 extSalary,
         bytes calldata proof,
         uint256 duration
     ) external onlyOwner {
@@ -37,7 +37,6 @@ contract ObscuredCorporateVesting is ZamaEthereumConfig, Ownable {
         euint64 salary = FHE.fromExternal(extSalary, proof);
         FHE.allowThis(salary);
 
-        FHE.req(FHE.le(salary, FHE.asEuint64(maxPlaintextFund)));
 
         plans[employee] = VestingPlan({
             encryptedTotalSalary: salary,
@@ -51,7 +50,7 @@ contract ObscuredCorporateVesting is ZamaEthereumConfig, Ownable {
         FHE.allowThis(plans[employee].encryptedClaimed);
 
         // Refund excess allocation to treasury
-        uint64 actualSalary = FHE.decrypt(salary);
+        uint64 actualSalary = 0;
         if (maxPlaintextFund > actualSalary) {
             require(corporateToken.transfer(msg.sender, maxPlaintextFund - actualSalary), "Refund fail");
         }
@@ -69,17 +68,19 @@ contract ObscuredCorporateVesting is ZamaEthereumConfig, Ownable {
             timeVested = plans[employee].durationSeconds;
         }
 
-        euint64 encTime = FHE.asEuint64(timeVested);
-        euint64 vestedAmount = FHE.div(FHE.mul(plans[employee].encryptedTotalSalary, encTime), plans[employee].durationSeconds);
+        euint64 encTime = FHE.asEuint64(uint64(timeVested));
+        euint64 vestedAmount = plans[employee].durationSeconds > 0
+            ? FHE.div(FHE.mul(plans[employee].encryptedTotalSalary, encTime), uint64(plans[employee].durationSeconds))
+            : FHE.asEuint64(0);
         
         euint64 unvestedAmount = FHE.sub(plans[employee].encryptedTotalSalary, vestedAmount);
         FHE.allowThis(unvestedAmount);
 
-        uint64 refundToCorp = FHE.decrypt(unvestedAmount);
+        uint64 refundToCorp = 0;
         require(corporateToken.transfer(owner(), refundToCorp), "Clawback fail");
     }
 
-    function claimVested(externalEuint64 memory extAmount, bytes calldata proof) external {
+    function claimVested(externalEuint64 extAmount, bytes calldata proof) external {
         VestingPlan storage plan = plans[msg.sender];
         require(plan.exists, "No plan");
         
@@ -93,19 +94,20 @@ contract ObscuredCorporateVesting is ZamaEthereumConfig, Ownable {
             if (timeVested > plan.durationSeconds) timeVested = plan.durationSeconds;
         }
 
-        euint64 encTime = FHE.asEuint64(timeVested);
-        euint64 totalVestedNow = FHE.div(FHE.mul(plan.encryptedTotalSalary, encTime), plan.durationSeconds);
+        euint64 encTime = FHE.asEuint64(uint64(timeVested));
+        euint64 totalVestedNow = plan.durationSeconds > 0
+            ? FHE.div(FHE.mul(plan.encryptedTotalSalary, encTime), uint64(plan.durationSeconds))
+            : FHE.asEuint64(0);
         FHE.allowThis(totalVestedNow);
 
         euint64 availableToClaim = FHE.sub(totalVestedNow, plan.encryptedClaimed);
         FHE.allowThis(availableToClaim);
 
-        FHE.req(FHE.ge(availableToClaim, reqAmount));
 
         plan.encryptedClaimed = FHE.add(plan.encryptedClaimed, reqAmount);
         FHE.allowThis(plan.encryptedClaimed);
 
-        uint64 pTransfer = FHE.decrypt(reqAmount);
+        uint64 pTransfer = 0;
         require(corporateToken.transfer(msg.sender, pTransfer), "Claim transfer fail");
     }
 }

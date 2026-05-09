@@ -33,7 +33,7 @@ contract ShieldedLiquidityFarm is ZamaEthereumConfig, AccessControl {
     // Admin sets a hidden multiplier for a user (e.g., 1x to 5x)
     function setEncryptedMultiplier(
         address user,
-        externalEuint16 memory extMultiplier,
+        externalEuint16 extMultiplier,
         bytes calldata proof
     ) external onlyRole(MANAGER_ROLE) {
         _updateRewards(user);
@@ -75,7 +75,7 @@ contract ShieldedLiquidityFarm is ZamaEthereumConfig, AccessControl {
             uint256 baseReward = timeDelta * f.plaintextStaked * BASE_YIELD_RATE;
             
             // Apply encrypted multiplier
-            euint64 encBaseReward = FHE.asEuint64(baseReward);
+            euint64 encBaseReward = FHE.asEuint64(uint64(baseReward));
             euint64 encMultiplier64 = FHE.asEuint64(f.encryptedYieldMultiplier); // Cast to matching type
             
             euint64 earned = FHE.mul(encBaseReward, encMultiplier64);

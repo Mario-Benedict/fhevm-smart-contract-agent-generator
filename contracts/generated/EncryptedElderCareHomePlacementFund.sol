@@ -236,9 +236,8 @@ contract EncryptedElderCareHomePlacementFund is ZamaEthereumConfig, Ownable, Ree
         FHE.allow(r.medicaidLienAmount, msg.sender);
 
         emit MedicaidConversionApproved(residentToken);
-        if (FHE.asEuint64(0) != liableAssets) {
-            emit EstateLienFiled(residentToken);
-        }
+        // liableAssets check omitted (cannot compare encrypted values directly)
+        emit EstateLienFiled(residentToken);
     }
 
     function collectEstateLien(bytes32 residentToken) external onlyBilling {

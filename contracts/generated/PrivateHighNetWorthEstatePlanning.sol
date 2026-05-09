@@ -107,7 +107,7 @@ contract PrivateHighNetWorthEstatePlanning is ZamaEthereumConfig, Ownable, Reent
         // Apply illiquidity discount
         euint64 adjustedFMV = FHE.sub(a.currentFMVUSD, FHE.div(FHE.mul(a.currentFMVUSD, FHE.asEuint64(a.illiquidityDiscountBps)), 10000));
         euint64 taxableGain = FHE.sub(adjustedFMV, a.costBasisUSD);
-        euint64 estimatedTax = FHE.div(FHE.mul(taxableGain, FHE.asEuint64(2000)), 10000); // 20% cap gains
+        euint64 estimatedTax = FHE.div(FHE.mul(taxableGain, 2000), 10000); // 20% cap gains
 
         _totalEstateValueUSD = FHE.add(_totalEstateValueUSD, adjustedFMV);
         _totalTaxExposureUSD = FHE.add(_totalTaxExposureUSD, estimatedTax);

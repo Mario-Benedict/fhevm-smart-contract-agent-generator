@@ -118,9 +118,9 @@ contract EncryptedFactoringPlatformReceivables is ZamaEthereumConfig, AccessCont
 
         euint64 faceValue = FHE.fromExternal(encFaceValue, fvProof);
         euint64 advanceRateBps = FHE.fromExternal(encAdvanceRate, arProof);
-        euint64 advanceAmount = FHE.div(FHE.mul(faceValue, advanceRateBps), FHE.asEuint64(10000));
+        euint64 advanceAmount = FHE.div(FHE.mul(faceValue, advanceRateBps), 10000);
         euint64 reserveAmount = FHE.sub(faceValue, advanceAmount);
-        euint64 discountFee = FHE.div(FHE.mul(faceValue, FHE.asEuint64(250)), FHE.asEuint64(10000)); // 2.5%
+        euint64 discountFee = FHE.div(FHE.mul(faceValue, 250), 10000); // 2.5%
 
         invoiceId = keccak256(abi.encodePacked(msg.sender, debtor, invoiceDate, block.timestamp));
 

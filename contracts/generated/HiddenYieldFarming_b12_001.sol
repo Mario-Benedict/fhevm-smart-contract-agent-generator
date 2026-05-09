@@ -41,7 +41,7 @@ contract HiddenYieldFarming_b12_001 is ZamaEthereumConfig {
         if (stakers[msg.sender].lastUpdateBlock > 0 && blocksElapsed > 0) {
             // Pending = elapsed * yield * staked amount (simplification for single user context)
             // Hardcoding 1-to-1 yield distribution for simplicity avoiding plaintext division
-            euint64 pending = FHE.mul(stakers[msg.sender].amountStaked, FHE.asEuint64(blocksElapsed));
+            euint64 pending = FHE.mul(stakers[msg.sender].amountStaked, FHE.asEuint64(uint64(blocksElapsed)));
             stakers[msg.sender].rewardDebt = FHE.add(stakers[msg.sender].rewardDebt, pending);
         }
 

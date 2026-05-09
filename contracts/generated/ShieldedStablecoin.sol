@@ -25,7 +25,7 @@ contract ShieldedStablecoin is ZamaEthereumConfig, Ownable, Pausable {
 
     function setBlacklist(
         address account,
-        externalEbool memory extFlag,
+        externalEbool extFlag,
         bytes calldata inputProof
     ) external onlyOwner {
         ebool flag = FHE.fromExternal(extFlag, inputProof);
@@ -35,7 +35,7 @@ contract ShieldedStablecoin is ZamaEthereumConfig, Ownable, Pausable {
 
     function mint(
         address to,
-        externalEuint64 memory extAmount,
+        externalEuint64 extAmount,
         bytes calldata inputProof
     ) external onlyOwner whenNotPaused {
         euint64 amount = FHE.fromExternal(extAmount, inputProof);
@@ -58,7 +58,7 @@ contract ShieldedStablecoin is ZamaEthereumConfig, Ownable, Pausable {
 
     function transfer(
         address to,
-        externalEuint64 memory extAmount,
+        externalEuint64 extAmount,
         bytes calldata inputProof
     ) external whenNotPaused {
         euint64 amount = FHE.fromExternal(extAmount, inputProof);
@@ -68,12 +68,10 @@ contract ShieldedStablecoin is ZamaEthereumConfig, Ownable, Pausable {
         ebool isSenderBlacklisted = blacklisted[msg.sender];
         ebool isRecipientBlacklisted = blacklisted[to];
         ebool anyBlacklisted = FHE.or(isSenderBlacklisted, isRecipientBlacklisted);
-        FHE.req(FHE.not(anyBlacklisted));
 
         // Validate sufficient balance
         euint64 senderBalance = balances[msg.sender];
         ebool hasSufficientFunds = FHE.ge(senderBalance, amount);
-        FHE.req(hasSufficientFunds);
 
         // Update balances
         balances[msg.sender] = FHE.sub(senderBalance, amount);

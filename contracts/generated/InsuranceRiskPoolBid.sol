@@ -11,7 +11,8 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
         string riskCategory;
         euint64 maxExposure;
         euint64 lowestPremiumBid;
-        address winningInsurer;
+        eaddress encWinningInsurer;
+        address revealedWinner;
         uint256 bidDeadline;
         bool allocated;
     }
@@ -34,7 +35,7 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
     function openTranche(
         string calldata riskCategory,
         uint256 duration,
-        externalEuint64 calldata encMaxExposure,
+        externalEuint64 encMaxExposure,
         bytes calldata inputProof
     ) external onlyOwner returns (uint256 trancheId) {
         trancheId = trancheCount++;
@@ -42,13 +43,15 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
         t.riskCategory = riskCategory;
         t.maxExposure = FHE.fromExternal(encMaxExposure, inputProof);
         t.lowestPremiumBid = FHE.asEuint64(type(uint64).max);
+        t.encWinningInsurer = FHE.asEaddress(address(0));
         t.bidDeadline = block.timestamp + duration;
         FHE.allowThis(t.maxExposure);
         FHE.allowThis(t.lowestPremiumBid);
+        FHE.allowThis(t.encWinningInsurer);
         emit TrancheOpened(trancheId, riskCategory);
     }
 
-    function placePremiumBid(uint256 trancheId, externalEuint64 calldata encPremium, bytes calldata inputProof)
+    function placePremiumBid(uint256 trancheId, externalEuint64 encPremium, bytes calldata inputProof)
         external
     {
         require(approvedInsurers[msg.sender], "Not approved");
@@ -62,18 +65,21 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
 
         ebool isLower = FHE.lt(premium, t.lowestPremiumBid);
         t.lowestPremiumBid = FHE.select(isLower, premium, t.lowestPremiumBid);
+        t.encWinningInsurer = FHE.select(isLower, FHE.asEaddress(msg.sender), t.encWinningInsurer);
         FHE.allowThis(t.lowestPremiumBid);
-        if (isLower.unwrap() != 0) t.winningInsurer = msg.sender;
+        FHE.allowThis(t.encWinningInsurer);
         emit PremiumBidPlaced(trancheId, msg.sender);
     }
 
-    function allocateTranche(uint256 trancheId) external onlyOwner {
+    function allocateTranche(uint256 trancheId, address winner) external onlyOwner {
         RiskTranche storage t = tranches[trancheId];
         require(block.timestamp > t.bidDeadline, "Not closed");
         require(!t.allocated, "Done");
         t.allocated = true;
-        FHE.allow(t.lowestPremiumBid, t.winningInsurer);
+        t.revealedWinner = winner;
+        FHE.allow(t.lowestPremiumBid, winner);
         FHE.allow(t.lowestPremiumBid, owner());
-        emit TrancheAllocated(trancheId, t.winningInsurer);
+        FHE.allow(t.encWinningInsurer, owner());
+        emit TrancheAllocated(trancheId, winner);
     }
 }

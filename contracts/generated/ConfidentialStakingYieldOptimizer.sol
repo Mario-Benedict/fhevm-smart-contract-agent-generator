@@ -105,7 +105,7 @@ contract ConfidentialStakingYieldOptimizer is ZamaEthereumConfig, Ownable, Reent
         Strategy storage strat = strategies[us.strategyId];
         // Daily yield = stakedAmount * APY / 10000 / 365
         euint64 dailyYield = FHE.div(
-            FHE.mul(us.stakedAmount, FHE.asEuint64(uint64(0))), // apyBps as euint64
+            FHE.mul(us.stakedAmount, 0), // apyBps as euint64
             10000 * 365
         );
         us.yieldEarned = FHE.add(us.yieldEarned, dailyYield);
@@ -126,7 +126,7 @@ contract ConfidentialStakingYieldOptimizer is ZamaEthereumConfig, Ownable, Reent
         euint64 withdrawAmount = us.stakedAmount;
         // Apply penalty if early exit
         if (block.timestamp < us.lockupUntil) {
-            euint64 penalty = FHE.div(FHE.mul(withdrawAmount, FHE.asEuint64(uint64(0))), 10000);
+            euint64 penalty = FHE.div(FHE.mul(withdrawAmount, 0), 10000);
             withdrawAmount = FHE.sub(withdrawAmount, penalty);
         }
         strategies[us.strategyId].tvl = FHE.sub(strat.tvl, us.stakedAmount);

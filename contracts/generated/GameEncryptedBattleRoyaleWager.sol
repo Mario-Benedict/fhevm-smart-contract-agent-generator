@@ -22,6 +22,7 @@ contract GameEncryptedBattleRoyaleWager is ZamaEthereumConfig, Ownable, Reentran
         euint64 secondPrizeBps;        // encrypted 2nd prize %
         euint64 thirdPrizeBps;         // encrypted 3rd prize %
         euint32 maxPlayers;
+        uint32  maxPlayersPlaintext;
         uint256 currentPlayers;
         MatchStatus status;
         uint256 startedAt;
@@ -110,7 +111,9 @@ contract GameEncryptedBattleRoyaleWager is ZamaEthereumConfig, Ownable, Reentran
         m.firstPrizeBps = firstPrize;
         m.secondPrizeBps = secondPrize;
         m.thirdPrizeBps = thirdPrize;
-        m.maxPlayers = maxPlayers;
+        m.maxPlayers = FHE.asEuint32(maxPlayers);
+        FHE.allowThis(m.maxPlayers);
+        m.maxPlayersPlaintext = maxPlayers;
         m.currentPlayers = 0;
         m.status = MatchStatus.Lobby;
 
@@ -125,7 +128,7 @@ contract GameEncryptedBattleRoyaleWager is ZamaEthereumConfig, Ownable, Reentran
         require(profiles[msg.sender].registered, "Not registered");
         BattleMatch storage m = matches[matchId];
         require(m.status == MatchStatus.Lobby, "Not in lobby");
-        require(m.currentPlayers < m.maxPlayers, "Match full");
+        require(m.currentPlayers < m.maxPlayersPlaintext, "Match full");
 
         matchPlayers[matchId].push(msg.sender);
         m.currentPlayers++;

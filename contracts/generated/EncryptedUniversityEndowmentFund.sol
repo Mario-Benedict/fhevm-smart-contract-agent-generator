@@ -103,7 +103,7 @@ contract EncryptedUniversityEndowmentFund is ZamaEthereumConfig, Ownable, Reentr
             grantType: grantType,
             principalUSD: principal,
             marketValueUSD: principal,
-            annualSpendableUSD: FHE.div(FHE.mul(principal, FHE.asEuint64(uint64(0))), 10000),
+            annualSpendableUSD: FHE.div(FHE.mul(principal, 0), 10000),
             spentToDateUSD: FHE.asEuint64(0),
             investmentReturnUSD: FHE.asEuint64(0),
             targetSpendingBps: FHE.asEuint32(0),

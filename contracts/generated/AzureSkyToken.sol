@@ -43,7 +43,7 @@ contract AzureSkyToken is ZamaEthereumConfig {
         _;
     }
 
-    function requestMint(address to, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function requestMint(address to, externalEuint64 encAmount, bytes calldata inputProof)
         external
         onlySigner
         returns (uint256 requestId)
@@ -78,7 +78,7 @@ contract AzureSkyToken is ZamaEthereumConfig {
         return _balances[account];
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[msg.sender] = FHE.sub(_balances[msg.sender], amount);
         _balances[to] = FHE.add(_balances[to], amount);

@@ -125,7 +125,7 @@ contract EncryptedVentureCapitalFundToken is ZamaEthereumConfig, Ownable, Reentr
         euint64 invested  = FHE.fromExternal(encInvested, iProof);
         euint64 valuation = FHE.fromExternal(encValuation, vProof);
         euint64 ownership = FHE.fromExternal(encOwnership, oProof);
-        euint64 moic = FHE.div(FHE.mul(valuation, FHE.asEuint64(100)), FHE.asEuint64(1)); // simplified
+        euint64 moic = FHE.div(FHE.mul(valuation, 100), 1); // simplified
         cId = portfolioCount++;
         portfolio[cId] = PortfolioCompany({ company: company, companyName: companyName, investedCapitalUSD: invested, currentValuationUSD: valuation, ownershipBps: ownership, moic: moic, investedAt: block.timestamp });
         _portfolioFMVUSD = FHE.add(_portfolioFMVUSD, valuation);
@@ -138,7 +138,7 @@ contract EncryptedVentureCapitalFundToken is ZamaEthereumConfig, Ownable, Reentr
     function distributeToLP(uint256 lpId, externalEuint64 encDistrib, bytes calldata proof) external onlyGeneralPartner nonReentrant {
         LPCommitment storage lpc = lpCommitments[lpId];
         euint64 distribAmt = FHE.fromExternal(encDistrib, proof);
-        euint64 carryAmt   = FHE.div(FHE.mul(distribAmt, FHE.asEuint64(2000)), 10000); // 20% carry
+        euint64 carryAmt   = FHE.div(FHE.mul(distribAmt, 2000), 10000); // 20% carry
         euint64 lpAmt      = FHE.sub(distribAmt, carryAmt);
         lpc.distributionsUSD = FHE.add(lpc.distributionsUSD, lpAmt);
         _carriedInterestUSD = FHE.add(_carriedInterestUSD, carryAmt);

@@ -115,10 +115,10 @@ contract DeFiPrivateSyntheticAsset is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit PositionClosed(msg.sender);
     }
 
-    function liquidate(address user) external onlyOwner nonReentrant {
+    function liquidate(address user, uint64 oraclePricePlaintext) external onlyOwner nonReentrant {
         SynthPosition storage p = positions[user];
         require(p.active, "No position");
-        euint64 collateralValue = FHE.div(p.collateral, _oraclePrice);
+        euint64 collateralValue = oraclePricePlaintext > 0 ? FHE.div(p.collateral, oraclePricePlaintext) : FHE.asEuint64(0);
         euint64 requiredCollateral = FHE.div(FHE.mul(p.minted, _minRatioBps), 10000);
         ebool undercollateralized = FHE.lt(collateralValue, requiredCollateral);
         if (FHE.isInitialized(undercollateralized)) {

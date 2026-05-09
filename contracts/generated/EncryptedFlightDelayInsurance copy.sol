@@ -43,7 +43,7 @@ contract EncryptedFlightDelayInsurance is ZamaEthereumConfig, Ownable, Reentranc
         FHE.allowThis(insurancePool);
     }
 
-    function fundPool(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function fundPool(externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         insurancePool = FHE.add(insurancePool, amount);
         FHE.allowThis(insurancePool);
@@ -52,7 +52,7 @@ contract EncryptedFlightDelayInsurance is ZamaEthereumConfig, Ownable, Reentranc
     function purchasePolicy(
         string  calldata flightNumber,
         uint256 departureTime,
-        externalEuint64    calldata encPremium,   bytes calldata premiumProof,
+        externalEuint64 encPremium,   bytes calldata premiumProof,
         externalEuint64[4] calldata encPayouts,   bytes[4] calldata payoutProofs
     ) external nonReentrant returns (uint256 policyId) {
         policyId = policyCount++;
@@ -75,7 +75,7 @@ contract EncryptedFlightDelayInsurance is ZamaEthereumConfig, Ownable, Reentranc
 
     function submitClaim(
         uint256 policyId,
-        externalEuint16 calldata encDelayMins, bytes calldata delayProof
+        externalEuint16 encDelayMins, bytes calldata delayProof
     ) external returns (uint256 claimId) {
         FlightPolicy storage p = policies[policyId];
         require(p.insured == msg.sender, "Not insured");

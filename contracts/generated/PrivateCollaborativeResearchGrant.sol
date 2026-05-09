@@ -150,7 +150,7 @@ contract PrivateCollaborativeResearchGrant is ZamaEthereumConfig, Ownable, Reent
         euint64 imp = FHE.fromExternal(encImpact, impProof);
         // Composite: 40% scientific + 30% feasibility + 30% impact
         euint64 composite = FHE.div(
-            FHE.add(FHE.add(FHE.mul(sci, 40), FHE.mul(feas, FHE.asEuint64(30))), FHE.mul(imp, FHE.asEuint64(30))),
+            FHE.add(FHE.add(FHE.mul(sci, 40), FHE.mul(feas, 30)), FHE.mul(imp, FHE.asEuint64(30))),
             100
         );
         reviews[grantId] = PeerReviewPanel({

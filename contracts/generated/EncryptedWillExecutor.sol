@@ -41,7 +41,7 @@ contract EncryptedWillExecutor is ZamaEthereumConfig, ReentrancyGuard {
     function createWill(
         address executor,
         uint256 activationDelay,
-        externalEuint64 calldata encEstate,
+        externalEuint64 encEstate,
         bytes calldata inputProof
     ) external returns (uint256 willId) {
         require(!hasWill[msg.sender], "Will exists");
@@ -63,7 +63,7 @@ contract EncryptedWillExecutor is ZamaEthereumConfig, ReentrancyGuard {
     function addBeneficiary(
         uint256 willId,
         address beneficiary,
-        externalEuint8 calldata encPercent,
+        externalEuint8 encPercent,
         bytes calldata inputProof
     ) external {
         Will storage w = wills[willId];
@@ -101,8 +101,8 @@ contract EncryptedWillExecutor is ZamaEthereumConfig, ReentrancyGuard {
         for (uint8 i = 0; i < w.beneficiaryCount; i++) {
             Beneficiary storage b = beneficiaries[willId][i];
             euint64 share = FHE.div(
-                FHE.mul(w.totalEstate, FHE.asEuint64(b.allocationPercent.unwrap())),
-                FHE.asEuint64(100)
+                FHE.mul(w.totalEstate, b.allocationPercent),
+                100
             );
             b.allocatedAmount = share;
             FHE.allowThis(b.allocatedAmount);

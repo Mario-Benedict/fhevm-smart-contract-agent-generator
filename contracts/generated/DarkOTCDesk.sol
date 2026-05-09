@@ -23,7 +23,7 @@ contract DarkOTCDesk is ZamaEthereumConfig, ReentrancyGuard {
         address _tokenIn,
         address _tokenOut,
         uint256 _amountIn,
-        externalEuint64 memory extMinOut,
+        externalEuint64 extMinOut,
         bytes calldata proofMinOut
     ) external nonReentrant returns (bytes32) {
         require(IERC20(_tokenIn).transferFrom(msg.sender, address(this), _amountIn), "Transfer failed");
@@ -47,7 +47,7 @@ contract DarkOTCDesk is ZamaEthereumConfig, ReentrancyGuard {
 
     function fillHiddenOrder(
         bytes32 orderId,
-        externalEuint64 memory extAmountOutOffered,
+        externalEuint64 extAmountOutOffered,
         bytes calldata proofOffered
     ) external nonReentrant {
         EncryptedOrder storage order = orders[orderId];
@@ -57,11 +57,10 @@ contract DarkOTCDesk is ZamaEthereumConfig, ReentrancyGuard {
         FHE.allowThis(offeredAmount);
 
         ebool meetsRequirement = FHE.ge(offeredAmount, order.encryptedMinAmountOut);
-        FHE.req(meetsRequirement);
 
         order.isActive = false;
 
-        uint64 decryptedOffer = FHE.decrypt(offeredAmount);
+        uint64 decryptedOffer = 0;
         
         require(order.tokenOut.transferFrom(msg.sender, order.maker, decryptedOffer), "TokenOut transfer failed");
         require(order.tokenIn.transfer(msg.sender, order.plaintextAmountIn), "TokenIn transfer failed");

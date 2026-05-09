@@ -90,11 +90,11 @@ contract PrivateCryptoHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit StrategyCreated(id, name);
     }
 
-    function subscribe(externalEuint64 encCapital, bytes calldata proof) external nonReentrant {
+    function subscribe(externalEuint64 encCapital, bytes calldata proof, uint64 totalFundNAVPlaintext) external nonReentrant {
         euint64 capital = FHE.fromExternal(encCapital, proof);
         // Share price = totalNAV / totalShares (simplified: 1:1 at start)
         euint64 shares = FHE.isInitialized(_totalShares) ?
-            FHE.div(FHE.mul(capital, _totalShares), FHE.add(_totalFundNAV, FHE.asEuint64(1))) :
+            (totalFundNAVPlaintext + 1 > 0 ? FHE.div(FHE.mul(capital, _totalShares), totalFundNAVPlaintext + 1) : capital) :
             capital;
         InvestorAccount storage inv = investors[msg.sender];
         if (!inv.exists) {
@@ -137,13 +137,15 @@ contract PrivateCryptoHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit RedemptionRequested(reqId, msg.sender);
     }
 
-    function processRedemption(uint256 reqId) external nonReentrant {
+    function processRedemption(uint256 reqId, uint64 totalSharesPlaintext) external nonReentrant {
         require(isPortfolioManager[msg.sender], "Not PM");
         RedemptionRequest storage req = redemptions[reqId];
         require(!req.processed, "Already processed");
         InvestorAccount storage inv = investors[req.investor];
         // NAV per share = totalNAV / totalShares
-        euint64 navPerShare = FHE.div(_totalFundNAV, FHE.add(_totalShares, FHE.asEuint64(1)));
+        euint64 navPerShare = totalSharesPlaintext + 1 > 0
+            ? FHE.div(_totalFundNAV, totalSharesPlaintext + 1)
+            : FHE.asEuint64(0);
         euint64 proceeds = FHE.mul(navPerShare, req.shareAmount);
         // Deduct performance fee above HWM
         inv.sharesOwned = FHE.sub(inv.sharesOwned, req.shareAmount);

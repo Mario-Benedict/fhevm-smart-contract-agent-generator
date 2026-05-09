@@ -18,6 +18,7 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
         euint64  amount;
         euint64  votesFor;
         euint64  votesAgainst;
+        ebool    passed;
         uint256  deadline;
         bool     executed;
         bool     cancelled;
@@ -49,7 +50,7 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
 
     modifier onlyAdmin() { require(msg.sender == admin, "Not admin"); _; }
 
-    function addMember(address member, externalEuint64 calldata encWeight, bytes calldata inputProof)
+    function addMember(address member, externalEuint64 encWeight, bytes calldata inputProof)
         external onlyAdmin
     {
         members[member].votingWeight = FHE.fromExternal(encWeight, inputProof);
@@ -60,7 +61,7 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
         emit MemberAdded(member);
     }
 
-    function deposit(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyAdmin {
+    function deposit(externalEuint64 encAmount, bytes calldata inputProof) external onlyAdmin {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         treasuryBalance = FHE.add(treasuryBalance, amount);
         FHE.allowThis(treasuryBalance);
@@ -71,7 +72,7 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
         address recipient,
         string calldata purpose,
         uint256 votingDays,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external returns (uint256 id) {
         require(members[msg.sender].active, "Not member");
         id = proposalCount++;
@@ -87,7 +88,7 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
         emit ProposalCreated(id, recipient);
     }
 
-    function vote(uint256 id, externalEbool calldata encSupport, bytes calldata inputProof) external {
+    function vote(uint256 id, externalEbool encSupport, bytes calldata inputProof) external {
         require(members[msg.sender].active, "Not member");
         SpendingProposal storage p = proposals[id];
         require(!p.voted[msg.sender], "Already voted");
@@ -105,8 +106,9 @@ contract EncryptedCommunityTreasury is ZamaEthereumConfig, ReentrancyGuard {
         SpendingProposal storage p = proposals[id];
         require(block.timestamp > p.deadline, "Voting active");
         require(!p.executed && !p.cancelled, "Invalid state");
-        ebool passed = FHE.gt(p.votesFor, p.votesAgainst);
-        require(passed.unwrap() != 0, "Proposal failed");
+        p.passed = FHE.gt(p.votesFor, p.votesAgainst);
+        FHE.allowThis(p.passed);
+        FHE.allow(p.passed, admin);
         p.executed = true;
         treasuryBalance = FHE.sub(treasuryBalance, p.amount);
         FHE.allowThis(treasuryBalance);

@@ -26,8 +26,8 @@ contract StealthLimitBook is ZamaEthereumConfig {
     }
 
     function placeEncryptedOrder(
-        externalEuint32 memory extTargetTick,
-        externalEuint64 memory extVolume,
+        externalEuint32 extTargetTick,
+        externalEuint64 extVolume,
         bytes calldata proofTick,
         bytes calldata proofVol,
         bool isBuy
@@ -54,7 +54,6 @@ contract StealthLimitBook is ZamaEthereumConfig {
             ? FHE.le(encCurrentTick, order.encryptedTargetTick) 
             : FHE.ge(encCurrentTick, order.encryptedTargetTick);
         
-        FHE.req(conditionMet);
         
         order.isActive = false;
         // Proceed to decrypt volume and swap

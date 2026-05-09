@@ -39,7 +39,7 @@ contract PrivateCommodityFutures is ZamaEthereumConfig, Ownable, ReentrancyGuard
 
     constructor() Ownable(msg.sender) {}
 
-    function depositMargin(externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function depositMargin(externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         traderMargin[msg.sender] = FHE.add(traderMargin[msg.sender], amount);
         FHE.allowThis(traderMargin[msg.sender]);
@@ -47,7 +47,7 @@ contract PrivateCommodityFutures is ZamaEthereumConfig, Ownable, ReentrancyGuard
         emit MarginDeposited(msg.sender);
     }
 
-    function updatePrice(CommodityType commodity, externalEuint64 calldata encPrice, bytes calldata inputProof)
+    function updatePrice(CommodityType commodity, externalEuint64 encPrice, bytes calldata inputProof)
         external onlyOwner
     {
         currentPrices[commodity] = FHE.fromExternal(encPrice, inputProof);
@@ -59,8 +59,8 @@ contract PrivateCommodityFutures is ZamaEthereumConfig, Ownable, ReentrancyGuard
         CommodityType commodity,
         Side side,
         uint256 expiryDays,
-        externalEuint64 calldata encSize,   bytes calldata sizeProof,
-        externalEuint64 calldata encMargin, bytes calldata marginProof
+        externalEuint64 encSize,   bytes calldata sizeProof,
+        externalEuint64 encMargin, bytes calldata marginProof
     ) external nonReentrant returns (uint256 positionId) {
         euint64 size   = FHE.fromExternal(encSize,   sizeProof);
         euint64 margin = FHE.fromExternal(encMargin, marginProof);

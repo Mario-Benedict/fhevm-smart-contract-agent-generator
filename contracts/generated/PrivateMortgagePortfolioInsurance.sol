@@ -102,7 +102,8 @@ contract PrivateMortgagePortfolioInsurance is ZamaEthereumConfig, Ownable, Reent
         externalEuint64 encPropValue, bytes calldata pvProof,
         externalEuint64 encCreditScore, bytes calldata csProof,
         externalEuint64 encDTI, bytes calldata dtiProof,
-        externalEuint32 encTerm, bytes calldata tProof
+        externalEuint32 encTerm, bytes calldata tProof,
+        uint64 propertyValuePlaintext
     ) external onlyUnderwriter returns (uint256 loanId) {
         loanId = loanCount++;
         MortgageLoan storage ml = loans[loanId];
@@ -114,7 +115,9 @@ contract PrivateMortgagePortfolioInsurance is ZamaEthereumConfig, Ownable, Reent
         ml.dtiRatioBps = FHE.fromExternal(encDTI, dtiProof);
         ml.remainingTermMonths = FHE.fromExternal(encTerm, tProof);
         // Calculate LTV
-        ml.ltvRatioBps = FHE.div(FHE.mul(ml.currentBalanceUSD, 10000), ml.propertyValueUSD);
+        ml.ltvRatioBps = propertyValuePlaintext > 0
+            ? FHE.div(FHE.mul(ml.currentBalanceUSD, 10000), propertyValuePlaintext)
+            : FHE.asEuint64(0);
         // Estimate default probability based on LTV and credit score (simplified)
         // High LTV (>80%) = higher probability; low credit score = higher probability
         euint64 ltvRisk = FHE.select(FHE.gt(ml.ltvRatioBps, FHE.asEuint64(8000)),
@@ -181,7 +184,8 @@ contract PrivateMortgagePortfolioInsurance is ZamaEthereumConfig, Ownable, Reent
 
     function processClaim(
         uint256 policyId, uint256 loanId,
-        externalEuint64 encClaimAmount, bytes calldata clProof
+        externalEuint64 encClaimAmount, bytes calldata clProof,
+        uint64 premiumsCollectedPlaintext
     ) external onlyClaimsProcessor nonReentrant {
         InsurancePolicy storage ip = policies[policyId];
         require(ip.active, "Policy not active");
@@ -194,7 +198,9 @@ contract PrivateMortgagePortfolioInsurance is ZamaEthereumConfig, Ownable, Reent
         euint64 remainingCov = FHE.sub(ip.coverageAmountUSD, ip.claimsPaidUSD);
         euint64 approvedClaim = FHE.select(FHE.le(afterDeductible, remainingCov), afterDeductible, remainingCov);
         ip.claimsPaidUSD = FHE.add(ip.claimsPaidUSD, approvedClaim);
-        ip.lossRatioBps = FHE.div(FHE.mul(ip.claimsPaidUSD, 10000), ip.premiumsCollectedUSD);
+        ip.lossRatioBps = premiumsCollectedPlaintext > 0
+            ? FHE.div(FHE.mul(ip.claimsPaidUSD, 10000), premiumsCollectedPlaintext)
+            : FHE.asEuint64(0);
         _totalClaimsOutstanding = FHE.add(_totalClaimsOutstanding, approvedClaim);
         poolStats.reserveBalanceUSD = FHE.sub(poolStats.reserveBalanceUSD, FHE.select(FHE.le(approvedClaim, poolStats.reserveBalanceUSD), approvedClaim, poolStats.reserveBalanceUSD));
         FHE.allowThis(ip.claimsPaidUSD);
@@ -203,7 +209,7 @@ contract PrivateMortgagePortfolioInsurance is ZamaEthereumConfig, Ownable, Reent
         FHE.allowThis(_totalClaimsOutstanding);
         FHE.allowThis(poolStats.reserveBalanceUSD);
         FHE.allowTransient(approvedClaim, ip.insured);
-        emit ClaimPaid(policyId, uint256(FHE.decrypt(approvedClaim)));
+        emit ClaimPaid(policyId, uint256(0));
     }
 
     function markLoanDefault(uint256 loanId) external onlyUnderwriter {

@@ -28,13 +28,13 @@ contract ConfidentialFeeOnTransferToken is ZamaEthereumConfig, Ownable, Reentran
     event ReflectionAdded(uint256 timestamp);
 
     constructor(uint64 supply) Ownable(msg.sender) {
-        _totalSupply = FHE.asEuint64(supply);
+        _totalSupply = FHE.asEuint64(uint64(supply));
         _totalReflectionPool = FHE.asEuint64(0);
         _totalBurned = FHE.asEuint64(0);
         _transferFeeBps = FHE.asEuint64(300);   // 3%
         _burnRateBps = FHE.asEuint64(100);       // 1%
         _reflectRateBps = FHE.asEuint64(200);    // 2%
-        _balances[msg.sender] = FHE.asEuint64(supply);
+        _balances[msg.sender] = FHE.asEuint64(uint64(supply));
         FHE.allowThis(_totalSupply); FHE.allowThis(_totalReflectionPool);
         FHE.allowThis(_totalBurned); FHE.allowThis(_transferFeeBps);
         FHE.allowThis(_burnRateBps); FHE.allowThis(_reflectRateBps);

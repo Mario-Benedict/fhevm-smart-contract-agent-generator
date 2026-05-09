@@ -74,19 +74,20 @@ contract DeFiConfidentialLiquidityPool is ZamaEthereumConfig, Ownable, Reentranc
 
     function swap(
         bool aToB,
-        externalEuint64 encAmountIn, bytes calldata proof
+        externalEuint64 encAmountIn, bytes calldata proof,
+        uint64 reserveAPlaintext, uint64 reserveBPlaintext
     ) external nonReentrant {
         euint64 amountIn = FHE.fromExternal(encAmountIn, proof);
         euint64 fee = FHE.div(FHE.mul(amountIn, _feeRateBps), 10000);
         euint64 amountAfterFee = FHE.sub(amountIn, fee);
         if (aToB) {
-            euint64 amountOut = FHE.div(FHE.mul(amountAfterFee, _reserveB), _reserveA);
+            euint64 amountOut = reserveAPlaintext > 0 ? FHE.div(FHE.mul(amountAfterFee, _reserveB), reserveAPlaintext) : FHE.asEuint64(0);
             _reserveA = FHE.add(_reserveA, amountIn);
             _reserveB = FHE.sub(_reserveB, amountOut);
             _totalFeesA = FHE.add(_totalFeesA, fee);
             FHE.allow(amountOut, msg.sender);
         } else {
-            euint64 amountOut = FHE.div(FHE.mul(amountAfterFee, _reserveA), _reserveB);
+            euint64 amountOut = reserveBPlaintext > 0 ? FHE.div(FHE.mul(amountAfterFee, _reserveA), reserveBPlaintext) : FHE.asEuint64(0);
             _reserveB = FHE.add(_reserveB, amountIn);
             _reserveA = FHE.sub(_reserveA, amountOut);
             FHE.allow(amountOut, msg.sender);
@@ -98,15 +99,15 @@ contract DeFiConfidentialLiquidityPool is ZamaEthereumConfig, Ownable, Reentranc
         emit Swap(msg.sender, aToB);
     }
 
-    function removeLiquidity(externalEuint64 encShares, bytes calldata proof) external nonReentrant {
+    function removeLiquidity(externalEuint64 encShares, bytes calldata proof, uint64 totalSharesPlaintext) external nonReentrant {
         euint64 shares = FHE.fromExternal(encShares, proof);
         LPPosition storage lp = lpPositions[msg.sender];
         ebool hasShares = FHE.le(shares, lp.sharesBps);
         euint64 actual = FHE.select(hasShares, shares, FHE.asEuint64(0));
         lp.sharesBps = FHE.sub(lp.sharesBps, actual);
         _totalShares = FHE.sub(_totalShares, actual);
-        euint64 returnedA = FHE.div(FHE.mul(actual, _reserveA), _totalShares);
-        euint64 returnedB = FHE.div(FHE.mul(actual, _reserveB), _totalShares);
+        euint64 returnedA = totalSharesPlaintext > 0 ? FHE.div(FHE.mul(actual, _reserveA), totalSharesPlaintext) : FHE.asEuint64(0);
+        euint64 returnedB = totalSharesPlaintext > 0 ? FHE.div(FHE.mul(actual, _reserveB), totalSharesPlaintext) : FHE.asEuint64(0);
         _reserveA = FHE.sub(_reserveA, returnedA);
         _reserveB = FHE.sub(_reserveB, returnedB);
         FHE.allowThis(lp.sharesBps);

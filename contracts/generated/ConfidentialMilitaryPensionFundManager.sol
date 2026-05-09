@@ -124,9 +124,9 @@ contract ConfidentialMilitaryPensionFundManager is ZamaEthereumConfig, Ownable, 
         require(v.enrolled && !v.deceased, "Not active");
         v.deceased = true;
         // Survivor gets a % of pension
-        euint64 survivorAmount = FHE.div(FHE.mul(v.monthlyPensionUSD, FHE.asEuint64(uint64(0))), 10000);
+        euint64 survivorAmount = FHE.div(FHE.mul(v.monthlyPensionUSD, 0), 10000);
         // Simplified: survivor gets 55%
-        survivorAmount = FHE.div(FHE.mul(v.monthlyPensionUSD, FHE.asEuint64(55)), 100);
+        survivorAmount = FHE.div(FHE.mul(v.monthlyPensionUSD, 55), 100);
         _monthlyObligations = FHE.sub(_monthlyObligations, v.monthlyPensionUSD);
         _monthlyObligations = FHE.add(_monthlyObligations, survivorAmount);
         FHE.allowThis(_monthlyObligations);

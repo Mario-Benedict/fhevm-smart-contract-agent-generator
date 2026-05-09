@@ -28,7 +28,7 @@ contract SupplierReputationMatrix is ZamaEthereumConfig {
         
         // Initialize with random baseline tier (e.g., 1 to 5) to prevent profiling
         euint64 randomBase = FHE.randEuint64();
-        euint16 initialTier = FHE.asEuint16(FHE.add(FHE.rem(randomBase, FHE.asEuint64(5)), FHE.asEuint64(1)));
+        euint16 initialTier = FHE.asEuint16(FHE.add(FHE.rem(randomBase, 5), FHE.asEuint64(1)));
         
         euint16 initialScore = FHE.asEuint16(0);
 
@@ -44,7 +44,7 @@ contract SupplierReputationMatrix is ZamaEthereumConfig {
 
     function updateEncryptedScore(
         address supplier,
-        externalEuint16 memory extPoints,
+        externalEuint16 extPoints,
         bytes calldata inputProof,
         bool isPenalty
     ) external onlyAuditor {

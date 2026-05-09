@@ -77,11 +77,8 @@ contract PrivateElectoralFinanceTracker is ZamaEthereumConfig, Ownable, Reentran
         require(!candidates[candidate].disqualified, "Candidate disqualified");
         require(!donors[msg.sender].flagged, "Donor flagged");
         // Initialize donor if first time
-        if (FHE.eq(donors[msg.sender].totalDonated, FHE.asEuint64(0)) == FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
-            if (FHE.eq(donationPerCandidatePerDonor[msg.sender][candidate], FHE.asEuint64(0)) ==
-                FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
-                // initialize
-            }
+        if (!FHE.isInitialized(donors[msg.sender].totalDonated)) {
+            // first donation — values start as uninitialized (zero by default in FHE)
         }
         euint64 amount = FHE.fromExternal(encAmount, proof);
         // Check donor cap

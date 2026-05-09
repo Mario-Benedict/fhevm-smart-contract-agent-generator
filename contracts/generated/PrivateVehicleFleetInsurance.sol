@@ -52,7 +52,7 @@ contract PrivateVehicleFleetInsurance is ZamaEthereumConfig, Ownable, Reentrancy
     function insureVehicle(
         string calldata vin,
         uint256 coverageDays,
-        externalEuint64 calldata encPremium, bytes calldata premiumProof
+        externalEuint64 encPremium, bytes calldata premiumProof
     ) external returns (uint256 vehicleId) {
         require(registeredFleets[msg.sender], "Not registered fleet");
         vehicleId = vehicleCount++;
@@ -78,10 +78,10 @@ contract PrivateVehicleFleetInsurance is ZamaEthereumConfig, Ownable, Reentrancy
     function submitTelematics(
         uint256 vehicleId,
         uint256 period,
-        externalEuint64 calldata encKm,     bytes calldata kmProof,
-        externalEuint8  calldata encBraking,bytes calldata brakingProof,
-        externalEuint8  calldata encAccel,  bytes calldata accelProof,
-        externalEuint8  calldata encSpeed,  bytes calldata speedProof
+        externalEuint64 encKm,     bytes calldata kmProof,
+        externalEuint8 encBraking,bytes calldata brakingProof,
+        externalEuint8 encAccel,  bytes calldata accelProof,
+        externalEuint8 encSpeed,  bytes calldata speedProof
     ) external {
         Vehicle storage v = vehicles[vehicleId];
         require(v.fleetOwner == msg.sender, "Not fleet owner");
@@ -111,14 +111,14 @@ contract PrivateVehicleFleetInsurance is ZamaEthereumConfig, Ownable, Reentrancy
     function adjustPremium(uint256 vehicleId) external onlyOwner {
         Vehicle storage v = vehicles[vehicleId];
         // Better drivers get discount: premium * (200 - safetyScore) / 100
-        euint64 factor = FHE.asEuint64(FHE.sub(FHE.asEuint8(200), v.safetyScore).unwrap());
-        v.adjustedPremium = FHE.div(FHE.mul(v.basePremium, factor), FHE.asEuint64(100));
+        euint8 factor8 = FHE.sub(FHE.asEuint8(200), v.safetyScore);
+        v.adjustedPremium = FHE.div(FHE.mul(v.basePremium, factor8), 100);
         FHE.allowThis(v.adjustedPremium);
         FHE.allow(v.adjustedPremium, v.fleetOwner);
         emit PremiumAdjusted(vehicleId);
     }
 
-    function fileClaim(uint256 vehicleId, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function fileClaim(uint256 vehicleId, externalEuint64 encAmount, bytes calldata inputProof)
         external nonReentrant
     {
         Vehicle storage v = vehicles[vehicleId];

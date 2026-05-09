@@ -36,7 +36,7 @@ contract PrivateRebaseToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         lastRebaseTime = block.timestamp;
     }
 
-    function deposit(externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function deposit(externalEuint64 encAmount, bytes calldata inputProof)
         external nonReentrant
     {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -70,7 +70,7 @@ contract PrivateRebaseToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit Rebase(block.timestamp);
     }
 
-    function withdraw(externalEuint64 calldata encShares, bytes calldata inputProof)
+    function withdraw(externalEuint64 encShares, bytes calldata inputProof)
         external nonReentrant
     {
         euint64 shares = FHE.fromExternal(encShares, inputProof);
@@ -90,7 +90,7 @@ contract PrivateRebaseToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit Withdrawal(msg.sender);
     }
 
-    function transfer(address to, externalEuint64 calldata encShares, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encShares, bytes calldata inputProof) external {
         euint64 shares = FHE.fromExternal(encShares, inputProof);
         ebool sufficient = FHE.ge(_shares[msg.sender], shares);
         euint64 actual = FHE.select(sufficient, shares, FHE.asEuint64(0));

@@ -85,7 +85,7 @@ contract EncryptedRockPaperScissorsGame is ZamaEthereumConfig, Ownable, Reentran
         ebool p1S_p2P = FHE.and(FHE.eq(g.move1, FHE.asEuint8(3)), FHE.eq(g.move2, FHE.asEuint8(2)));
         ebool p1Wins = FHE.or(FHE.or(p1R_p2S, p1P_p2R), p1S_p2P);
         // Prize: 95% to winner (5% house), plaintext divisor
-        euint64 prize = FHE.div(FHE.mul(g.wager, FHE.asEuint64(95)), 100);
+        euint64 prize = FHE.div(FHE.mul(g.wager, 95), 100);
         euint64 house = FHE.sub(g.wager, prize);
         _totalWagerVolume = FHE.add(_totalWagerVolume, g.wager);
         _houseRevenue = FHE.add(_houseRevenue, house);

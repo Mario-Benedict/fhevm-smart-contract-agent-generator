@@ -56,8 +56,8 @@ contract BlindPokerHand is ZamaEthereumConfig, Ownable {
         for (uint8 c = 0; c < CARDS_PER_PLAYER; c++) {
             for (uint8 p = 0; p < g.playerCount; p++) {
                 euint8 card = FHE.randEuint8();
-                euint8 suit = FHE.rem(card, FHE.asEuint8(4));
-                euint8 rank = FHE.add(FHE.rem(card, FHE.asEuint8(13)), FHE.asEuint8(1));
+                euint8 suit = FHE.rem(card, 4);
+                euint8 rank = FHE.add(FHE.rem(card, 13), FHE.asEuint8(1));
                 g.holeCards[c][p] = FHE.add(FHE.mul(suit, FHE.asEuint8(13)), rank);
                 FHE.allowThis(g.holeCards[c][p]);
                 FHE.allow(g.holeCards[c][p], g.players[p]);
@@ -67,7 +67,7 @@ contract BlindPokerHand is ZamaEthereumConfig, Ownable {
         g.phase = GamePhase.Betting;
     }
 
-    function placeBet(uint256 gameId, externalEuint64 calldata encBet, bytes calldata inputProof) external {
+    function placeBet(uint256 gameId, externalEuint64 encBet, bytes calldata inputProof) external {
         Game storage g = games[gameId];
         require(g.phase == GamePhase.Betting, "Not betting phase");
         require(!folded[gameId][msg.sender], "Folded");

@@ -51,7 +51,7 @@ contract LendingInterestBearing_b4_004 is ZamaEthereumConfig {
         euint64 amount = FHE.fromExternal(amountStr, proof);
         uint256 elapsed = block.timestamp - borrowTimestamp[msg.sender];
         uint64 interest = uint64((elapsed * uint256(interestRatePerYear)) / (365 days * 100));
-        euint64 interest_ = FHE.mul(borrows[msg.sender], FHE.asEuint64(interest));
+        euint64 interest_ = FHE.mul(borrows[msg.sender], FHE.asEuint64(uint64(interest)));
         euint64 totalOwed = FHE.add(borrows[msg.sender], interest_);
         ebool ok = FHE.ge(amount, totalOwed);
         euint64 repaid = FHE.select(ok, totalOwed, amount);

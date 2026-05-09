@@ -29,7 +29,7 @@ contract WhistleblowerDAO is ZamaEthereumConfig, AccessControl {
 
     function setBlacklistStatus(
         address account,
-        externalEbool memory extStatus,
+        externalEbool extStatus,
         bytes calldata inputProof
     ) external onlyRole(ADMIN_ROLE) {
         ebool status = FHE.fromExternal(extStatus, inputProof);
@@ -56,7 +56,7 @@ contract WhistleblowerDAO is ZamaEthereumConfig, AccessControl {
 
     function castEncryptedVote(
         uint256 proposalId,
-        externalEbool memory isForVote,
+        externalEbool isForVote,
         bytes calldata inputProof
     ) external {
         require(block.timestamp < proposals[proposalId].endTime, "Voting ended");

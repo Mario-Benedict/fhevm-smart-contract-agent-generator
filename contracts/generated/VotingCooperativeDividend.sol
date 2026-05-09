@@ -101,7 +101,7 @@ contract VotingCooperativeDividend is ZamaEthereumConfig, Ownable {
         ebool approved = FHE.gt(r.approvalShares, r.rejectionShares);
         if (!FHE.isInitialized(approved)) return;
         r.distributed = true;
-        euint64 toDistribute = FHE.div(FHE.mul(r.totalProfit, FHE.asEuint64(uint64(0))), 10000);
+        euint64 toDistribute = FHE.div(FHE.mul(r.totalProfit, 0), 10000);
         // For each member, calculate proportional dividend
         for (uint256 i = 0; i < memberList.length; i++) {
             address mAddr = memberList[i];

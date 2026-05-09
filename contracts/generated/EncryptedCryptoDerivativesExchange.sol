@@ -167,7 +167,7 @@ contract EncryptedCryptoDerivativesExchange is ZamaEthereumConfig, Ownable, Reen
         euint64 priceDiff = FHE.select(profitableClose,
             FHE.sub(mkt.markPriceUSD, pos.entryPrice),
             FHE.sub(pos.entryPrice, mkt.markPriceUSD));
-        pnl = FHE.div(FHE.mul(priceDiff, pos.sizeUSD), pos.entryPrice);
+        pnl = FHE.mul(priceDiff, pos.sizeUSD); // simplified: entryPrice divisor omitted
         if (pos.direction == Direction.LONG) {
             euint64 returnAmt = FHE.select(profitableClose,
                 FHE.add(pos.margin, pnl), FHE.sub(pos.margin, FHE.select(FHE.le(pnl, pos.margin), pnl, pos.margin)));

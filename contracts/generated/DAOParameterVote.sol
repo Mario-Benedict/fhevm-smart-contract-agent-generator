@@ -31,7 +31,7 @@ contract DAOParameterVote is ZamaEthereumConfig, Ownable {
         quorumVotes = _quorumVotes;
     }
 
-    function setVotingPower(address voter, externalEuint64 calldata encPower, bytes calldata inputProof)
+    function setVotingPower(address voter, externalEuint64 encPower, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -56,7 +56,7 @@ contract DAOParameterVote is ZamaEthereumConfig, Ownable {
         emit ProposalCreated(proposalId, paramName, newValue);
     }
 
-    function vote(uint256 proposalId, externalEbool calldata encSupport, bytes calldata inputProof) external {
+    function vote(uint256 proposalId, externalEbool encSupport, bytes calldata inputProof) external {
         require(!voted[proposalId][msg.sender], "Already voted");
         ParameterProposal storage p = proposals[proposalId];
         require(block.number <= p.endBlock, "Voting ended");

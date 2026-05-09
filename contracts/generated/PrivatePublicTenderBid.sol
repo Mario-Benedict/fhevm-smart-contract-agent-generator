@@ -12,7 +12,8 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
         string requirements;
         euint64 budgetCeiling;
         euint64 lowestBid;
-        address winningVendor;
+        eaddress encWinningVendor;
+        address revealedWinner;
         uint256 submissionDeadline;
         uint256 evaluationDeadline;
         bool awarded;
@@ -39,7 +40,7 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function registerVendor(address vendor, externalEuint8 calldata encCapability, bytes calldata inputProof)
+    function registerVendor(address vendor, externalEuint8 encCapability, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -54,7 +55,7 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
         string calldata requirements,
         uint256 submissionWindow,
         uint256 evaluationWindow,
-        externalEuint64 calldata encBudget,
+        externalEuint64 encBudget,
         bytes calldata inputProof
     ) external onlyOwner returns (uint256 tenderId) {
         tenderId = tenderCount++;
@@ -63,14 +64,16 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
         t.requirements = requirements;
         t.budgetCeiling = FHE.fromExternal(encBudget, inputProof);
         t.lowestBid = FHE.asEuint64(type(uint64).max);
+        t.encWinningVendor = FHE.asEaddress(address(0));
         t.submissionDeadline = block.timestamp + submissionWindow;
         t.evaluationDeadline = block.timestamp + submissionWindow + evaluationWindow;
         FHE.allowThis(t.budgetCeiling);
         FHE.allowThis(t.lowestBid);
+        FHE.allowThis(t.encWinningVendor);
         emit TenderPublished(tenderId, title);
     }
 
-    function submitBid(uint256 tenderId, externalEuint64 calldata encBid, bytes calldata inputProof) external {
+    function submitBid(uint256 tenderId, externalEuint64 encBid, bytes calldata inputProof) external {
         require(registeredVendors[msg.sender], "Not registered");
         Tender storage t = tenders[tenderId];
         require(block.timestamp <= t.submissionDeadline, "Submission closed");
@@ -86,12 +89,13 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
         ebool qualifies = FHE.and(withinBudget, isLower);
 
         t.lowestBid = FHE.select(qualifies, bid, t.lowestBid);
+        t.encWinningVendor = FHE.select(qualifies, FHE.asEaddress(msg.sender), t.encWinningVendor);
         FHE.allowThis(t.lowestBid);
-        if (qualifies.unwrap() != 0) t.winningVendor = msg.sender;
+        FHE.allowThis(t.encWinningVendor);
         emit BidSubmitted(tenderId, msg.sender);
     }
 
-    function evaluateBid(uint256 tenderId, address vendor, externalEuint8 calldata encTechScore, bytes calldata inputProof)
+    function evaluateBid(uint256 tenderId, address vendor, externalEuint8 encTechScore, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -104,13 +108,15 @@ contract PrivatePublicTenderBid is ZamaEthereumConfig, Ownable {
         emit BidEvaluated(tenderId, vendor);
     }
 
-    function awardTender(uint256 tenderId) external onlyOwner {
+    function awardTender(uint256 tenderId, address winner) external onlyOwner {
         Tender storage t = tenders[tenderId];
         require(block.timestamp > t.evaluationDeadline, "Evaluation ongoing");
         require(!t.awarded, "Already awarded");
         t.awarded = true;
-        FHE.allow(t.lowestBid, t.winningVendor);
+        t.revealedWinner = winner;
+        FHE.allow(t.lowestBid, winner);
         FHE.allow(t.lowestBid, owner());
-        emit TenderAwarded(tenderId, t.winningVendor);
+        FHE.allow(t.encWinningVendor, owner());
+        emit TenderAwarded(tenderId, winner);
     }
 }

@@ -31,7 +31,7 @@ contract PrivateMicroLending is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     constructor() Ownable(msg.sender) {}
 
-    function assignCreditScore(address borrower, externalEuint8 calldata encScore, bytes calldata inputProof)
+    function assignCreditScore(address borrower, externalEuint8 encScore, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -40,7 +40,7 @@ contract PrivateMicroLending is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allow(creditScores[borrower], borrower);
     }
 
-    function requestLoan(externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function requestLoan(externalEuint32 encAmount, bytes calldata inputProof)
         external
         returns (uint256 loanId)
     {
@@ -59,7 +59,7 @@ contract PrivateMicroLending is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit LoanRequested(loanId, msg.sender);
     }
 
-    function approveLoan(uint256 loanId, externalEuint32 calldata encApproved, bytes calldata inputProof)
+    function approveLoan(uint256 loanId, externalEuint32 encApproved, bytes calldata inputProof)
         external
         onlyOwner
     {

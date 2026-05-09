@@ -37,13 +37,13 @@ contract EmploymentCredentialNFT is ZamaEthereumConfig, AccessControl {
 
     function issueCredential(
         address employee,
-        externalEuint32 calldata encStart,
+        externalEuint32 encStart,
         bytes calldata startProof,
-        externalEuint32 calldata encEnd,
+        externalEuint32 encEnd,
         bytes calldata endProof,
-        externalEuint8 calldata encGrade,
+        externalEuint8 encGrade,
         bytes calldata gradeProof,
-        externalEuint16 calldata encSalary,
+        externalEuint16 encSalary,
         bytes calldata salaryProof,
         bool isActive
     ) external onlyRole(EMPLOYER_ROLE) {

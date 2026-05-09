@@ -109,8 +109,8 @@ contract PrivateDecentralizedExchangeOrderBook is ZamaEthereumConfig, Ownable, R
         require(!maker.filled && !maker.cancelled && !taker.filled && !taker.cancelled, "Orders invalid");
         euint64 tradeAmt   = FHE.fromExternal(encTradeAmt, taProof);
         euint64 tradePrice = FHE.fromExternal(encTradePrice, tpProof);
-        euint64 makerFee   = FHE.div(FHE.mul(tradeAmt, FHE.asEuint64(5)), 10000);  // 0.05% maker
-        euint64 takerFee   = FHE.div(FHE.mul(tradeAmt, FHE.asEuint64(10)), 10000); // 0.10% taker
+        euint64 makerFee   = FHE.div(FHE.mul(tradeAmt, 5), 10000);  // 0.05% maker
+        euint64 takerFee   = FHE.div(FHE.mul(tradeAmt, 10), 10000); // 0.10% taker
         tradeId = tradeCount++;
         trades[tradeId] = Trade({
             makerOrderId: makerOrderId, takerOrderId: takerOrderId,

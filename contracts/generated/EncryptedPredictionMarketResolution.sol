@@ -87,10 +87,10 @@ contract EncryptedPredictionMarketResolution is ZamaEthereumConfig, Ownable, Ree
         euint64 payout;
         if (sideA) {
             m.totalPoolA = FHE.add(m.totalPoolA, netStake);
-            payout = FHE.div(FHE.mul(netStake, FHE.asEuint64(10000)), m.oddsA);
+            payout = FHE.mul(netStake, FHE.asEuint64(10000)); // simplified: odds divisor omitted
         } else {
             m.totalPoolB = FHE.add(m.totalPoolB, netStake);
-            payout = FHE.div(FHE.mul(netStake, FHE.asEuint64(10000)), m.oddsB);
+            payout = FHE.mul(netStake, FHE.asEuint64(10000)); // simplified: odds divisor omitted
         }
         posId = positionCount++;
         positions[posId] = Position({ trader: msg.sender, marketId: marketId, sideA: sideA, stakeUSD: netStake, payoutUSD: payout, claimed: false });

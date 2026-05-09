@@ -40,9 +40,9 @@ contract ConfidentialSupplyChain is ZamaEthereumConfig, AccessControl {
 
     function createShipment(
         bytes32 productId,
-        externalEuint64 calldata encCost,
+        externalEuint64 encCost,
         bytes calldata costProof,
-        externalEuint32 calldata encQty,
+        externalEuint32 encQty,
         bytes calldata qtyProof
     ) external onlyRole(SUPPLIER_ROLE) returns (uint256 shipmentId) {
         shipmentId = shipmentCount++;
@@ -67,7 +67,7 @@ contract ConfidentialSupplyChain is ZamaEthereumConfig, AccessControl {
 
     function advanceStage(
         uint256 shipmentId,
-        externalEuint64 calldata encAddedCost,
+        externalEuint64 encAddedCost,
         bytes calldata costProof
     ) external {
         Shipment storage s = shipments[shipmentId];
@@ -84,7 +84,7 @@ contract ConfidentialSupplyChain is ZamaEthereumConfig, AccessControl {
         emit StageAdvanced(shipmentId, s.currentStage, msg.sender);
     }
 
-    function recordQuality(uint256 shipmentId, externalEuint8 calldata encScore, bytes calldata inputProof)
+    function recordQuality(uint256 shipmentId, externalEuint8 encScore, bytes calldata inputProof)
         external
         onlyRole(AUDITOR_ROLE)
     {
@@ -96,7 +96,7 @@ contract ConfidentialSupplyChain is ZamaEthereumConfig, AccessControl {
         emit QualityRecorded(shipmentId, msg.sender);
     }
 
-    function setUnitPrice(uint256 shipmentId, externalEuint64 calldata encPrice, bytes calldata inputProof)
+    function setUnitPrice(uint256 shipmentId, externalEuint64 encPrice, bytes calldata inputProof)
         external
     {
         require(shipments[shipmentId].currentHolder == msg.sender, "Not holder");

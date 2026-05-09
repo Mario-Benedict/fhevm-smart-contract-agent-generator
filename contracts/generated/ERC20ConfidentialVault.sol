@@ -39,12 +39,12 @@ contract ERC20ConfidentialVault is ZamaEthereumConfig, Ownable, ReentrancyGuard,
         FHE.allowThis(_totalReserve);
     }
 
-    function depositAndMint(externalEuint64 encCollateral, bytes calldata proof) external nonReentrant whenNotPaused {
+    function depositAndMint(externalEuint64 encCollateral, bytes calldata proof, uint64 minRatioPlaintext, uint64 newSupplyPlaintext) external nonReentrant whenNotPaused {
         euint64 collateral = FHE.fromExternal(encCollateral, proof);
-        euint64 tokensToMint = FHE.div(FHE.mul(collateral, 10000), _minReserveRatioBps);
+        euint64 tokensToMint = minRatioPlaintext > 0 ? FHE.div(FHE.mul(collateral, 10000), minRatioPlaintext) : FHE.asEuint64(0);
         euint64 newReserve = FHE.add(_totalReserve, collateral);
         euint64 newSupply = FHE.add(_totalSupply, tokensToMint);
-        euint64 newRatio = FHE.div(FHE.mul(newReserve, 10000), newSupply);
+        euint64 newRatio = newSupplyPlaintext > 0 ? FHE.div(FHE.mul(newReserve, 10000), newSupplyPlaintext) : FHE.asEuint64(0);
         ebool healthy = FHE.ge(newRatio, _minReserveRatioBps);
         euint64 actualMint = FHE.select(healthy, tokensToMint, FHE.asEuint64(0));
         euint64 actualReserve = FHE.select(healthy, collateral, FHE.asEuint64(0));

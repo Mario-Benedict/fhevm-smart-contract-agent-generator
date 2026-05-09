@@ -47,7 +47,7 @@ contract PrivateCollateralVault is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit PositionOpened(msg.sender);
     }
 
-    function depositCollateral(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function depositCollateral(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         require(positions[msg.sender].active, "No position");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         positions[msg.sender].collateral = FHE.add(positions[msg.sender].collateral, amount);
@@ -58,10 +58,10 @@ contract PrivateCollateralVault is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit CollateralDeposited(msg.sender);
     }
 
-    function issueDebt(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function issueDebt(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         require(positions[msg.sender].active, "No position");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
-        euint64 maxDebt = FHE.div(FHE.mul(positions[msg.sender].collateral, FHE.asEuint64(10000)), FHE.asEuint64(collateralRatioBps));
+        euint64 maxDebt = FHE.div(FHE.mul(positions[msg.sender].collateral, 10000), uint64(collateralRatioBps));
         ebool safe = FHE.le(FHE.add(positions[msg.sender].debt, amount), maxDebt);
         euint64 safeAmount = FHE.select(safe, amount, FHE.asEuint64(0));
         positions[msg.sender].debt = FHE.add(positions[msg.sender].debt, safeAmount);
@@ -73,7 +73,7 @@ contract PrivateCollateralVault is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit DebtIssued(msg.sender);
     }
 
-    function repayDebt(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function repayDebt(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         require(positions[msg.sender].active, "No position");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         positions[msg.sender].debt = FHE.sub(positions[msg.sender].debt, amount);
@@ -87,10 +87,10 @@ contract PrivateCollateralVault is ZamaEthereumConfig, Ownable, ReentrancyGuard 
     function liquidate(address user) external nonReentrant {
         Position storage p = positions[user];
         require(p.active, "No position");
-        euint64 maxDebt = FHE.div(FHE.mul(p.collateral, FHE.asEuint64(10000)), FHE.asEuint64(collateralRatioBps));
+        euint64 maxDebt = FHE.div(FHE.mul(p.collateral, 10000), uint64(collateralRatioBps));
         ebool undercollateralized = FHE.gt(p.debt, maxDebt);
         euint64 penalty = FHE.select(undercollateralized,
-            FHE.div(FHE.mul(p.collateral, FHE.asEuint64(liquidationPenaltyBps)), FHE.asEuint64(10000)),
+            FHE.div(FHE.mul(p.collateral, FHE.asEuint64(uint64(liquidationPenaltyBps))), 10000),
             FHE.asEuint64(0)
         );
         p.collateral = FHE.sub(p.collateral, penalty);

@@ -23,6 +23,7 @@ contract PrivateMergerArbitrageVault is ZamaEthereumConfig, Ownable, ReentrancyG
     mapping(uint256 => DealPosition) public deals;
     mapping(address => mapping(uint256 => euint64)) private investorExposure;
     mapping(address => euint64) public investorPnL;
+    mapping(address => bool) private _pnlInitialized;
     mapping(address => bool) public qualifiedInvestors;
     uint256 public dealCount;
     euint64 private vaultTotalExposure;
@@ -44,8 +45,8 @@ contract PrivateMergerArbitrageVault is ZamaEthereumConfig, Ownable, ReentrancyG
 
     function openDeal(
         string calldata target, string calldata acquirer,
-        externalEuint64 calldata encOffer,   bytes calldata offerProof,
-        externalEuint64 calldata encMarket,  bytes calldata marketProof,
+        externalEuint64 encOffer,   bytes calldata offerProof,
+        externalEuint64 encMarket,  bytes calldata marketProof,
         uint256 expectedCloseDays
     ) external onlyOwner returns (uint256 dealId) {
         dealId = dealCount++;
@@ -65,7 +66,7 @@ contract PrivateMergerArbitrageVault is ZamaEthereumConfig, Ownable, ReentrancyG
 
     function takeExposure(
         uint256 dealId,
-        externalEuint64 calldata encShares, bytes calldata inputProof
+        externalEuint64 encShares, bytes calldata inputProof
     ) external nonReentrant {
         require(qualifiedInvestors[msg.sender], "Not qualified");
         DealPosition storage d = deals[dealId];
@@ -77,9 +78,10 @@ contract PrivateMergerArbitrageVault is ZamaEthereumConfig, Ownable, ReentrancyG
         FHE.allowThis(investorExposure[msg.sender][dealId]);
         FHE.allowThis(d.positionSize); FHE.allowThis(vaultTotalExposure);
         FHE.allow(investorExposure[msg.sender][dealId], msg.sender);
-        if (investorPnL[msg.sender].unwrap() == 0) {
+        if (!_pnlInitialized[msg.sender]) {
             investorPnL[msg.sender] = FHE.asEuint64(0);
             FHE.allowThis(investorPnL[msg.sender]);
+            _pnlInitialized[msg.sender] = true;
         }
         emit ExposureTaken(dealId, msg.sender);
     }

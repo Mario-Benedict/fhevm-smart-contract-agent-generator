@@ -196,7 +196,7 @@ contract PrivateRealEstateInvestmentTrust is ZamaEthereumConfig, Ownable, Reentr
 
     function claimDividend() external nonReentrant {
         Investor storage inv = investors[msg.sender];
-        require(inv.approved && FHE.decrypt(FHE.gt(inv.sharesHeld, FHE.asEuint64(0))), "Not eligible");
+        require(inv.approved, "Not eligible");
         uint256 lastClaim = inv.lastDividendClaim;
         require(block.timestamp > lastClaim + 90 days, "Already claimed this quarter");
         euint64 dividendAmount = FHE.mul(inv.sharesHeld, reitShare.dividendPerShare);

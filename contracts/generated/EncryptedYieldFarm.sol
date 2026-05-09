@@ -15,6 +15,7 @@ contract EncryptedYieldFarm is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     }
 
     mapping(address => StakeInfo) public stakes;
+    mapping(address => bool) private _stakeInitialized;
     euint64 private totalStaked;
     euint64 private rewardPool;
     uint64 public rewardPerBlock;
@@ -36,21 +37,22 @@ contract EncryptedYieldFarm is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         farmActive = true;
     }
 
-    function addRewards(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function addRewards(externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         rewardPool = FHE.add(rewardPool, amount);
         FHE.allowThis(rewardPool);
         emit RewardsAdded();
     }
 
-    function stake(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function stake(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         require(farmActive, "Farm not active");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         StakeInfo storage s = stakes[msg.sender];
         s.amount = FHE.add(s.amount, amount);
         s.depositBlock = block.number;
-        if (s.pendingRewards.unwrap() == 0) {
+        if (!_stakeInitialized[msg.sender]) {
             s.pendingRewards = FHE.asEuint64(0);
+            _stakeInitialized[msg.sender] = true;
         }
         totalStaked = FHE.add(totalStaked, amount);
         FHE.allowThis(s.amount);
@@ -77,7 +79,7 @@ contract EncryptedYieldFarm is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit RewardsClaimed(msg.sender);
     }
 
-    function unstake(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function unstake(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         StakeInfo storage s = stakes[msg.sender];
         s.amount = FHE.sub(s.amount, amount);

@@ -40,6 +40,7 @@ contract GameEncryptedHorseRacing is ZamaEthereumConfig, Ownable, ReentrancyGuar
     mapping(uint256 => Race) private races;
     uint256 public raceCount;
     mapping(uint256 => mapping(address => Bet)) private bets;
+    mapping(uint256 => mapping(address => bool)) private hasBet;
     mapping(uint256 => address[]) private bettors;
     euint64 private _houseEdgeBps;
 
@@ -85,9 +86,10 @@ contract GameEncryptedHorseRacing is ZamaEthereumConfig, Ownable, ReentrancyGuar
     function placeBet(uint256 raceId, uint256 horseId, externalEuint64 encAmount, bytes calldata proof) external nonReentrant {
         Race storage r = races[raceId];
         require(!r.finished && block.timestamp < r.raceTime, "Race not open");
-        require(bets[raceId][msg.sender].amount == FHE.asEuint64(0), "Already bet");
+        require(!hasBet[raceId][msg.sender], "Already bet");
         euint64 amount = FHE.fromExternal(encAmount, proof);
         bets[raceId][msg.sender] = Bet({ horseId: horseId, amount: amount, settled: false });
+        hasBet[raceId][msg.sender] = true;
         r.totalPool = FHE.add(r.totalPool, amount);
         FHE.allowThis(bets[raceId][msg.sender].amount);
         FHE.allow(bets[raceId][msg.sender].amount, msg.sender);

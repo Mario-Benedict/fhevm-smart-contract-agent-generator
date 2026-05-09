@@ -56,7 +56,7 @@ contract EncryptedCarbonTaxObligationRegistry is ZamaEthereumConfig, Ownable, Re
     event AuditCompleted(address indexed company, uint256 year);
     event ExemptionGranted(address indexed company);
 
-    constructor(externalEuint64 encInitialTaxRate, bytes calldata proof) Ownable(msg.sender) {
+    constructor(externalEuint64 encInitialTaxRate, bytes memory proof) Ownable(msg.sender) {
         _carbonTaxRateUSDPerTonne = FHE.fromExternal(encInitialTaxRate, proof);
         _totalTaxRevenue = FHE.asEuint64(0);
         _totalNationalEmissions = FHE.asEuint64(0);

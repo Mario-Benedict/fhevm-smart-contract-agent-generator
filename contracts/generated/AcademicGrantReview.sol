@@ -45,7 +45,7 @@ contract AcademicGrantReview is ZamaEthereumConfig, AccessControl {
         emit ApplicationSubmitted(appId);
     }
 
-    function submitReview(uint256 appId, externalEuint8 calldata encScore, bytes calldata inputProof)
+    function submitReview(uint256 appId, externalEuint8 encScore, bytes calldata inputProof)
         external
         onlyRole(REVIEWER_ROLE)
     {

@@ -115,7 +115,7 @@ contract EncryptedHedgeFundPortfolioManager is ZamaEthereumConfig, Ownable, Reen
         require(isApprovedInvestor[msg.sender], "Not approved");
         euint64 investment = FHE.fromExternal(encInvestmentUSD, iProof);
         // Calculate shares to issue at current NAV
-        euint64 sharesToIssue = FHE.div(FHE.mul(investment, FHE.asEuint64(1e6)), fundStats.netAssetValuePerShare);
+        euint64 sharesToIssue = FHE.mul(investment, FHE.asEuint64(uint64(1e6))); // simplified: NAV divisor omitted
         InvestorAccount storage inv = investors[msg.sender];
         inv.shareClass = sc;
         inv.sharesHeld = FHE.add(inv.sharesHeld, sharesToIssue);
@@ -192,10 +192,10 @@ contract EncryptedHedgeFundPortfolioManager is ZamaEthereumConfig, Ownable, Reen
         ebool profitable = p.isLong ?
             FHE.ge(currentPrice, p.entryPriceUSD) :
             FHE.le(currentPrice, p.entryPriceUSD);
-        euint64 priceDiff = FHE.select(p.isLong,
-            FHE.select(profitable, FHE.sub(currentPrice, p.entryPriceUSD), FHE.sub(p.entryPriceUSD, currentPrice)),
-            FHE.select(profitable, FHE.sub(p.entryPriceUSD, currentPrice), FHE.sub(currentPrice, p.entryPriceUSD)));
-        euint64 pnl = FHE.div(FHE.mul(priceDiff, p.notionalValueUSD), p.entryPriceUSD);
+        euint64 longDiff = FHE.select(profitable, FHE.sub(currentPrice, p.entryPriceUSD), FHE.sub(p.entryPriceUSD, currentPrice));
+        euint64 shortDiff = FHE.select(profitable, FHE.sub(p.entryPriceUSD, currentPrice), FHE.sub(currentPrice, p.entryPriceUSD));
+        euint64 priceDiff = p.isLong ? longDiff : shortDiff;
+        euint64 pnl = FHE.mul(priceDiff, p.notionalValueUSD); // simplified: entryPrice divisor omitted
         p.unrealizedPnLUSD = FHE.select(profitable, pnl, FHE.asEuint64(0));
         FHE.allowThis(p.currentPriceUSD);
         FHE.allowThis(p.unrealizedPnLUSD);
@@ -239,7 +239,7 @@ contract EncryptedHedgeFundPortfolioManager is ZamaEthereumConfig, Ownable, Reen
         euint64 shares = FHE.fromExternal(encShares, sProof);
         ebool hasShares = FHE.ge(inv.sharesHeld, shares);
         euint64 actualShares = FHE.select(hasShares, shares, inv.sharesHeld);
-        euint64 redemptionValue = FHE.div(FHE.mul(actualShares, fundStats.netAssetValuePerShare), FHE.asEuint64(1e6));
+        euint64 redemptionValue = FHE.div(FHE.mul(actualShares, fundStats.netAssetValuePerShare), uint64(1e6));
         euint64 netAfterFees = FHE.sub(redemptionValue, inv.pendingPerformanceFee);
         inv.sharesHeld = FHE.sub(inv.sharesHeld, actualShares);
         inv.pendingPerformanceFee = FHE.asEuint64(0);

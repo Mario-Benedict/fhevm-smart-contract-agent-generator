@@ -216,8 +216,8 @@ contract ConfidentialCryptocurrencyExchangeOrderBook is ZamaEthereumConfig, Owna
         require(orders[sellOrderId].side == OrderSide.SELL, "Not sell order");
         euint64 execQty   = FHE.fromExternal(encExecQty, eqProof);
         euint64 execPrice = FHE.fromExternal(encExecPrice, epProof);
-        euint64 buyFee    = FHE.div(FHE.mul(execQty, FHE.asEuint64(uint64(0))), 10000);
-        euint64 sellFee   = FHE.div(FHE.mul(execQty, FHE.asEuint64(uint64(0))), 10000);
+        euint64 buyFee    = FHE.div(FHE.mul(execQty, 0), 10000);
+        euint64 sellFee   = FHE.div(FHE.mul(execQty, 0), 10000);
         uint256 execId = executionCount++;
         executions[execId] = TradeExecution({
             buyOrderId: buyOrderId,

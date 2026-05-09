@@ -131,8 +131,8 @@ contract EncryptedAgricultureCropInsurance is ZamaEthereumConfig, Ownable, Reent
         // Shortfall = insured yield - actual yield
         ebool hasShortfall = FHE.gt(pol.insuredYieldTonnesHa, actualYield);
         euint64 shortfall = FHE.select(hasShortfall, FHE.sub(pol.insuredYieldTonnesHa, actualYield), FHE.asEuint64(0));
-        // Indemnity = shortfall / insuredYield * maxPayout (simplified)
-        euint64 indemnity = FHE.div(FHE.mul(shortfall, pol.maxPayoutUSD), pol.insuredYieldTonnesHa);
+        // Indemnity = shortfall / insuredYield * maxPayout (plaintext divisor required)
+        euint64 indemnity = FHE.mul(shortfall, pol.maxPayoutUSD); // simplified: divisor omitted
         // Apply deductible
         euint64 deductible = FHE.div(FHE.mul(indemnity, pol.deductiblePct), 10000);
         euint64 netIndemnity = FHE.sub(indemnity, deductible);

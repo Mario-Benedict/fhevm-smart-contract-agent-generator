@@ -31,7 +31,7 @@ contract ConfidentialDocumentVault is ZamaEthereumConfig, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function setClearance(address user, externalEuint8 calldata encLevel, bytes calldata inputProof)
+    function setClearance(address user, externalEuint8 encLevel, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -43,7 +43,7 @@ contract ConfidentialDocumentVault is ZamaEthereumConfig, Ownable {
 
     function storeDocument(
         string calldata ipfsCid,
-        externalEuint8 calldata encClassification,
+        externalEuint8 encClassification,
         bytes calldata inputProof
     ) external returns (bytes32 docId) {
         docId = keccak256(abi.encodePacked(msg.sender, ipfsCid, block.timestamp));

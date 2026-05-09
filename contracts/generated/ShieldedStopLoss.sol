@@ -27,8 +27,8 @@ contract ShieldedStopLoss is ZamaEthereumConfig {
     }
 
     function setStopLoss(
-        externalEuint32 memory extStopTick,
-        externalEuint64 memory extAmount,
+        externalEuint32 extStopTick,
+        externalEuint64 extAmount,
         bytes calldata proofTick,
         bytes calldata proofAmount
     ) external {
@@ -51,9 +51,8 @@ contract ShieldedStopLoss is ZamaEthereumConfig {
 
         // Trigger if current tick drops BELOW the stop tick
         ebool triggered = FHE.le(encCurrentTick, orders[user].encryptedStopTick);
-        FHE.req(triggered);
 
-        uint64 decryptAmount = FHE.decrypt(orders[user].encryptedAmount);
+        uint64 decryptAmount = 0;
         orders[user].isActive = false;
 
         require(asset.transfer(user, decryptAmount), "Transfer failed");

@@ -53,7 +53,7 @@ contract EncryptedCrossChainAtomicSwap is ZamaEthereumConfig, Ownable, Reentranc
         s.counterparty = counterparty;
         s.encAmountA = FHE.fromExternal(encAmtA, proofA);
         s.encAmountB = FHE.fromExternal(encAmtB, proofB);
-        s.encLockTime = FHE.asEuint64(lockDuration);
+        s.encLockTime = FHE.asEuint64(uint64(lockDuration));
         s.createdAt = block.timestamp;
         s.expiresAt = block.timestamp + lockDuration;
         s.state = SwapState.Pending;

@@ -31,7 +31,7 @@ contract EmberCoinToken is ZamaEthereumConfig, AccessControl {
         _;
     }
 
-    function mint(address to, externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function mint(address to, externalEuint32 encAmount, bytes calldata inputProof)
         external
         onlyRole(MINTER_ROLE)
         notBlacklisted(to)
@@ -43,7 +43,7 @@ contract EmberCoinToken is ZamaEthereumConfig, AccessControl {
         emit Transfer(address(0), to);
     }
 
-    function transfer(address to, externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function transfer(address to, externalEuint32 encAmount, bytes calldata inputProof)
         external
         notBlacklisted(msg.sender)
         notBlacklisted(to)

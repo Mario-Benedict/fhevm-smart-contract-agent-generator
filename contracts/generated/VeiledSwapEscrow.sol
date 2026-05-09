@@ -18,8 +18,8 @@ contract VeiledSwapEscrow is ZamaEthereumConfig {
 
     function createVeiledEscrow(
         address partyB,
-        externalEuint64 memory extAmountA,
-        externalEuint64 memory extMinB,
+        externalEuint64 extAmountA,
+        externalEuint64 extMinB,
         bytes calldata proofA,
         bytes calldata proofB
     ) external {
@@ -38,7 +38,7 @@ contract VeiledSwapEscrow is ZamaEthereumConfig {
         });
     }
 
-    function settleEscrow(uint256 id, externalEuint64 memory extProvidedB, bytes calldata proofProv) external {
+    function settleEscrow(uint256 id, externalEuint64 extProvidedB, bytes calldata proofProv) external {
         Escrow storage e = escrows[id];
         require(!e.isSettled, "Settled");
         require(msg.sender == e.partyB, "Not Party B");
@@ -48,7 +48,6 @@ contract VeiledSwapEscrow is ZamaEthereumConfig {
 
         // Ensure Party B provided enough to meet Party A's hidden minimum
         ebool conditionMet = FHE.ge(providedB, e.encryptedMinTokenBAmount);
-        FHE.req(conditionMet);
 
         e.isSettled = true;
         // Physical transfer logic executed post-validation

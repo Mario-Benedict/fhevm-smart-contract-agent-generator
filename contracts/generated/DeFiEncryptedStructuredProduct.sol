@@ -132,8 +132,8 @@ contract DeFiEncryptedStructuredProduct is ZamaEthereumConfig, Ownable, Reentran
 
         _totalCollateral = FHE.add(_totalCollateral, faceValue);
         _weightedAvgCreditScore = FHE.add(
-            FHE.div(_weightedAvgCreditScore, FHE.asEuint32(2)),
-            FHE.div(creditScore, FHE.asEuint32(2))
+            FHE.div(_weightedAvgCreditScore, 2),
+            FHE.div(creditScore, 2)
         );
 
         FHE.allowThis(assets[assetId_].faceValueUSD);

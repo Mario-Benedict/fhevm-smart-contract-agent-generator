@@ -183,7 +183,7 @@ contract PrivateMunicipalWaterUtilityTariff is ZamaEthereumConfig, Ownable, Reen
         euint64 tier2Vol = FHE.mul(acct.monthlyBaselineGallons, FHE.asEuint64(15000)); // 150% of baseline (in bps)
         // Simplified tier assignment
         ebool inTier1 = FHE.le(consumption, tier1Vol);
-        ebool inTier2 = FHE.le(consumption, FHE.div(FHE.mul(tier1Vol, FHE.asEuint64(15)), FHE.asEuint64(10)));
+        ebool inTier2 = FHE.le(consumption, FHE.div(FHE.mul(tier1Vol, 15), 10));
         ebool inTier3 = FHE.le(consumption, FHE.mul(tier1Vol, FHE.asEuint64(2)));
 
         // Compute volumetric charge (simplified)
@@ -199,16 +199,16 @@ contract PrivateMunicipalWaterUtilityTariff is ZamaEthereumConfig, Ownable, Reen
         );
 
         // Sewer charge
-        euint64 sewerCharge = FHE.div(FHE.mul(volumetricCharge, tariff.sewerRatePercent), FHE.asEuint64(10000));
+        euint64 sewerCharge = FHE.div(FHE.mul(volumetricCharge, tariff.sewerRatePercent), 10000);
 
         // Drought surcharge
-        euint64 droughtSurcharge = FHE.div(FHE.mul(volumetricCharge, tariff.droughtSurchargePercent), FHE.asEuint64(10000));
+        euint64 droughtSurcharge = FHE.div(FHE.mul(volumetricCharge, tariff.droughtSurchargePercent), 10000);
 
         euint64 totalBill = FHE.add(FHE.add(FHE.add(tariff.baseMonthlyCharge, volumetricCharge), sewerCharge), droughtSurcharge);
 
         // LIRA discount
         if (acct.lowIncomeEligible) {
-            euint64 discount = FHE.div(FHE.mul(totalBill, tariff.lowIncomeDiscountBps), FHE.asEuint64(10000));
+            euint64 discount = FHE.div(FHE.mul(totalBill, tariff.lowIncomeDiscountBps), 10000);
             acct.incomeAssistanceBenefit = FHE.add(acct.incomeAssistanceBenefit, discount);
             totalBill = FHE.sub(totalBill, discount);
             systemFinancials.lowIncomeSubsidyPaid = FHE.add(systemFinancials.lowIncomeSubsidyPaid, discount);

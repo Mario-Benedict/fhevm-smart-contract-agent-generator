@@ -122,7 +122,7 @@ contract EncryptedCryptocurrencyOTCDealerBook is ZamaEthereumConfig, Ownable, Re
         euint64 markup = FHE.fromExternal(encMarkup, mkProof);
 
         // Client rate = mid +/- spread/2 +/- markup
-        euint64 halfSpread = FHE.div(spread, FHE.asEuint64(2));
+        euint64 halfSpread = FHE.div(spread, 2);
         euint64 clientRate = direction == TradeDirection.BUY
             ? FHE.add(FHE.add(midPrice, halfSpread), markup)
             : FHE.sub(FHE.sub(midPrice, halfSpread), markup);

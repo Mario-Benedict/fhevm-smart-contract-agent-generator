@@ -51,7 +51,7 @@ contract PrivateGovernanceMultiSigTimelock is ZamaEthereumConfig, AccessControl,
     event ProposalCancelled(uint256 indexed id);
 
     constructor(
-        externalEuint64 encThreshold, bytes calldata proof
+        externalEuint64 encThreshold, bytes memory proof
     ) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PROPOSER_ROLE, msg.sender);

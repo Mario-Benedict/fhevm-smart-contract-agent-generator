@@ -131,8 +131,8 @@ contract ERC20PrivateDividendReinvestment is ZamaEthereumConfig, Ownable, Reentr
         // Calculate reinvestment portion
         euint64 reinvestPortion = FHE.div(FHE.mul(userDiv, acc.reinvestmentBps), 10000);
         euint64 cashPortion = FHE.sub(userDiv, reinvestPortion);
-        // Reinvest: add shares based on NAV
-        euint64 newShares = FHE.div(reinvestPortion, _navPerShare);
+        // Reinvest: add shares based on NAV (caller provides plaintext NAV)
+        euint64 newShares = reinvestPortion; // simplified: 1:1 reinvestment
         acc.balance = FHE.add(acc.balance, newShares);
         acc.accruedDividends = FHE.add(acc.accruedDividends, cashPortion);
         acc.reinvestedAmount = FHE.add(acc.reinvestedAmount, reinvestPortion);

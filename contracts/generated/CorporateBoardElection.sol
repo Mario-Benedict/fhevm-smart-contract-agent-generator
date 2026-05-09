@@ -33,7 +33,7 @@ contract CorporateBoardElection is ZamaEthereumConfig, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function assignShares(address shareholder, externalEuint64 calldata encShares, bytes calldata inputProof)
+    function assignShares(address shareholder, externalEuint64 encShares, bytes calldata inputProof)
         external
         onlyOwner
     {

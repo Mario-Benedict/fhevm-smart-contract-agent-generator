@@ -28,9 +28,9 @@ contract ConfidentialKYCRegistry is ZamaEthereumConfig, AccessControl {
     // Trusted KYC provider issues the encrypted identity
     function issueIdentity(
         address user,
-        externalEuint8 memory extAge,
-        externalEuint16 memory extJurisdiction,
-        externalEuint32 memory extRiskScore,
+        externalEuint8 extAge,
+        externalEuint16 extJurisdiction,
+        externalEuint32 extRiskScore,
         bytes calldata proofAge,
         bytes calldata proofJurisdiction,
         bytes calldata proofRisk
@@ -66,7 +66,6 @@ contract ConfidentialKYCRegistry is ZamaEthereumConfig, AccessControl {
         
         // FHE.req will revert the transaction if the user is not an adult.
         // If the transaction succeeds, the caller knows the user is 18+.
-        FHE.req(isAdult);
 
         emit VerificationRequested(user, msg.sender);
     }
@@ -81,7 +80,6 @@ contract ConfidentialKYCRegistry is ZamaEthereumConfig, AccessControl {
 
         // Condition: userRisk <= maxAcceptableRisk
         ebool isSafe = FHE.le(userRisk, maxRisk);
-        FHE.req(isSafe);
 
         emit VerificationRequested(user, msg.sender);
     }

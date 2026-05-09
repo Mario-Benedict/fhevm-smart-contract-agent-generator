@@ -12,6 +12,7 @@ contract CrimsonPeakToken is ZamaEthereumConfig, Ownable {
 
     mapping(address => euint64) private _balances;
     mapping(uint256 => mapping(address => euint64)) private _snapshots;
+    mapping(uint256 => mapping(address => bool)) private _snapshotRecorded;
     mapping(address => uint256) private _lastClaimedSnapshot;
     uint256 public currentSnapshotId;
     euint64 private _totalDividendPool;
@@ -22,7 +23,7 @@ contract CrimsonPeakToken is ZamaEthereumConfig, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function mint(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function mint(address to, externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[to] = FHE.add(_balances[to], amount);
         FHE.allowThis(_balances[to]);
@@ -35,19 +36,20 @@ contract CrimsonPeakToken is ZamaEthereumConfig, Ownable {
     }
 
     function recordSnapshot(address account) external {
-        require(_snapshots[currentSnapshotId][account].unwrap() == 0, "Already recorded");
+        require(!_snapshotRecorded[currentSnapshotId][account], "Already recorded");
+        _snapshotRecorded[currentSnapshotId][account] = true;
         _snapshots[currentSnapshotId][account] = _balances[account];
         FHE.allowThis(_snapshots[currentSnapshotId][account]);
     }
 
-    function depositDividend(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function depositDividend(externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _totalDividendPool = FHE.add(_totalDividendPool, amount);
         FHE.allowThis(_totalDividendPool);
         emit DividendDeposited();
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[msg.sender] = FHE.sub(_balances[msg.sender], amount);
         _balances[to] = FHE.add(_balances[to], amount);

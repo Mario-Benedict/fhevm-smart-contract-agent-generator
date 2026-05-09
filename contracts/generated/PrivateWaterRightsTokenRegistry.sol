@@ -122,7 +122,7 @@ contract PrivateWaterRightsTokenRegistry is ZamaEthereumConfig, Ownable, Reentra
     function applyDroughtCurtailment(uint256 rightId, externalEuint16 encCurtailment, bytes calldata proof) external onlyWaterAuthority {
         euint16 curtailment = FHE.fromExternal(encCurtailment, proof);
         waterRights[rightId].droughtCurtailmentBps = curtailment;
-        euint64 curtailedAlloc = FHE.sub(waterRights[rightId].allocatedAcreFeet, FHE.div(FHE.mul(waterRights[rightId].allocatedAcreFeet, FHE.asEuint64(1000)), 10000));
+        euint64 curtailedAlloc = FHE.sub(waterRights[rightId].allocatedAcreFeet, FHE.div(FHE.mul(waterRights[rightId].allocatedAcreFeet, 1000), 10000));
         waterRights[rightId].allocatedAcreFeet = curtailedAlloc;
         FHE.allowThis(waterRights[rightId].droughtCurtailmentBps);
         FHE.allowThis(waterRights[rightId].allocatedAcreFeet); FHE.allow(waterRights[rightId].allocatedAcreFeet, waterRights[rightId].holder);

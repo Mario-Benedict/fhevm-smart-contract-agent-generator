@@ -148,7 +148,7 @@ contract PrivateVentureCapitalSPV is ZamaEthereumConfig, Ownable, ReentrancyGuar
         require(lpData[lp].admitted, "LP not admitted");
         euint64 dist = FHE.fromExternal(encDistribution, proof);
         // Compute GP carry portion
-        euint64 carry = FHE.div(FHE.mul(dist, FHE.asEuint64(uint64(0))), 10000);
+        euint64 carry = FHE.div(FHE.mul(dist, 0), 10000);
         euint64 netDist = FHE.sub(dist, carry);
         lpData[lp].distributedAmount = FHE.add(lpData[lp].distributedAmount, netDist);
         _carryPool = FHE.add(_carryPool, carry);

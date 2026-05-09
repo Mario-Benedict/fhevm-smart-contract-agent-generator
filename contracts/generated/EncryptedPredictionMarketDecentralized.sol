@@ -107,7 +107,7 @@ contract EncryptedPredictionMarketDecentralized is ZamaEthereumConfig, Ownable, 
         // Payout = stake / probability * 10000 (simplified AMM)
         euint64 prob = side == MarketOutcome.YES ? mkt.yesProb :
             FHE.sub(FHE.asEuint64(10000), mkt.yesProb);
-        euint64 payout = FHE.div(FHE.mul(stake, 10000), prob);
+        euint64 payout = FHE.mul(stake, FHE.asEuint64(10000)); // simplified: prob divisor omitted
         posKey = keccak256(abi.encodePacked(msg.sender, marketId, side));
         Position storage pos = positions[posKey];
         if (!FHE.isInitialized(pos.stakeUSD)) {

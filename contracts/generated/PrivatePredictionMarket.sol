@@ -63,9 +63,9 @@ contract PrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyGuard
 
     function takePosition(
         uint256 marketId,
-        externalEbool calldata encSide,
+        externalEbool encSide,
         bytes calldata sideProof,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata amountProof
     ) external nonReentrant {
         Market storage m = markets[marketId];
@@ -113,7 +113,7 @@ contract PrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyGuard
 
         euint64 stake = m.outcome ? p.yesAmount : p.noAmount;
         euint64 winningPool = m.outcome ? m.yesPool : m.noPool;
-        euint64 fee = FHE.div(FHE.mul(m.totalPool, FHE.asEuint64(m.feeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(m.totalPool, FHE.asEuint64(m.feeBps)), 10000);
         euint64 payout = FHE.div(FHE.mul(stake, FHE.sub(m.totalPool, fee)), winningPool);
 
         FHE.allowTransient(payout, msg.sender);

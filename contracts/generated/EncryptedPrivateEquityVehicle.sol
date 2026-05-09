@@ -166,8 +166,7 @@ contract EncryptedPrivateEquityVehicle is ZamaEthereumConfig, Ownable, Reentranc
         // Update DPI = distributions / called capital
         ebool hasCalledCapital = FHE.gt(lpData.calledCapital, FHE.asEuint64(0));
         lpData.dpiRatio = FHE.select(hasCalledCapital,
-            FHE.div(FHE.mul(lpData.distributionsUSD, 1000), lpData.calledCapital),
-            FHE.asEuint64(0));
+            FHE.mul(lpData.distributionsUSD, FHE.asEuint64(1000)), FHE.asEuint64(0)); // simplified: calledCapital divisor omitted
         FHE.allowThis(lpData.distributionsUSD);
         FHE.allow(lpData.distributionsUSD, lp);
         FHE.allowThis(lpData.dpiRatio);

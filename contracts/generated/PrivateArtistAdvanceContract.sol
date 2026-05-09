@@ -44,8 +44,8 @@ contract PrivateArtistAdvanceContract is ZamaEthereumConfig, Ownable, Reentrancy
 
     function signContract(
         address artist,
-        externalEuint64 calldata encAdvance,  bytes calldata advProof,
-        externalEuint64 calldata encRate,     bytes calldata rateProof,
+        externalEuint64 encAdvance,  bytes calldata advProof,
+        externalEuint64 encRate,     bytes calldata rateProof,
         uint256 termYears
     ) external onlyOwner returns (uint256 contractId) {
         contractId = contractCount++;
@@ -70,9 +70,9 @@ contract PrivateArtistAdvanceContract is ZamaEthereumConfig, Ownable, Reentrancy
     function issueStatement(
         uint256 contractId,
         uint256 period,
-        externalEuint64 calldata encStream,   bytes calldata streamProof,
-        externalEuint64 calldata encPhysical, bytes calldata physicalProof,
-        externalEuint64 calldata encSync,     bytes calldata syncProof
+        externalEuint64 encStream,   bytes calldata streamProof,
+        externalEuint64 encPhysical, bytes calldata physicalProof,
+        externalEuint64 encSync,     bytes calldata syncProof
     ) external onlyOwner returns (uint256 stmtIdx) {
         ArtistContract storage c = contracts[contractId];
         require(c.active, "Inactive");
@@ -81,7 +81,7 @@ contract PrivateArtistAdvanceContract is ZamaEthereumConfig, Ownable, Reentrancy
         euint64 physical = FHE.fromExternal(encPhysical, physicalProof);
         euint64 sync     = FHE.fromExternal(encSync,     syncProof);
         euint64 total    = FHE.add(FHE.add(stream, physical), sync);
-        euint64 royalty  = FHE.div(FHE.mul(total, c.royaltyRateBps), FHE.asEuint64(10000));
+        euint64 royalty  = FHE.div(FHE.mul(total, c.royaltyRateBps), 10000);
 
         euint64 outstanding = FHE.sub(c.advanceAmount, c.recoupedAmount);
         ebool fullyRecouped = FHE.le(royalty, outstanding);
@@ -106,10 +106,8 @@ contract PrivateArtistAdvanceContract is ZamaEthereumConfig, Ownable, Reentrancy
         FHE.allowTransient(toArtist, c.artist);
 
         ebool nowRecouped = FHE.ge(c.recoupedAmount, c.advanceAmount);
-        if (nowRecouped.unwrap() != 0 && !c.recouped) {
-            c.recouped = true;
-            emit AdvanceRecouped(contractId);
-        }
+        FHE.allowThis(nowRecouped);
+        FHE.allow(nowRecouped, c.artist);
         emit StatementIssued(contractId, stmtIdx);
     }
 }

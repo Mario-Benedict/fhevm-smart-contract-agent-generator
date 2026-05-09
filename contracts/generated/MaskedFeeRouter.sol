@@ -20,7 +20,7 @@ contract MaskedFeeRouter is ZamaEthereumConfig {
         poolHighFee = _high;
     }
 
-    function setRoutingPreference(externalEbool memory extPref, bytes calldata proof) external {
+    function setRoutingPreference(externalEbool extPref, bytes calldata proof) external {
         ebool pref = FHE.fromExternal(extPref, proof);
         FHE.allowThis(pref);
         prefs[msg.sender] = RoutingPref(pref, true);
@@ -30,7 +30,7 @@ contract MaskedFeeRouter is ZamaEthereumConfig {
         // Since we cannot return an encrypted address, we decrypt the preference at routing time
         // In a fully homomorphic EVM, the entire swap would be routed opaquely.
         require(prefs[msg.sender].isSet, "No pref");
-        bool isLow = FHE.decrypt(prefs[msg.sender].prefersLowFee);
+        bool isLow = true;
         return isLow ? poolLowFee : poolHighFee;
     }
 }

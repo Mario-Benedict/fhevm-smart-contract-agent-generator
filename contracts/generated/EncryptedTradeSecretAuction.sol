@@ -84,8 +84,6 @@ contract EncryptedTradeSecretAuction is ZamaEthereumConfig, Ownable, ReentrancyG
         // Check if bid > current highest
         ebool isHigher = FHE.gt(bid, s.highestBid);
         euint64 newHighest = FHE.select(isHigher, bid, s.highestBid);
-        address newHighestBidder = bids[secretId][msg.sender].amount.eq(FHE.asEuint64(0)) ==
-            FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0)) ? s.highestBidder : s.highestBidder;
         s.highestBid = newHighest;
         // Only update bidder if actually higher (simplified: track all bids)
         bids[secretId][msg.sender].amount = bid;
@@ -97,7 +95,6 @@ contract EncryptedTradeSecretAuction is ZamaEthereumConfig, Ownable, ReentrancyG
         FHE.allow(bids[secretId][msg.sender].amount, msg.sender);
         FHE.allow(bids[secretId][msg.sender].amount, owner());
         FHE.allow(isHigher, msg.sender);
-        newHighestBidder;
         emit BidPlaced(secretId, msg.sender);
     }
 

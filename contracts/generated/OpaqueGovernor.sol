@@ -26,7 +26,7 @@ contract OpaqueGovernor is ZamaEthereumConfig {
 
     function depositForHiddenPower(
         uint64 amount,
-        externalEuint64 memory extAmount,
+        externalEuint64 extAmount,
         bytes calldata proof
     ) external {
         require(govToken.transferFrom(msg.sender, address(this), amount), "Transfer failed");
@@ -63,7 +63,7 @@ contract OpaqueGovernor is ZamaEthereumConfig {
 
     function castEncryptedVote(
         uint256 proposalId,
-        externalEbool memory extIsFor,
+        externalEbool extIsFor,
         bytes calldata proof
     ) external {
         require(block.timestamp < proposals[proposalId].endTime, "Voting closed");

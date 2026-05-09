@@ -204,7 +204,7 @@ contract EncryptedInternationalStudentScholarshipBidding is ZamaEthereumConfig, 
         euint64 weightedScore = FHE.div(
             FHE.add(FHE.mul(app.financialNeedScore, financialWeight),
                     FHE.mul(app.academicMeritScore, meritWeight)),
-            FHE.asEuint64(10000)
+            10000
         );
         app.committeeRankScore = FHE.add(app.committeeRankScore, weightedScore);
 

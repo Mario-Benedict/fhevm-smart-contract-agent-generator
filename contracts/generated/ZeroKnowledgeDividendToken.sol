@@ -30,11 +30,11 @@ contract ZeroKnowledgeDividendToken is ZamaEthereumConfig, Ownable, ReentrancyGu
     event Transfer(address indexed from, address indexed to);
 
     constructor(uint64 initialSupply) Ownable(msg.sender) {
-        _balances[msg.sender] = FHE.asEuint64(initialSupply);
+        _balances[msg.sender] = FHE.asEuint64(uint64(initialSupply));
         FHE.allowThis(_balances[msg.sender]);
         FHE.allow(_balances[msg.sender], msg.sender);
 
-        _totalSupply = FHE.asEuint64(initialSupply);
+        _totalSupply = FHE.asEuint64(uint64(initialSupply));
         FHE.allowThis(_totalSupply);
 
         _dividendPool = FHE.asEuint64(0);
@@ -43,7 +43,7 @@ contract ZeroKnowledgeDividendToken is ZamaEthereumConfig, Ownable, ReentrancyGu
         _holdingSince[msg.sender] = block.timestamp;
     }
 
-    function fundDividendPool(externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function fundDividendPool(externalEuint64 encAmount, bytes calldata inputProof)
         external onlyOwner
     {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -85,7 +85,7 @@ contract ZeroKnowledgeDividendToken is ZamaEthereumConfig, Ownable, ReentrancyGu
         emit DividendClaimed(msg.sender, round);
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_balances[msg.sender], amount);
         euint64 actual = FHE.select(sufficient, amount, FHE.asEuint64(0));

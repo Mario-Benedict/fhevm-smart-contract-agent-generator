@@ -43,7 +43,7 @@ contract EncryptedWhistleblowerBounty is ZamaEthereumConfig, Ownable, Reentrancy
         FHE.allowThis(bountyPool);
     }
 
-    function fundBountyPool(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function fundBountyPool(externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         bountyPool = FHE.add(bountyPool, amount);
         FHE.allowThis(bountyPool);
@@ -51,9 +51,9 @@ contract EncryptedWhistleblowerBounty is ZamaEthereumConfig, Ownable, Reentrancy
 
     function setRewardTier(
         uint256 tierId,
-        externalEuint8  calldata encMinSev, bytes calldata minSevProof,
-        externalEuint64 calldata encBase,   bytes calldata baseProof,
-        externalEuint64 calldata encMax,    bytes calldata maxProof
+        externalEuint8 encMinSev, bytes calldata minSevProof,
+        externalEuint64 encBase,   bytes calldata baseProof,
+        externalEuint64 encMax,    bytes calldata maxProof
     ) external onlyOwner {
         if (tierId >= tierCount) tierCount = tierId + 1;
         RewardTier storage t = rewardTiers[tierId];
@@ -64,9 +64,9 @@ contract EncryptedWhistleblowerBounty is ZamaEthereumConfig, Ownable, Reentrancy
     }
 
     function submitTip(
-        externalEuint128 calldata encIdentity, bytes calldata idProof,
-        externalEuint8   calldata encCategory, bytes calldata catProof,
-        externalEuint8   calldata encSeverity, bytes calldata sevProof,
+        externalEuint128 encIdentity, bytes calldata idProof,
+        externalEuint8 encCategory, bytes calldata catProof,
+        externalEuint8 encSeverity, bytes calldata sevProof,
         string calldata evidenceHash
     ) external returns (uint256 tipId) {
         tipId = tipCount++;
@@ -96,7 +96,7 @@ contract EncryptedWhistleblowerBounty is ZamaEthereumConfig, Ownable, Reentrancy
     function issueReward(
         uint256 tipId,
         address payable recipient,
-        externalEuint64 calldata encReward, bytes calldata inputProof
+        externalEuint64 encReward, bytes calldata inputProof
     ) external onlyOwner nonReentrant {
         Tip storage t = tips[tipId];
         require(t.status == TipStatus.Validated, "Not validated");

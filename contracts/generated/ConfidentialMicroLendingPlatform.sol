@@ -100,7 +100,7 @@ contract ConfidentialMicroLendingPlatform is ZamaEthereumConfig, Ownable, Reentr
         LoanRequest storage req = requests[requestId];
         require(req.status == LoanStatus.Requested, "Not requestable");
         uint256 termDays = 30; // simplified; use plaintext for term
-        euint64 interest = FHE.div(FHE.mul(req.requestedAmountUSD, FHE.asEuint64(1000)), 10000); // 10% interest placeholder
+        euint64 interest = FHE.div(FHE.mul(req.requestedAmountUSD, 1000), 10000); // 10% interest placeholder
         loanId = fundedLoanCount++;
         fundedLoans[loanId] = FundedLoan({
             requestId: requestId, lender: msg.sender, fundedAmountUSD: req.requestedAmountUSD,

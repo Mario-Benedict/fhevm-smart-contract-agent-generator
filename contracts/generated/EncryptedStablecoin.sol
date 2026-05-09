@@ -46,7 +46,7 @@ contract EncryptedStablecoin is ZamaEthereumConfig, AccessControl, Pausable {
         _;
     }
 
-    function mint(address to, externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function mint(address to, externalEuint32 encAmount, bytes calldata inputProof)
         external onlyRole(MINTER_ROLE) whenNotPaused notBlacklisted(to)
     {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
@@ -60,7 +60,7 @@ contract EncryptedStablecoin is ZamaEthereumConfig, AccessControl, Pausable {
         emit Mint(to);
     }
 
-    function burn(externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function burn(externalEuint32 encAmount, bytes calldata inputProof)
         external whenNotPaused notBlacklisted(msg.sender)
     {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
@@ -77,7 +77,7 @@ contract EncryptedStablecoin is ZamaEthereumConfig, AccessControl, Pausable {
         emit Burn(msg.sender);
     }
 
-    function transfer(address to, externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function transfer(address to, externalEuint32 encAmount, bytes calldata inputProof)
         external whenNotPaused notBlacklisted(msg.sender) notBlacklisted(to)
     {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
@@ -93,7 +93,7 @@ contract EncryptedStablecoin is ZamaEthereumConfig, AccessControl, Pausable {
         FHE.allow(_balances[to], to);
     }
 
-    function freezeBalance(address account, externalEuint32 calldata encAmount, bytes calldata inputProof)
+    function freezeBalance(address account, externalEuint32 encAmount, bytes calldata inputProof)
         external onlyRole(BLACKLISTER_ROLE)
     {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);

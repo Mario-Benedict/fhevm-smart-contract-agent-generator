@@ -105,7 +105,7 @@ contract PrivateCinemaBoxOfficeRevenueSharing is ZamaEthereumConfig, Ownable, Re
         euint32 weekNum = FHE.fromExternal(encWeekNum, wnProof);
         euint64 weeklyGross = FHE.fromExternal(encWeeklyGross, wgProof);
         // Distributor rental = weeklyGross * distributorSplitBps / 10000 (plaintext divisor)
-        euint64 distRental = FHE.div(FHE.mul(weeklyGross, FHE.asEuint64(uint64(6000))), 10000); // fixed 60% proxy
+        euint64 distRental = FHE.div(FHE.mul(weeklyGross, 6000), 10000); // fixed 60% proxy
         euint64 exhibitorShare = FHE.sub(weeklyGross, distRental);
         splitId = splitCount++;
         splits[splitId] = ExhibitorSplit({

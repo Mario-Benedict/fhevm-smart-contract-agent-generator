@@ -49,11 +49,11 @@ contract MedicalRecordAccess is ZamaEthereumConfig, AccessControl {
     }
 
     function createRecord(
-        externalEuint8 calldata encBloodType,
+        externalEuint8 encBloodType,
         bytes calldata btProof,
-        externalEuint8 calldata encAllergyFlags,
+        externalEuint8 encAllergyFlags,
         bytes calldata afProof,
-        externalEuint16 calldata encDiagnosis,
+        externalEuint16 encDiagnosis,
         bytes calldata dxProof
     ) external onlyRole(PATIENT_ROLE) {
         require(!records[msg.sender].exists, "Record exists");
@@ -92,7 +92,7 @@ contract MedicalRecordAccess is ZamaEthereumConfig, AccessControl {
         emit AccessRevoked(msg.sender, provider);
     }
 
-    function updateDiagnosis(address patient, externalEuint16 calldata encCode, bytes calldata inputProof)
+    function updateDiagnosis(address patient, externalEuint16 encCode, bytes calldata inputProof)
         external
         onlyRole(PROVIDER_ROLE)
     {

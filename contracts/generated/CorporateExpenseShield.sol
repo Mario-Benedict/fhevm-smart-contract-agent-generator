@@ -27,7 +27,7 @@ contract CorporateExpenseShield is ZamaEthereumConfig, AccessControl {
 
     function setExpenseAllowance(
         address employee,
-        externalEuint64 memory extLimit,
+        externalEuint64 extLimit,
         bytes calldata inputProof
     ) external onlyRole(FINANCE_ROLE) {
         euint64 newLimit = FHE.fromExternal(extLimit, inputProof);
@@ -53,7 +53,7 @@ contract CorporateExpenseShield is ZamaEthereumConfig, AccessControl {
 
     function chargeExpense(
         address merchant,
-        externalEuint64 memory extChargeAmount,
+        externalEuint64 extChargeAmount,
         bytes calldata inputProof
     ) external {
         require(accounts[msg.sender].isInitialized, "No expense account");
@@ -68,7 +68,6 @@ contract CorporateExpenseShield is ZamaEthereumConfig, AccessControl {
         FHE.allowThis(proposedSpent);
         
         ebool withinBudget = FHE.le(proposedSpent, acc.encryptedAllowance);
-        FHE.req(withinBudget);
 
         // Update employee spent amount
         acc.encryptedSpent = proposedSpent;

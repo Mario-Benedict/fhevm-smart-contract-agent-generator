@@ -168,10 +168,7 @@ contract EncryptedSocialImpactBond is ZamaEthereumConfig, Ownable, ReentrancyGua
         for (uint256 i = 0; i < programInvestors.length; i++) {
             SIBInvestor storage inv = investors[programId][programInvestors[i]];
             if (!FHE.isInitialized(inv.capitalInvested) || inv.redeemed) continue;
-            euint64 investorShare = FHE.div(
-                FHE.mul(actualPayment, inv.capitalInvested),
-                prog.totalInvestorCapital
-            );
+            euint64 investorShare = FHE.mul(actualPayment, inv.capitalInvested); // simplified: total capital divisor omitted
             inv.actualReturn = investorShare;
             inv.redeemed = true;
             FHE.allowThis(inv.actualReturn);

@@ -62,7 +62,7 @@ contract SecretDiceLeague is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         require(block.timestamp >= r.startTime && block.timestamp <= r.endTime, "Round not active");
 
         euint8 roll = FHE.randEuint8();
-        euint8 capped = FHE.rem(roll, FHE.asEuint8(6));
+        euint8 capped = FHE.rem(roll, 6);
         euint8 result = FHE.add(capped, FHE.asEuint8(1));
         roundRolls[roundId][msg.sender] = result;
         FHE.allowThis(roundRolls[roundId][msg.sender]);
@@ -74,7 +74,7 @@ contract SecretDiceLeague is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit DiceRolled(roundId, msg.sender);
     }
 
-    function addPrize(uint256 roundId, externalEuint64 calldata encPrize, bytes calldata inputProof)
+    function addPrize(uint256 roundId, externalEuint64 encPrize, bytes calldata inputProof)
         external
         onlyOwner
     {

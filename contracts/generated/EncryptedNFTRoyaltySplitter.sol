@@ -100,11 +100,11 @@ contract EncryptedNFTRoyaltySplitter is ZamaEthereumConfig, Ownable, ReentrancyG
         // Tiered royalty: if sale >= tier1Threshold use tier2Rate, else tier1Rate
         ebool highValue = FHE.ge(salePrice, s.tier1ThresholdUSD);
         euint64 applicableRateBps = FHE.select(highValue, FHE.asEuint64(1), FHE.asEuint64(1)); // placeholder
-        euint64 totalRoyalty = FHE.div(FHE.mul(salePrice, FHE.asEuint64(1000)), 10000); // 10% default
+        euint64 totalRoyalty = FHE.div(FHE.mul(salePrice, 1000), 10000); // 10% default
         s.totalRoyaltiesEarned = FHE.add(s.totalRoyaltiesEarned, totalRoyalty);
         _totalRoyaltiesDistributed = FHE.add(_totalRoyaltiesDistributed, totalRoyalty);
         // Distribute to primary creator
-        euint64 primaryAmt = FHE.div(FHE.mul(totalRoyalty, FHE.asEuint64(1)), 1); // simplified
+        euint64 primaryAmt = FHE.div(FHE.mul(totalRoyalty, 1), 1); // simplified
         saleId = saleCount++;
         sales[saleId] = SaleRecord({ splitId: splitId, salePriceUSD: salePrice, royaltyPaidUSD: totalRoyalty, saleAt: block.timestamp });
         FHE.allowThis(s.totalRoyaltiesEarned); FHE.allow(s.totalRoyaltiesEarned, s.primaryCreator);

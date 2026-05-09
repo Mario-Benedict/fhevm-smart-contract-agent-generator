@@ -145,8 +145,8 @@ contract EncryptedUndergroundMiningRoyalty is ZamaEthereumConfig, Ownable, Reent
         euint64 metalPrice = FHE.fromExternal(encMetalPrice, priceProof);
 
         // Metal content = tonnes * grade_g/t / 1000 (convert to kg for pricing)
-        euint64 metalContentGrams = FHE.div(FHE.mul(liftTonnes, gradeX10), FHE.asEuint64(10));
-        euint64 metalContentKg = FHE.div(metalContentGrams, FHE.asEuint64(1000));
+        euint64 metalContentGrams = FHE.div(FHE.mul(liftTonnes, gradeX10), 10);
+        euint64 metalContentKg = FHE.div(metalContentGrams, 1000);
         euint64 grossRevenue = FHE.mul(metalContentKg, metalPrice);
 
         RoyaltyStructure storage terms = royaltyTerms[c.operator];

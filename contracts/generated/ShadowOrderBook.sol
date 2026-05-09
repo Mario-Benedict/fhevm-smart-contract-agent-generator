@@ -30,8 +30,8 @@ contract ShadowOrderBook is ZamaEthereumConfig, Ownable {
 
     function placeOrder(
         Side side,
-        externalEuint64 calldata encPrice,
-        externalEuint64 calldata encQty,
+        externalEuint64 encPrice,
+        externalEuint64 encQty,
         bytes calldata priceProof,
         bytes calldata qtyProof
     ) external returns (uint256 orderId) {

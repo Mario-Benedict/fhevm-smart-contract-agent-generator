@@ -49,12 +49,12 @@ contract PrivateHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit AccreditationGranted(investor);
     }
 
-    function subscribe(externalEuint64 calldata encCapital, bytes calldata inputProof)
+    function subscribe(externalEuint64 encCapital, bytes calldata inputProof, uint64 navPerUnitPlaintext)
         external nonReentrant
     {
         require(accreditedInvestors[msg.sender], "Not accredited");
         euint64 capital = FHE.fromExternal(encCapital, inputProof);
-        euint64 units   = FHE.div(capital, currentNAVPerUnit);
+        euint64 units   = navPerUnitPlaintext > 0 ? FHE.div(capital, navPerUnitPlaintext) : capital;
         InvestorAccount storage a = investors[msg.sender];
         if (!a.active) {
             a.units           = FHE.asEuint64(0);
@@ -73,11 +73,11 @@ contract PrivateHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit InvestorSubscribed(msg.sender);
     }
 
-    function updateNAV(externalEuint64 calldata encTotalAUM, bytes calldata inputProof)
+    function updateNAV(externalEuint64 encTotalAUM, bytes calldata inputProof, uint64 totalFundUnitsPlaintext)
         external onlyOwner
     {
         euint64 aum     = FHE.fromExternal(encTotalAUM, inputProof);
-        euint64 newNav  = FHE.div(aum, totalFundUnits);
+        euint64 newNav  = totalFundUnitsPlaintext > 0 ? FHE.div(aum, totalFundUnitsPlaintext) : FHE.asEuint64(0);
         currentNAVPerUnit = newNav;
         FHE.allowThis(currentNAVPerUnit);
         navHistory.push(NAVSnapshot({
@@ -89,7 +89,7 @@ contract PrivateHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit NAVUpdated(idx);
     }
 
-    function redeem(externalEuint64 calldata encUnits, bytes calldata inputProof)
+    function redeem(externalEuint64 encUnits, bytes calldata inputProof, uint64 totalUnitsPlaintext)
         external nonReentrant
     {
         InvestorAccount storage a = investors[msg.sender];
@@ -97,7 +97,9 @@ contract PrivateHedgeFundNAV is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         require(block.timestamp >= a.lockupExpiry, "Still locked");
         euint64 units     = FHE.fromExternal(encUnits, inputProof);
         euint64 proceeds  = FHE.mul(units, currentNAVPerUnit);
-        euint64 cost      = FHE.div(FHE.mul(a.investedCapital, units), a.units);
+        euint64 cost      = totalUnitsPlaintext > 0
+            ? FHE.div(FHE.mul(a.investedCapital, units), totalUnitsPlaintext)
+            : FHE.asEuint64(0);
         euint64 pnl       = FHE.sub(proceeds, cost);
         a.units           = FHE.sub(a.units, units);
         a.investedCapital = FHE.sub(a.investedCapital, cost);

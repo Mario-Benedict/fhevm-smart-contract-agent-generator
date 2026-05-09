@@ -115,7 +115,7 @@ contract EncryptedFoodBankAllocationSystem is ZamaEthereumConfig, AccessControl,
         require(currentWeek > b.lastAllocationWeek, "Already allocated this week");
 
         euint32 alloc = b.weeklyAllocation;
-        euint64 alloc64 = FHE.asEuint64(uint64(alloc));
+        euint64 alloc64 = FHE.asEuint64(alloc);
 
         // Ensure inventory sufficient
         ebool hasStock = FHE.ge(_totalInventoryKg, alloc64);
@@ -123,7 +123,7 @@ contract EncryptedFoodBankAllocationSystem is ZamaEthereumConfig, AccessControl,
 
         _totalInventoryKg = FHE.sub(_totalInventoryKg, actualAlloc);
         _totalDistributedKg = FHE.add(_totalDistributedKg, actualAlloc);
-        b.totalReceived = FHE.add(b.totalReceived, FHE.asEuint32(uint32(actualAlloc)));
+        b.totalReceived = FHE.add(b.totalReceived, FHE.asEuint32(actualAlloc));
 
         FHE.allowThis(_totalInventoryKg);
         FHE.allowThis(_totalDistributedKg);

@@ -78,7 +78,7 @@ contract PrivateDebtCollectionAgencyToken is ZamaEthereumConfig, Ownable, Reentr
         euint16 recoveryRate= FHE.fromExternal(encRecoveryRate, rrProof);
         euint64 totalBalance= FHE.add(FHE.add(original, interest), penalties);
         // Mint DRT tokens proportional to purchase price (recovery rate * original)
-        euint64 purchasePrice = FHE.div(FHE.mul(original, FHE.asEuint64(1000)), 10000); // 10 cents on dollar
+        euint64 purchasePrice = FHE.div(FHE.mul(original, 1000), 10000); // 10 cents on dollar
         if (!FHE.isInitialized(_balances[msg.sender])) { _balances[msg.sender] = FHE.asEuint64(0); FHE.allowThis(_balances[msg.sender]); }
         _balances[msg.sender] = FHE.add(_balances[msg.sender], purchasePrice);
         _totalSupply = FHE.add(_totalSupply, purchasePrice);

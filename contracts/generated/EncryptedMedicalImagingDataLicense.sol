@@ -83,13 +83,13 @@ contract EncryptedMedicalImagingDataLicense is ZamaEthereumConfig, AccessControl
         licensed[datasetId][msg.sender] = true;
 
         // Update encrypted revenue counters
-        d.totalRevenue = FHE.add(d.totalRevenue, FHE.asEuint64(uint64(d.licensePrice)));
+        d.totalRevenue = FHE.add(d.totalRevenue, d.licensePrice);
         d.licensesSold = FHE.add(d.licensesSold, FHE.asEuint32(1));
         FHE.allowThis(d.totalRevenue);
         FHE.allowThis(d.licensesSold);
 
         // Credit provider earnings
-        providerEarnings[d.provider] = FHE.add(providerEarnings[d.provider], FHE.asEuint64(uint64(d.licensePrice)));
+        providerEarnings[d.provider] = FHE.add(providerEarnings[d.provider], d.licensePrice);
         FHE.allowThis(providerEarnings[d.provider]);
         FHE.allow(providerEarnings[d.provider], d.provider);
 

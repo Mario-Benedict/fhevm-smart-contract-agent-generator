@@ -37,7 +37,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
 
     function addEmployee(
         address employee,
-        externalEuint64 calldata encSalary,
+        externalEuint64 encSalary,
         bytes calldata inputProof
     ) external onlyRole(HR_ROLE) {
         euint64 salary = FHE.fromExternal(encSalary, inputProof);
@@ -57,7 +57,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
 
     function addDeduction(
         address employee,
-        externalEuint64 calldata encDeduction,
+        externalEuint64 encDeduction,
         bytes calldata inputProof
     ) external onlyRole(FINANCE_ROLE) {
         euint64 deduction = FHE.fromExternal(encDeduction, inputProof);
@@ -89,7 +89,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
 
     function adjustSalary(
         address employee,
-        externalEuint64 calldata encNewSalary,
+        externalEuint64 encNewSalary,
         bytes calldata inputProof
     ) external onlyRole(HR_ROLE) {
         euint64 newSalary = FHE.fromExternal(encNewSalary, inputProof);
@@ -101,7 +101,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
 
     function initiateClawback(
         address employee,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external onlyRole(FINANCE_ROLE) {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -113,7 +113,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
         emit Clawback(employee);
     }
 
-    function withdraw(externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function withdraw(externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         require(_active[msg.sender], "Not active employee");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_balance[msg.sender], amount);

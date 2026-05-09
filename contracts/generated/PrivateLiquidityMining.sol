@@ -40,7 +40,7 @@ contract PrivateLiquidityMining is ZamaEthereumConfig, Ownable, ReentrancyGuard 
 
     function addPool(
         string calldata name,
-        externalEuint64 calldata encEmission,
+        externalEuint64 encEmission,
         bytes calldata inputProof,
         uint256 allocPoints
     ) external onlyOwner returns (uint256 poolId) {
@@ -60,7 +60,7 @@ contract PrivateLiquidityMining is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit PoolAdded(poolId, name);
     }
 
-    function fundPool(uint256 poolId, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function fundPool(uint256 poolId, externalEuint64 encAmount, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -69,7 +69,7 @@ contract PrivateLiquidityMining is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         FHE.allowThis(pools[poolId].rewardReserve);
     }
 
-    function deposit(uint256 poolId, externalEuint64 calldata encLPAmount, bytes calldata inputProof)
+    function deposit(uint256 poolId, externalEuint64 encLPAmount, bytes calldata inputProof)
         external
         nonReentrant
     {
@@ -111,7 +111,7 @@ contract PrivateLiquidityMining is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit RewardHarvested(poolId, msg.sender);
     }
 
-    function withdraw(uint256 poolId, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function withdraw(uint256 poolId, externalEuint64 encAmount, bytes calldata inputProof)
         external
         nonReentrant
     {

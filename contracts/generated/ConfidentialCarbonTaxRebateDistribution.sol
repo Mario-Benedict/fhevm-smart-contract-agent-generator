@@ -68,7 +68,7 @@ contract ConfidentialCarbonTaxRebateDistribution is ZamaEthereumConfig, Ownable,
         euint64 emissions = FHE.fromExternal(encEmissions, proof);
         industries[msg.sender].annualEmissionsTonnes = emissions;
         // Tax = emissions * rate / 10000
-        euint64 tax = FHE.div(FHE.mul(emissions, FHE.asEuint64(uint64(0))), 10000); // simplified
+        euint64 tax = FHE.div(FHE.mul(emissions, 0), 10000); // simplified
         tax = FHE.div(emissions, 100); // 1% placeholder
         industries[msg.sender].taxPaidUSD = FHE.add(industries[msg.sender].taxPaidUSD, tax);
         _totalTaxCollected = FHE.add(_totalTaxCollected, tax);

@@ -33,7 +33,7 @@ contract ERC20BondingCurve_c2_004 is ZamaEthereumConfig, Ownable, ReentrancyGuar
         // cost = slope * (supply * amount + amount^2 / 2)
         euint64 supplyTimesAmount = FHE.mul(_totalSupply, amount);
         euint64 halfSquared = FHE.div(FHE.mul(amount, amount), 2);
-        return FHE.mul(FHE.asEuint64(CURVE_SLOPE), FHE.add(supplyTimesAmount, halfSquared));
+        return FHE.mul(FHE.asEuint64(uint64(CURVE_SLOPE)), FHE.add(supplyTimesAmount, halfSquared));
     }
 
     function buy(externalEuint64 encAmount, bytes calldata proof, externalEuint64 encPayment, bytes calldata payProof)
@@ -61,7 +61,7 @@ contract ERC20BondingCurve_c2_004 is ZamaEthereumConfig, Ownable, ReentrancyGuar
         euint64 actualAmount = FHE.select(hasFunds, amount, FHE.asEuint64(0));
         // refund = slope * (supply * amount - amount^2 / 2)
         euint64 refund = FHE.mul(
-            FHE.asEuint64(CURVE_SLOPE),
+            FHE.asEuint64(uint64(CURVE_SLOPE)),
             FHE.sub(
                 FHE.mul(_totalSupply, actualAmount),
                 FHE.div(FHE.mul(actualAmount, actualAmount), 2)

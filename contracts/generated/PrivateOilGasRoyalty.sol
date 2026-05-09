@@ -124,7 +124,7 @@ contract PrivateOilGasRoyalty is ZamaEthereumConfig, Ownable {
             address owner_ = owners[i];
             LandOwner storage lo = landOwners[zoneId][owner_];
             if (!lo.registered) continue;
-            euint64 share = FHE.div(FHE.mul(totalRoyalty, FHE.asEuint64(uint64(0))), 10000); // interest as euint64
+            euint64 share = FHE.div(FHE.mul(totalRoyalty, 0), 10000); // interest as euint64
             lo.accruedRoyalties = FHE.add(lo.accruedRoyalties, share);
             _totalRoyaltiesPaid = FHE.add(_totalRoyaltiesPaid, share);
             FHE.allowThis(lo.accruedRoyalties);

@@ -34,7 +34,7 @@ contract StakingAutoCompound_b4_011 is ZamaEthereumConfig {
         require(block.timestamp >= lastCompound + compoundIntervalSeconds, "Too soon");
         uint256 elapsed = block.timestamp - lastCompound;
         uint64 interest = uint64((elapsed * aprPercent) / (365 days * 100));
-        euint64 accrued = FHE.mul(totalUnderlying, FHE.asEuint64(interest));
+        euint64 accrued = FHE.mul(totalUnderlying, FHE.asEuint64(uint64(interest)));
         totalUnderlying = FHE.add(totalUnderlying, accrued);
         lastCompound = block.timestamp;
         FHE.allowThis(totalUnderlying);

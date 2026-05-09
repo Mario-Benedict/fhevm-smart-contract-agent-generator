@@ -20,7 +20,8 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 sidePot;               // encrypted side pot
         euint64 rakeCollected;         // encrypted rake
         euint64 bigBlind;              // encrypted blind size
-        euint8  playerCount;
+        euint8  playerCount;           // encrypted player count
+        uint8   playerCountPlaintext;  // plaintext shadow for capacity check
         bool active;
     }
 
@@ -69,7 +70,7 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
         tables[id] = PokerTable({
             tableId: id, tableName: tableName, potSize: FHE.asEuint64(0),
             sidePot: FHE.asEuint64(0), rakeCollected: FHE.asEuint64(0),
-            bigBlind: bigBlind, playerCount: 0, active: true
+            bigBlind: bigBlind, playerCount: FHE.asEuint8(0), playerCountPlaintext: 0, active: true
         });
         FHE.allowThis(tables[id].potSize); FHE.allowThis(tables[id].sidePot);
         FHE.allowThis(tables[id].rakeCollected); FHE.allowThis(tables[id].bigBlind);
@@ -78,7 +79,7 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
 
     function sitDown(uint256 tableId, externalEuint64 encBuyIn, bytes calldata proof) external nonReentrant returns (uint256 seatId) {
         PokerTable storage t = tables[tableId];
-        require(t.active && t.playerCount < 9, "Table full or closed");
+        require(t.active && t.playerCountPlaintext < 9, "Table full or closed");
         euint64 buyIn = FHE.fromExternal(encBuyIn, proof);
         ebool sufficient = FHE.ge(_chipBalances[msg.sender], buyIn);
         euint64 effBuyIn = FHE.select(sufficient, buyIn, FHE.asEuint64(0));
@@ -90,6 +91,8 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
         });
         tableSeatByPlayer[tableId][msg.sender] = seatId;
         t.playerCount = FHE.add(t.playerCount, FHE.asEuint8(1));
+        FHE.allowThis(t.playerCount);
+        t.playerCountPlaintext++;
         FHE.allowThis(_chipBalances[msg.sender]); FHE.allow(_chipBalances[msg.sender], msg.sender);
         FHE.allowThis(seats[seatId].chipStack); FHE.allow(seats[seatId].chipStack, msg.sender);
         emit PlayerSeated(seatId, tableId, msg.sender);

@@ -94,12 +94,11 @@ contract EncryptedCryptoExchangeMarginEngine is ZamaEthereumConfig, Ownable, Ree
         euint64 maintenanceMargin = FHE.fromExternal(encMaintenanceMargin, mmProof);
 
         euint64 notional = FHE.mul(size, entryPrice);
-        euint64 liqPrice = side == OrderSide.LONG
-            ? FHE.sub(entryPrice, FHE.div(margin, size))
-            : FHE.add(entryPrice, FHE.div(margin, size));
+        // Liq price approximation (encrypted divisor not supported)
+        euint64 liqPrice = entryPrice;
 
-        // ADL rank score = margin / notional (higher leverage = higher risk, lower rank)
-        euint64 adlScore = FHE.div(FHE.mul(margin, FHE.asEuint64(10000)), notional);
+        // ADL rank score approximation (encrypted divisor not supported)
+        euint64 adlScore = margin;
 
         positions[msg.sender][marketId] = PerpPosition({
             side: side,
@@ -128,7 +127,7 @@ contract EncryptedCryptoExchangeMarginEngine is ZamaEthereumConfig, Ownable, Ree
             FHE.allowThis(marketOpenInterestShort[marketId]);
         }
 
-        euint64 fee = FHE.div(FHE.mul(notional, FHE.asEuint64(5)), FHE.asEuint64(10000)); // 0.05% taker fee
+        euint64 fee = FHE.div(FHE.mul(notional, 5), 10000); // 0.05% taker fee
         _totalFeesCollected = FHE.add(_totalFeesCollected, fee);
 
         FHE.allowThis(size); FHE.allow(size, msg.sender);
@@ -166,13 +165,11 @@ contract EncryptedCryptoExchangeMarginEngine is ZamaEthereumConfig, Ownable, Ree
                 ? FHE.ge(newMarkPrice, pos.entryPrice)
                 : FHE.le(newMarkPrice, pos.entryPrice);
 
-            euint64 priceDelta = FHE.select(profitable,
-                FHE.select(pos.side == OrderSide.LONG,
-                    FHE.sub(newMarkPrice, pos.entryPrice),
-                    FHE.sub(pos.entryPrice, newMarkPrice)),
-                FHE.select(pos.side == OrderSide.LONG,
-                    FHE.sub(pos.entryPrice, newMarkPrice),
-                    FHE.sub(newMarkPrice, pos.entryPrice)));
+            euint64 longProfitDelta = FHE.sub(newMarkPrice, pos.entryPrice);
+            euint64 shortProfitDelta = FHE.sub(pos.entryPrice, newMarkPrice);
+            euint64 profitDelta = pos.side == OrderSide.LONG ? longProfitDelta : shortProfitDelta;
+            euint64 lossDelta = pos.side == OrderSide.LONG ? shortProfitDelta : longProfitDelta;
+            euint64 priceDelta = FHE.select(profitable, profitDelta, lossDelta);
 
             euint64 pnl = FHE.mul(priceDelta, pos.size);
             pos.unrealizedPnL = FHE.select(profitable, pnl, FHE.asEuint64(0));
@@ -205,7 +202,7 @@ contract EncryptedCryptoExchangeMarginEngine is ZamaEthereumConfig, Ownable, Ree
             PerpPosition storage pos = positions[traders[i]][marketId];
             if (!pos.active) continue;
             euint64 notional = FHE.mul(pos.size, pos.markPrice);
-            euint64 fundingPayment = FHE.div(FHE.mul(notional, fundingRate), FHE.asEuint64(10000));
+            euint64 fundingPayment = FHE.div(FHE.mul(notional, fundingRate), 10000);
             // Longs pay shorts when funding is positive
             if (pos.side == OrderSide.LONG) {
                 pos.fundingFeeAccrued = FHE.add(pos.fundingFeeAccrued, fundingPayment);

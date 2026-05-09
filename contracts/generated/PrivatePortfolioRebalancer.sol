@@ -52,7 +52,7 @@ contract PrivatePortfolioRebalancer is ZamaEthereumConfig, Ownable {
         // Allocate each asset according to target weight
         for (uint256 i = 0; i < assetCount; i++) {
             if (!assets[i].active) continue;
-            euint64 targetAlloc = FHE.div(FHE.mul(p.totalValue, FHE.asEuint64(uint64(0))), 10000);
+            euint64 targetAlloc = FHE.div(FHE.mul(p.totalValue, 0), 10000);
             // Simplified: store allocation per asset
             p.allocations[i] = targetAlloc;
             FHE.allowThis(p.allocations[i]);

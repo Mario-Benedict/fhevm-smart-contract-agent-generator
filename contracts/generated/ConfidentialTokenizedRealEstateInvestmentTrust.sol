@@ -134,16 +134,16 @@ contract ConfidentialTokenizedRealEstateInvestmentTrust is ZamaEthereumConfig, O
         emit SharesIssued(investor, 0);
     }
 
-    function updateNAV(externalEuint64 encNewNAV, bytes calldata proof) external {
+    function updateNAV(externalEuint64 encNewNAV, bytes calldata proof, uint64 totalSharesPlaintext) external {
         require(isFundManager[msg.sender], "Not fund manager");
         euint64 newNAV = FHE.fromExternal(encNewNAV, proof);
         _totalNAV = newNAV;
-        // NAV per share = totalNAV / totalShares
-        ebool hasShares = FHE.ne(_totalSharesOutstanding, FHE.asEuint64(0));
-        _navPerShare = FHE.select(hasShares,
-            FHE.div(newNAV, _totalSharesOutstanding),
-            FHE.asEuint64(0)
-        );
+        // NAV per share = totalNAV / totalShares (plaintext divisor)
+        if (totalSharesPlaintext > 0) {
+            _navPerShare = FHE.div(newNAV, totalSharesPlaintext);
+        } else {
+            _navPerShare = FHE.asEuint64(0);
+        }
         FHE.allowThis(_totalNAV);
         FHE.allowThis(_navPerShare);
         emit NAVUpdated();

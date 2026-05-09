@@ -26,7 +26,7 @@ contract ConfidentialNexusGovernanceToken is ZamaEthereumConfig, Ownable, Reentr
 
     constructor(uint64 maxSupply) Ownable(msg.sender) {
         _totalSupply = FHE.asEuint64(0);
-        _maxSupply = FHE.asEuint64(maxSupply);
+        _maxSupply = FHE.asEuint64(uint64(maxSupply));
         FHE.allowThis(_totalSupply);
         FHE.allowThis(_maxSupply);
     }

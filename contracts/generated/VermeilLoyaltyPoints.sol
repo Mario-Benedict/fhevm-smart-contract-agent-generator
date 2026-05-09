@@ -32,7 +32,7 @@ contract VermeilLoyaltyPoints is ZamaEthereumConfig, Ownable {
         authorizedMerchants[merchant] = status;
     }
 
-    function awardPoints(address customer, externalEuint16 calldata encPoints, bytes calldata proof) external {
+    function awardPoints(address customer, externalEuint16 encPoints, bytes calldata proof) external {
         require(authorizedMerchants[msg.sender], "Not authorized merchant");
         euint16 basePoints = FHE.fromExternal(encPoints, proof);
         euint16 bonus = FHE.mul(basePoints, uint16(rewardMultipliers[tier[customer]]));
@@ -42,7 +42,7 @@ contract VermeilLoyaltyPoints is ZamaEthereumConfig, Ownable {
         emit PointsAwarded(customer);
     }
 
-    function redeemPoints(externalEuint16 calldata encPoints, bytes calldata proof) external {
+    function redeemPoints(externalEuint16 encPoints, bytes calldata proof) external {
         require(redemptionOpen, "Redemption closed");
         euint16 points = FHE.fromExternal(encPoints, proof);
         ebool sufficient = FHE.le(points, _points[msg.sender]);

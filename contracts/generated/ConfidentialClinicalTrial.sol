@@ -55,7 +55,7 @@ contract ConfidentialClinicalTrial is ZamaEthereumConfig, AccessControl {
         string calldata hypothesis,
         uint256 enrollmentWindow,
         uint256 trialDuration,
-        externalEuint32 calldata encTarget,
+        externalEuint32 encTarget,
         bytes calldata inputProof
     ) external onlyRole(RESEARCHER_ROLE) returns (uint256 id) {
         id = trialCount++;
@@ -78,7 +78,7 @@ contract ConfidentialClinicalTrial is ZamaEthereumConfig, AccessControl {
         emit TrialApproved(id);
     }
 
-    function enrollParticipant(uint256 id, ArmAssignment arm, externalEuint8 calldata encBaseline, bytes calldata inputProof)
+    function enrollParticipant(uint256 id, ArmAssignment arm, externalEuint8 encBaseline, bytes calldata inputProof)
         external
     {
         require(hasRole(PARTICIPANT_ROLE, msg.sender), "Not participant");
@@ -102,11 +102,11 @@ contract ConfidentialClinicalTrial is ZamaEthereumConfig, AccessControl {
 
     function submitOutcome(
         uint256 id,
-        externalEuint8 calldata encOutcome,
+        externalEuint8 encOutcome,
         bytes calldata outcomeProof,
-        externalEuint8 calldata encSideEffect,
+        externalEuint8 encSideEffect,
         bytes calldata sideEffectProof,
-        externalEuint16 calldata encFollowUp,
+        externalEuint16 encFollowUp,
         bytes calldata followUpProof
     ) external {
         require(hasRole(PARTICIPANT_ROLE, msg.sender), "Not participant");

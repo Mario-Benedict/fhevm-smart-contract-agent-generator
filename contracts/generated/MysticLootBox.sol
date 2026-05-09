@@ -38,7 +38,7 @@ contract MysticLootBox is ZamaEthereumConfig {
         euint64 randomValue = FHE.randEuint64();
         
         // Map random value to a tier (Simplified: modulo 100 for percentage)
-        euint64 roll = FHE.rem(randomValue, FHE.asEuint64(100));
+        euint64 roll = FHE.rem(randomValue, 100);
         FHE.allowThis(roll);
 
         // Tier Logic: 

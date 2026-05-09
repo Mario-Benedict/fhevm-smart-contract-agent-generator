@@ -66,7 +66,7 @@ contract VotingAcademicTenure is ZamaEthereumConfig, Ownable {
 
         // Average of three dimensions
         euint16 avg = FHE.div(
-            FHE.add(FHE.add(FHE.asEuint16(uint16(0)), FHE.asEuint16(uint16(0))), FHE.asEuint16(uint16(0))),
+            FHE.add(FHE.add(FHE.asEuint16(uint16(0)), 0), FHE.asEuint16(uint16(0))),
             3
         );
         // Use euint8 arithmetic then cast via addition pattern

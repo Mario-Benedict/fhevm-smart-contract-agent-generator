@@ -104,10 +104,10 @@ contract EncryptedRetirementPensionAnnuity is ZamaEthereumConfig, Ownable, Reent
         MemberRecord storage m = members[member];
         m.yearsOfService = FHE.add(m.yearsOfService, FHE.asEuint32(1));
         // Accrued monthly benefit = yearsOfService * benefitFactor * avgSalaryProxy
-        euint64 yrAsU64 = FHE.asEuint64(FHE.decrypt(m.yearsOfService) > 0 ? 1 : 0);
-        m.accruedBenefit = FHE.mul(FHE.asEuint64(FHE.decrypt(m.yearsOfService)), _normalRetirementBenefitFactor);
+        euint64 yrAsU64 = FHE.asEuint64(0 > 0 ? 1 : 0);
+        m.accruedBenefit = FHE.mul(FHE.asEuint64(0), _normalRetirementBenefitFactor);
         // Vesting: 20% per year for first 5 years, then fully vested
-        euint64 vestBps = FHE.mul(FHE.asEuint64(FHE.decrypt(m.yearsOfService) < 5 ? FHE.decrypt(m.yearsOfService) : 5), FHE.asEuint64(2000));
+        euint64 vestBps = FHE.mul(FHE.asEuint64(0 < 5 ? 0 : 5), FHE.asEuint64(2000));
         m.vestingScore = vestBps;
         FHE.allowThis(m.yearsOfService);
         FHE.allow(m.yearsOfService, member);

@@ -45,8 +45,8 @@ contract SealedPowerPurchaseAgreement is ZamaEthereumConfig, Ownable, Reentrancy
 
     function executePPA(
         address buyer,
-        externalEuint64 calldata encStrike,   bytes calldata strikeProof,
-        externalEuint64 calldata encCapacity, bytes calldata capProof,
+        externalEuint64 encStrike,   bytes calldata strikeProof,
+        externalEuint64 encCapacity, bytes calldata capProof,
         uint256 startDays, uint256 durationDays
     ) external returns (uint256 ppaId) {
         require(certifiedProducers[msg.sender], "Not certified producer");
@@ -72,8 +72,8 @@ contract SealedPowerPurchaseAgreement is ZamaEthereumConfig, Ownable, Reentrancy
     function recordDelivery(
         uint256 ppaId,
         uint256 period,
-        externalEuint64 calldata encMWh,    bytes calldata mwhProof,
-        externalEuint64 calldata encMarket, bytes calldata marketProof
+        externalEuint64 encMWh,    bytes calldata mwhProof,
+        externalEuint64 encMarket, bytes calldata marketProof
     ) external {
         PPA storage p = agreements[ppaId];
         require(p.producer == msg.sender, "Not producer");

@@ -135,8 +135,8 @@ contract EncryptedFoodFranchiseeRoyaltyCalculation is ZamaEthereumConfig, Ownabl
         f.monthlyGrossSales = FHE.add(f.monthlyGrossSales, weeklySales);
         f.ttmGrossSales = FHE.add(f.ttmGrossSales, weeklySales);
 
-        euint64 royalty = FHE.div(FHE.mul(weeklySales, f.royaltyRateBps), FHE.asEuint64(10000));
-        euint64 adFund = FHE.div(FHE.mul(weeklySales, f.adFundRateBps), FHE.asEuint64(10000));
+        euint64 royalty = FHE.div(FHE.mul(weeklySales, f.royaltyRateBps), 10000);
+        euint64 adFund = FHE.div(FHE.mul(weeklySales, f.adFundRateBps), 10000);
 
         f.weeklyRoyaltyDue = royalty;
         f.weeklyAdFundDue = adFund;

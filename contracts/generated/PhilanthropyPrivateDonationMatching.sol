@@ -35,6 +35,7 @@ contract PhilanthropyPrivateDonationMatching is ZamaEthereumConfig, Ownable {
     mapping(uint256 => Campaign) private campaigns;
     uint256 public campaignCount;
     mapping(uint256 => mapping(address => Donation)) private donations;
+    mapping(uint256 => mapping(address => bool)) private hasDonated;
     mapping(uint256 => address[]) private donors;
     mapping(address => bool) public isMatchingCorp;
     euint64 private _platformFeeBps;
@@ -84,7 +85,8 @@ contract PhilanthropyPrivateDonationMatching is ZamaEthereumConfig, Ownable {
     ) external {
         Campaign storage c = campaigns[campaignId];
         require(c.active && block.timestamp < c.deadline, "Campaign closed");
-        require(donations[campaignId][msg.sender].amount == FHE.asEuint64(0), "Already donated");
+        require(!hasDonated[campaignId][msg.sender], "Already donated");
+        hasDonated[campaignId][msg.sender] = true;
         euint64 amount = FHE.fromExternal(encAmount, proof);
         // Calculate match (min of amount, matchCapPerDonor, remaining totalCap)
         euint64 matchFromCap = FHE.select(FHE.le(amount, c.matchCapPerDonor), amount, c.matchCapPerDonor);

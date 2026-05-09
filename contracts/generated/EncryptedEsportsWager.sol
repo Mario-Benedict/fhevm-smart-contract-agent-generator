@@ -89,7 +89,7 @@ contract EncryptedEsportsWager is ZamaEthereumConfig, Ownable {
         m.winner = winner;
         // Platform fee
         euint64 totalPool = FHE.add(m.poolTeamA, m.poolTeamB);
-        euint64 fee = FHE.div(FHE.mul(totalPool, FHE.asEuint64(uint64(250))), 10000); // 2.5% platform fee hardcoded
+        euint64 fee = FHE.div(FHE.mul(totalPool, 250), 10000); // 2.5% platform fee hardcoded
         _totalFeesCollected = FHE.add(_totalFeesCollected, fee);
         FHE.allowThis(_totalFeesCollected);
         FHE.allow(m.poolTeamA, matchOracle);
@@ -104,13 +104,12 @@ contract EncryptedEsportsWager is ZamaEthereumConfig, Ownable {
             _betTeamA[matchId][msg.sender] : _betTeamB[matchId][msg.sender];
         euint64 winnerPool = m.winner == Team.TeamA ? m.poolTeamA : m.poolTeamB;
         euint64 totalPool = FHE.add(m.poolTeamA, m.poolTeamB);
-        euint64 fee = FHE.div(FHE.mul(totalPool, FHE.asEuint64(uint64(250))), 10000); // 2.5% platform fee
+        euint64 fee = FHE.div(FHE.mul(totalPool, 250), 10000); // 2.5% platform fee
         euint64 netPool = FHE.sub(totalPool, fee);
         ebool hasBet = FHE.gt(userBet, FHE.asEuint64(0));
         // Proportional payout scaled by 1e6
         euint64 payout = FHE.select(hasBet,
-            FHE.div(FHE.mul(userBet, 1_000_000), 1_000_000),
-            FHE.asEuint64(0));
+            FHE.div(FHE.mul(userBet, 1_000_000), 1_000_000), FHE.asEuint64(0));
         _winnings[msg.sender] = FHE.add(_winnings[msg.sender], payout);
         FHE.allowThis(_winnings[msg.sender]);
         FHE.allow(_winnings[msg.sender], msg.sender);

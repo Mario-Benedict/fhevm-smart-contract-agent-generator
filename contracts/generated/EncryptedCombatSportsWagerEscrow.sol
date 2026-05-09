@@ -210,7 +210,7 @@ contract EncryptedCombatSportsWagerEscrow is ZamaEthereumConfig, Ownable, Reentr
         FightOutcome outcome = events[eventId].outcome;
         bool won = (wager.backingFighterA && (outcome == FightOutcome.FIGHTER_A_WIN || outcome == FightOutcome.TKO_A)) ||
                    (!wager.backingFighterA && (outcome == FightOutcome.FIGHTER_B_WIN || outcome == FightOutcome.TKO_B));
-        euint64 commission = FHE.div(FHE.mul(wager.wagerAmount, FHE.asEuint64(uint64(200))), 10000); // 2% commission
+        euint64 commission = FHE.div(FHE.mul(wager.wagerAmount, 200), 10000); // 2% commission
         _houseTotalCommission = FHE.add(_houseTotalCommission, commission);
         wager.claimed = true;
         wager.settled = true;

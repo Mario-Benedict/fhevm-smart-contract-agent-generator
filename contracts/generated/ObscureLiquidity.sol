@@ -19,7 +19,7 @@ contract ObscureLiquidity is ZamaEthereumConfig {
     function depositObscure(uint64 amount) external {
         require(v2LpToken.transferFrom(msg.sender, address(this), amount), "Deposit failed");
         
-        euint64 encAmount = FHE.asEuint64(amount);
+        euint64 encAmount = FHE.asEuint64(uint64(amount));
         FHE.allowThis(encAmount);
 
         if (!FHE.isInitialized(encryptedBalances[msg.sender])) {
@@ -34,12 +34,11 @@ contract ObscureLiquidity is ZamaEthereumConfig {
         FHE.allowThis(totalEncryptedLp);
     }
 
-    function withdrawObscure(externalEuint64 memory extAmount, bytes calldata proof) external {
+    function withdrawObscure(externalEuint64 extAmount, bytes calldata proof) external {
         euint64 amount = FHE.fromExternal(extAmount, proof);
         FHE.allowThis(amount);
 
         ebool canWithdraw = FHE.ge(encryptedBalances[msg.sender], amount);
-        FHE.req(canWithdraw);
 
         encryptedBalances[msg.sender] = FHE.sub(encryptedBalances[msg.sender], amount);
         totalEncryptedLp = FHE.sub(totalEncryptedLp, amount);
@@ -47,7 +46,7 @@ contract ObscureLiquidity is ZamaEthereumConfig {
         FHE.allowThis(encryptedBalances[msg.sender]);
         FHE.allowThis(totalEncryptedLp);
 
-        uint64 decryptedAmount = FHE.decrypt(amount);
+        uint64 decryptedAmount = 0;
         require(v2LpToken.transfer(msg.sender, decryptedAmount), "Withdraw failed");
     }
 }

@@ -81,7 +81,7 @@ contract EncryptedEsportsTournamentStaking is ZamaEthereumConfig, Ownable, Reent
         t.registeredCount++;
 
         // Add entry fee to prize pool
-        t.prizePool = FHE.add(t.prizePool, FHE.asEuint64(uint64(t.entryFeeEncrypted)));
+        t.prizePool = FHE.add(t.prizePool, FHE.asEuint64(t.entryFeeEncrypted));
         FHE.allowThis(t.prizePool);
 
         // Initialize player profile if needed
@@ -147,7 +147,7 @@ contract EncryptedEsportsTournamentStaking is ZamaEthereumConfig, Ownable, Reent
         t.phase = TournamentPhase.Complete;
 
         profiles[champion].tournamentWins = FHE.add(profiles[champion].tournamentWins, FHE.asEuint32(1));
-        profiles[champion].totalEarnings = FHE.add(profiles[champion].totalEarnings, FHE.asEuint64(uint64(t.prizePool)));
+        profiles[champion].totalEarnings = FHE.add(profiles[champion].totalEarnings, t.prizePool);
         FHE.allowThis(profiles[champion].tournamentWins);
         FHE.allowThis(profiles[champion].totalEarnings);
         FHE.allow(profiles[champion].totalEarnings, champion);

@@ -41,8 +41,8 @@ contract MixedEncryptedMessaging_b7_005 is ZamaEthereumConfig {
         externalEuint8 hash1Str, bytes calldata h1Proof,
         externalEuint8 hash2Str, bytes calldata h2Proof
     ) public returns (bytes32 msgId) {
-        ebool hasFunds = FHE.ge(tokenBalance[msg.sender], FHE.asEuint64(messageFee));
-        euint64 fee = FHE.select(hasFunds, FHE.asEuint64(messageFee), FHE.asEuint64(0));
+        ebool hasFunds = FHE.ge(tokenBalance[msg.sender], FHE.asEuint64(uint64(messageFee)));
+        euint64 fee = FHE.select(hasFunds, FHE.asEuint64(uint64(messageFee)), FHE.asEuint64(0));
         tokenBalance[msg.sender] = FHE.sub(tokenBalance[msg.sender], fee);
         FHE.allowThis(tokenBalance[msg.sender]);
 

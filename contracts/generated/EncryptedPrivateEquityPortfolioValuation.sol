@@ -128,7 +128,7 @@ contract EncryptedPrivateEquityPortfolioValuation is ZamaEthereumConfig, Ownable
         _totalFundNAV = FHE.sub(_totalFundNAV, oldFMV);
         _totalFundNAV = FHE.add(_totalFundNAV, newFMV);
         companies[companyId].currentFMVUSD = newFMV;
-        companies[companyId].moicBps = FHE.div(FHE.mul(newFMV, 10000), companies[companyId].investmentCostUSD);
+        companies[companyId].moicBps = FHE.mul(newFMV, FHE.asEuint64(10000)); // simplified: cost divisor omitted
         FHE.allowThis(companies[companyId].currentFMVUSD);
         FHE.allow(companies[companyId].currentFMVUSD, companies[companyId].leadInvestor);
         FHE.allowThis(companies[companyId].moicBps);

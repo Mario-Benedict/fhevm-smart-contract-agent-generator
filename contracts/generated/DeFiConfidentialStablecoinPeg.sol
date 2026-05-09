@@ -42,10 +42,10 @@ contract DeFiConfidentialStablecoinPeg is ZamaEthereumConfig, Ownable, Reentranc
         FHE.allowThis(_totalCollateral);
     }
 
-    function depositAndMint(externalEuint64 encCollateral, bytes calldata proof) external nonReentrant {
+    function depositAndMint(externalEuint64 encCollateral, bytes calldata proof, uint64 targetRatioPlaintext) external nonReentrant {
         euint64 collateral = FHE.fromExternal(encCollateral, proof);
         // Mint = collateral * 10000 / targetRatio
-        euint64 toMint = FHE.div(FHE.mul(collateral, 10000), _targetRatioBps);
+        euint64 toMint = targetRatioPlaintext > 0 ? FHE.div(FHE.mul(collateral, 10000), targetRatioPlaintext) : FHE.asEuint64(0);
         _balances[msg.sender] = FHE.add(_balances[msg.sender], toMint);
         _totalCollateral = FHE.add(_totalCollateral, collateral);
         _totalSupply = FHE.add(_totalSupply, toMint);

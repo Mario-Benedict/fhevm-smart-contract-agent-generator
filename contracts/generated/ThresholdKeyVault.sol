@@ -38,7 +38,7 @@ contract ThresholdKeyVault is ZamaEthereumConfig, Ownable {
     constructor() Ownable(msg.sender) {}
 
     function storeSecret(
-        externalEuint128 calldata encSecret,
+        externalEuint128 encSecret,
         bytes calldata inputProof,
         address[] calldata _guardians,
         uint8 threshold,

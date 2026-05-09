@@ -41,7 +41,7 @@ contract ShieldedLoyaltyToken is ZamaEthereumConfig, Ownable {
         _;
     }
 
-    function earnPoints(address user, externalEuint32 calldata encBase, bytes calldata inputProof)
+    function earnPoints(address user, externalEuint32 encBase, bytes calldata inputProof)
         external onlyDistributor
     {
         euint32 basePoints = FHE.fromExternal(encBase, inputProof);
@@ -96,7 +96,7 @@ contract ShieldedLoyaltyToken is ZamaEthereumConfig, Ownable {
         emit TierUpgraded(user);
     }
 
-    function redeemPoints(externalEuint32 calldata encAmount, bytes calldata inputProof) external {
+    function redeemPoints(externalEuint32 encAmount, bytes calldata inputProof) external {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_points[msg.sender], amount);
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));
@@ -108,7 +108,7 @@ contract ShieldedLoyaltyToken is ZamaEthereumConfig, Ownable {
         emit PointsRedeemed(msg.sender);
     }
 
-    function transferPoints(address to, externalEuint32 calldata encAmount, bytes calldata inputProof) external {
+    function transferPoints(address to, externalEuint32 encAmount, bytes calldata inputProof) external {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_points[msg.sender], amount);
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));

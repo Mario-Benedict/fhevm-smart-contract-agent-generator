@@ -109,7 +109,7 @@ contract PrivateIoTDataMarketplaceSubscription is ZamaEthereumConfig, Ownable, R
         ds.totalRevenueUSD = FHE.add(ds.totalRevenueUSD, ds.pricePerMonthUSD);
         ds.activeSubscribers = FHE.add(ds.activeSubscribers, FHE.asEuint32(1));
         // Operator gets 80% (plaintext divisor)
-        euint64 operatorPayout = FHE.div(FHE.mul(ds.pricePerMonthUSD, FHE.asEuint64(80)), 100);
+        euint64 operatorPayout = FHE.div(FHE.mul(ds.pricePerMonthUSD, 80), 100);
         _totalMarketplaceRevenueUSD = FHE.add(_totalMarketplaceRevenueUSD, ds.pricePerMonthUSD);
         _totalOperatorPayoutsUSD = FHE.add(_totalOperatorPayoutsUSD, operatorPayout);
         FHE.allowThis(subscriptions[subId].monthlyFeeUSD); FHE.allow(subscriptions[subId].monthlyFeeUSD, msg.sender);

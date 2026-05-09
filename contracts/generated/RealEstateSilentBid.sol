@@ -13,7 +13,8 @@ contract RealEstateSilentBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         address seller;
         euint64 reservePrice;
         euint64 highestBid;
-        address highestBidder;
+        eaddress encHighestBidder;
+        address revealedWinner;
         uint256 auctionEnd;
         bool settled;
         bool active;
@@ -32,7 +33,7 @@ contract RealEstateSilentBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     function listProperty(
         string calldata propertyId,
         uint256 duration,
-        externalEuint64 calldata encReserve,
+        externalEuint64 encReserve,
         bytes calldata inputProof
     ) external returns (uint256 propId) {
         propId = propertyCount++;
@@ -41,6 +42,7 @@ contract RealEstateSilentBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         p.seller = msg.sender;
         p.reservePrice = FHE.fromExternal(encReserve, inputProof);
         p.highestBid = FHE.asEuint64(0);
+        p.encHighestBidder = FHE.asEaddress(address(0));
         p.auctionEnd = block.timestamp + duration;
         p.active = true;
         FHE.allowThis(p.reservePrice);
@@ -49,7 +51,7 @@ contract RealEstateSilentBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit PropertyListed(propId, msg.sender);
     }
 
-    function placeBid(uint256 propId, externalEuint64 calldata encBid, bytes calldata inputProof) external {
+    function placeBid(uint256 propId, externalEuint64 encBid, bytes calldata inputProof) external {
         Property storage p = properties[propId];
         require(p.active && block.timestamp <= p.auctionEnd, "Auction not active");
 
@@ -59,24 +61,24 @@ contract RealEstateSilentBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
         ebool isHigher = FHE.gt(bid, p.highestBid);
         p.highestBid = FHE.select(isHigher, bid, p.highestBid);
+        p.encHighestBidder = FHE.select(isHigher, FHE.asEaddress(msg.sender), p.encHighestBidder);
         FHE.allowThis(p.highestBid);
-
-        if (FHE.gt(bid, p.highestBid).unwrap() != 0) {
-            p.highestBidder = msg.sender;
-        }
+        FHE.allowThis(p.encHighestBidder);
         emit BidPlaced(propId, msg.sender);
     }
 
-    function settleAuction(uint256 propId) external nonReentrant {
+    function settleAuction(uint256 propId, address winner) external nonReentrant {
         Property storage p = properties[propId];
         require(block.timestamp > p.auctionEnd, "Not ended");
         require(!p.settled, "Already settled");
         require(msg.sender == p.seller || msg.sender == owner(), "Unauthorized");
         p.settled = true;
         p.active = false;
+        p.revealedWinner = winner;
         FHE.allow(p.highestBid, p.seller);
-        FHE.allow(p.highestBid, p.highestBidder);
-        emit AuctionSettled(propId, p.highestBidder);
+        FHE.allow(p.highestBid, winner);
+        FHE.allow(p.encHighestBidder, p.seller);
+        emit AuctionSettled(propId, winner);
     }
 
     function getMyBid(uint256 propId) external view returns (euint64) {

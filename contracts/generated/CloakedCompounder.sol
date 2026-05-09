@@ -13,7 +13,7 @@ contract CloakedCompounder is ZamaEthereumConfig {
         FHE.allowThis(totalEncryptedShares);
     }
 
-    function depositAndHide(externalEuint64 memory extShares, bytes calldata proof) external {
+    function depositAndHide(externalEuint64 extShares, bytes calldata proof) external {
         euint64 shares = FHE.fromExternal(extShares, proof);
         FHE.allowThis(shares);
 
@@ -30,7 +30,7 @@ contract CloakedCompounder is ZamaEthereumConfig {
     }
 
     // A keeper calls this to update the share ratio after compounding yield from Uniswap V3
-    function compoundYieldMultiplier(externalEuint64 memory extMultiplier, bytes calldata proof) external {
+    function compoundYieldMultiplier(externalEuint64 extMultiplier, bytes calldata proof) external {
         euint64 multiplier = FHE.fromExternal(extMultiplier, proof);
         FHE.allowThis(multiplier);
         

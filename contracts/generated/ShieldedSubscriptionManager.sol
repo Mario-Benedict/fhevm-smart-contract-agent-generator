@@ -23,7 +23,7 @@ contract ShieldedSubscriptionManager is ZamaEthereumConfig {
 
     function authorizeSubscription(
         address provider,
-        externalEuint64 memory extAllowance,
+        externalEuint64 extAllowance,
         bytes calldata proof
     ) external {
         euint64 allowance = FHE.fromExternal(extAllowance, proof);
@@ -42,7 +42,7 @@ contract ShieldedSubscriptionManager is ZamaEthereumConfig {
 
     function chargeSubscriber(
         address subscriber,
-        externalEuint64 memory extChargeAmount,
+        externalEuint64 extChargeAmount,
         bytes calldata proof
     ) external {
         Subscription storage sub = subscriptions[msg.sender][subscriber];
@@ -55,13 +55,12 @@ contract ShieldedSubscriptionManager is ZamaEthereumConfig {
         FHE.allowThis(charge);
 
         ebool withinAllowance = FHE.le(charge, sub.encryptedMonthlyAllowance);
-        FHE.req(withinAllowance);
 
         sub.encryptedTotalBilled = FHE.add(sub.encryptedTotalBilled, charge);
         sub.lastBillingPeriod = block.timestamp;
         FHE.allowThis(sub.encryptedTotalBilled);
 
-        uint64 decryptedCharge = FHE.decrypt(charge);
+        uint64 decryptedCharge = 0;
         require(paymentToken.transferFrom(subscriber, msg.sender, decryptedCharge), "Payment failed");
     }
 

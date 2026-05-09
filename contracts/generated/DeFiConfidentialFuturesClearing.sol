@@ -47,13 +47,14 @@ contract DeFiConfidentialFuturesClearing is ZamaEthereumConfig, Ownable, Reentra
     function openPosition(
         bool isLong,
         externalEuint64 encNotional, bytes calldata nProof,
-        externalEuint64 encMargin, bytes calldata mProof
+        externalEuint64 encMargin, bytes calldata mProof,
+        uint64 notionalPlaintext
     ) external nonReentrant {
         require(!positions[msg.sender].open, "Position exists");
         euint64 notional = FHE.fromExternal(encNotional, nProof);
         euint64 margin = FHE.fromExternal(encMargin, mProof);
-        // Check margin ratio >= maintenance
-        euint64 marginRatio = FHE.div(FHE.mul(margin, FHE.asEuint64(10000)), notional);
+        // Check margin ratio >= maintenance (plaintext divisor)
+        euint64 marginRatio = notionalPlaintext > 0 ? FHE.div(FHE.mul(margin, 10000), notionalPlaintext) : FHE.asEuint64(0);
         ebool adequate = FHE.ge(marginRatio, _defaultMaintenanceMarginBps);
         euint64 actualNotional = FHE.select(adequate, notional, FHE.asEuint64(0));
         positions[msg.sender] = FuturesPosition({

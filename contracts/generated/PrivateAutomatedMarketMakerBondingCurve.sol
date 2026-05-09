@@ -32,8 +32,8 @@ contract PrivateAutomatedMarketMakerBondingCurve is ZamaEthereumConfig, Ownable,
     constructor(uint64 initialPrice, uint64 reserveRatio) Ownable(msg.sender) {
         _totalSupply = FHE.asEuint64(0);
         _reserveBalance = FHE.asEuint64(0);
-        _reserveRatioBps = FHE.asEuint64(reserveRatio);
-        _currentPrice = FHE.asEuint64(initialPrice);
+        _reserveRatioBps = FHE.asEuint64(uint64(reserveRatio));
+        _currentPrice = FHE.asEuint64(uint64(initialPrice));
         _buyTaxBps = FHE.asEuint64(200);   // 2% buy tax
         _sellTaxBps = FHE.asEuint64(300);  // 3% sell tax
         _treasuryAccumulated = FHE.asEuint64(0);
@@ -57,12 +57,12 @@ contract PrivateAutomatedMarketMakerBondingCurve is ZamaEthereumConfig, Ownable,
         euint64 tax = FHE.div(FHE.mul(payment, _buyTaxBps), 10000);
         euint64 netPayment = FHE.sub(payment, tax);
         // Tokens = netPayment / currentPrice (plaintext divisor not applicable; use reserve ratio)
-        euint64 tokensOut = FHE.div(netPayment, FHE.asEuint64(100)); // simplified: price = 100
+        euint64 tokensOut = FHE.div(netPayment, 100); // simplified: price = 100
         _reserveBalance = FHE.add(_reserveBalance, netPayment);
         _treasuryAccumulated = FHE.add(_treasuryAccumulated, tax);
         _totalSupply = FHE.add(_totalSupply, tokensOut);
         // Update price: price = reserveBalance / (totalSupply * reserveRatio / 10000)
-        _currentPrice = FHE.div(_reserveBalance, FHE.asEuint64(100)); // simplified
+        _currentPrice = FHE.div(_reserveBalance, 100); // simplified
         if (!FHE.isInitialized(_balances[msg.sender])) { _balances[msg.sender] = FHE.asEuint64(0); FHE.allowThis(_balances[msg.sender]); }
         _balances[msg.sender] = FHE.add(_balances[msg.sender], tokensOut);
         FHE.allowThis(_balances[msg.sender]); FHE.allow(_balances[msg.sender], msg.sender);
@@ -81,7 +81,7 @@ contract PrivateAutomatedMarketMakerBondingCurve is ZamaEthereumConfig, Ownable,
         _totalSupply = FHE.sub(_totalSupply, effTokens);
         _reserveBalance = FHE.sub(_reserveBalance, netProceeds);
         _treasuryAccumulated = FHE.add(_treasuryAccumulated, tax);
-        _currentPrice = FHE.div(_reserveBalance, FHE.asEuint64(100));
+        _currentPrice = FHE.div(_reserveBalance, 100);
         FHE.allowThis(_balances[msg.sender]); FHE.allow(_balances[msg.sender], msg.sender);
         FHE.allowThis(_totalSupply); FHE.allowThis(_reserveBalance); FHE.allowThis(_currentPrice); FHE.allowThis(_treasuryAccumulated);
         FHE.allow(netProceeds, msg.sender);

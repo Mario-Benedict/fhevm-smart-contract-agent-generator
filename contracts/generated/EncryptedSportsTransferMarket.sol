@@ -48,9 +48,9 @@ contract EncryptedSportsTransferMarket is ZamaEthereumConfig, Ownable, Reentranc
     function registerAthlete(
         string calldata athleteId,
         uint256 contractExpiryDays,
-        externalEuint64 calldata encValue,   bytes calldata valueProof,
-        externalEuint64 calldata encBuyout,  bytes calldata buyoutProof,
-        externalEuint64 calldata encWage,    bytes calldata wageProof
+        externalEuint64 encValue,   bytes calldata valueProof,
+        externalEuint64 encBuyout,  bytes calldata buyoutProof,
+        externalEuint64 encWage,    bytes calldata wageProof
     ) external returns (uint256 id) {
         require(registeredClubs[msg.sender], "Not registered club");
         id = athleteCount++;
@@ -77,9 +77,9 @@ contract EncryptedSportsTransferMarket is ZamaEthereumConfig, Ownable, Reentranc
     function makeOffer(
         uint256 athleteId,
         uint256 validDays,
-        externalEuint64 calldata encOffer, bytes calldata offerProof,
-        externalEuint64 calldata encWage,  bytes calldata wageProof,
-        externalEuint8  calldata encYears, bytes calldata yearsProof
+        externalEuint64 encOffer, bytes calldata offerProof,
+        externalEuint64 encWage,  bytes calldata wageProof,
+        externalEuint8 encYears, bytes calldata yearsProof
     ) external returns (uint256 offerId) {
         require(registeredClubs[msg.sender], "Not club");
         AthleteContract storage a = athletes[athleteId];

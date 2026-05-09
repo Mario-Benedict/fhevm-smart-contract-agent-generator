@@ -203,7 +203,7 @@ contract EncryptedGeneticLineageNFTRoyalty is ZamaEthereumConfig, Ownable, Reent
         for (uint256 i = 0; i < contribs.length && i < 10; i++) {
             address c = contribs[i];
             euint64 share = FHE.div(
-                FHE.mul(totalRoyalty, FHE.asEuint64(uint64(0))), // weight placeholder
+                FHE.mul(totalRoyalty, 0), // weight placeholder
                 10000
             );
             contributors[seqId][c].accruedRoyalties = FHE.add(contributors[seqId][c].accruedRoyalties, share);

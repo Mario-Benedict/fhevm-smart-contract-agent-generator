@@ -60,7 +60,7 @@ contract PatentDisputeArbitration is ZamaEthereumConfig, Ownable {
 
     function castArbitratorVote(
         uint256 caseId,
-        externalEbool calldata encSupportsClaimant,
+        externalEbool encSupportsClaimant,
         bytes calldata inputProof
     ) external {
         require(registeredArbitrators[msg.sender], "Not arbitrator");
@@ -86,13 +86,15 @@ contract PatentDisputeArbitration is ZamaEthereumConfig, Ownable {
         emit VoteCast(caseId, msg.sender);
     }
 
-    function resolveCase(uint256 caseId) external onlyOwner {
+    function resolveCase(uint256 caseId, bool claimantWonResult) external onlyOwner {
         DisputeCase storage c = cases[caseId];
         require(block.timestamp > c.votingDeadline, "Voting active");
         require(!c.resolved, "Already resolved");
         ebool claimantWins = FHE.gt(c.arbitratorVotesForClaimant, c.arbitratorVotesForRespondent);
-        c.claimantWon = claimantWins.unwrap() != 0;
+        c.claimantWon = claimantWonResult;
         c.resolved = true;
+        FHE.allowThis(claimantWins);
+        FHE.allow(claimantWins, owner());
         FHE.allow(c.arbitratorVotesForClaimant, owner());
         FHE.allow(c.arbitratorVotesForRespondent, owner());
         emit CaseResolved(caseId, c.claimantWon);

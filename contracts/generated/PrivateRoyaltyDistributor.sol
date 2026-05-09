@@ -54,7 +54,7 @@ contract PrivateRoyaltyDistributor is ZamaEthereumConfig, Ownable, ReentrancyGua
     function addRightsholder(
         uint256 trackId,
         address rightsholder,
-        externalEuint8 calldata encShare,
+        externalEuint8 encShare,
         bytes calldata inputProof
     ) external onlyOwner {
         Track storage t = tracks[trackId];
@@ -70,7 +70,7 @@ contract PrivateRoyaltyDistributor is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit RightsholderAdded(trackId, rightsholder);
     }
 
-    function depositRoyalties(uint256 trackId, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function depositRoyalties(uint256 trackId, externalEuint64 encAmount, bytes calldata inputProof)
         external onlyOwner
     {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -80,8 +80,8 @@ contract PrivateRoyaltyDistributor is ZamaEthereumConfig, Ownable, ReentrancyGua
         for (uint8 i = 0; i < t.rightsholderCount; i++) {
             RightsSplit storage s = splits[trackId][i];
             euint64 share = FHE.div(
-                FHE.mul(amount, FHE.asEuint64(s.sharePercent.unwrap())),
-                FHE.asEuint64(100)
+                FHE.mul(amount, s.sharePercent),
+                100
             );
             s.pendingPayout = FHE.add(s.pendingPayout, share);
             FHE.allowThis(s.pendingPayout);

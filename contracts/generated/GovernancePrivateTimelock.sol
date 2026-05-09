@@ -82,7 +82,7 @@ contract GovernancePrivateTimelock is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit Voted(proposalId, msg.sender);
     }
 
-    function execute(uint256 proposalId) external onlyOwner nonReentrant {
+    function execute(uint256 proposalId, uint64 totalVotesPlaintext) external onlyOwner nonReentrant {
         TimelockProposal storage p = proposals[proposalId];
         require(block.timestamp >= p.executionTime, "Too early");
         require(!p.executed && !p.cancelled, "Not queued");
@@ -90,7 +90,9 @@ contract GovernancePrivateTimelock is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 totalVotes = FHE.add(p.votesFor, p.votesAgainst);
         ebool quorumMet = FHE.ge(totalVotes, p.quorumThreshold);
         // Check supermajority: votesFor / totalVotes >= supermajorityBps / 10000
-        euint64 forPct = FHE.div(FHE.mul(p.votesFor, 10000), totalVotes);
+        euint64 forPct = totalVotesPlaintext > 0
+            ? FHE.div(FHE.mul(p.votesFor, 10000), totalVotesPlaintext)
+            : FHE.asEuint64(0);
         ebool supermajority = FHE.ge(forPct, FHE.asEuint64(6600)); // simplified
         ebool passes = FHE.and(quorumMet, supermajority);
         p.executed = FHE.isInitialized(passes);

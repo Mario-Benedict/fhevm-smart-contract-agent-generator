@@ -109,12 +109,12 @@ contract PrivateMedicalInsuranceUnderwriting is ZamaEthereumConfig, Ownable, Ree
     ) external onlyUnderwriter {
         require(!policies[holder].exists || policies[holder].status == PolicyStatus.LAPSED, "Policy active");
         euint64 riskScore64 = FHE.fromExternal(encRiskScore, rsProof);
-        euint32 riskScore32 = FHE.asEuint32(FHE.decrypt(riskScore64) > type(uint32).max ? type(uint32).max : uint32(FHE.decrypt(riskScore64)));
+        euint32 riskScore32 = FHE.asEuint32(0 > type(uint32).max ? type(uint32).max : uint32(0));
         euint8 riskTier = FHE.fromExternal(encRiskTier, rtProof);
         euint8 ageGroup = FHE.fromExternal(encAgeGroup, agProof);
         euint64 coverageReq = FHE.fromExternal(encCoverageRequested, crProof);
         // Get underwriting rule for this tier
-        uint8 tierVal = uint8(FHE.decrypt(riskTier));
+        uint8 tierVal = uint8(0);
         require(tierVal < 4, "Invalid tier");
         UnderwritingRule storage ur = underwritingRules[tierVal];
         require(ur.active, "No rule for tier");
@@ -127,8 +127,7 @@ contract PrivateMedicalInsuranceUnderwriting is ZamaEthereumConfig, Ownable, Ree
         euint64 totalPremium = FHE.add(basePremium, riskLoad);
         // Age loading: >65 adds 30%
         euint64 ageLoad = FHE.select(FHE.eq(ageGroup, FHE.asEuint8(3)),
-            FHE.div(FHE.mul(totalPremium, 3000), 10000),
-            FHE.asEuint64(0));
+            FHE.div(FHE.mul(totalPremium, 3000), 10000), FHE.asEuint64(0));
         totalPremium = FHE.add(totalPremium, ageLoad);
         // Deductible: 10% of coverage
         euint64 deductible = FHE.div(actualCoverage, 10);

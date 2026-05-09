@@ -34,7 +34,8 @@ contract PrivateMutualFundNetAssetValueReporting is ZamaEthereumConfig, Ownable,
 
     euint64 private _totalNAV;             // fund's total NAV
     euint64 private _totalUnitsOutstanding;
-    euint64 private _unitNAV;              // NAV per unit
+    euint64 private _unitNAV;              // NAV per unit (encrypted for ACL)
+    uint64 public _unitNAVPlain;           // plaintext cache for division ops
     euint64 private _performanceFeeAccrued;
     euint32 private _managementFeeBps;
     euint32 private _performanceFeeBps;
@@ -54,7 +55,8 @@ contract PrivateMutualFundNetAssetValueReporting is ZamaEthereumConfig, Ownable,
         _performanceFeeBps = FHE.fromExternal(encPerfFee, perfProof);
         _totalNAV = FHE.fromExternal(encInitNAV, navProof);
         _totalUnitsOutstanding = FHE.asEuint64(1_000_000); // 1M initial units
-        _unitNAV = FHE.div(_totalNAV, FHE.asEuint64(1_000_000));
+        _unitNAVPlain = 1;
+        _unitNAV = FHE.div(_totalNAV, 1_000_000);
         _performanceFeeAccrued = FHE.asEuint64(0);
         lastNAVUpdateDate = block.timestamp;
         FHE.allowThis(_managementFeeBps);
@@ -81,14 +83,16 @@ contract PrivateMutualFundNetAssetValueReporting is ZamaEthereumConfig, Ownable,
         emit AssetAdded(id);
     }
 
-    function updateNAV(externalEuint64 encNewNAV, bytes calldata proof) external onlyOwner {
+    function updateNAV(externalEuint64 encNewNAV, bytes calldata proof, uint64 currentUnitsOutstanding, uint64 newUnitNAVPlain) external onlyOwner {
+        require(currentUnitsOutstanding > 0, "Units must be > 0");
         euint64 oldNAV = _totalNAV;
         _totalNAV = FHE.fromExternal(encNewNAV, proof);
-        _unitNAV = FHE.div(_totalNAV, _totalUnitsOutstanding);
+        _unitNAV = FHE.div(_totalNAV, currentUnitsOutstanding);
+        _unitNAVPlain = newUnitNAVPlain;
         // Check if NAV grew (performance fee)
         ebool grew = FHE.gt(_totalNAV, oldNAV);
         euint64 gain = FHE.select(grew, FHE.sub(_totalNAV, oldNAV), FHE.asEuint64(0));
-        euint64 perfFee = FHE.div(FHE.mul(gain, FHE.asEuint64(uint64(0))), 10000);
+        euint64 perfFee = FHE.div(FHE.mul(gain, 0), 10000);
         perfFee = FHE.div(gain, 5); // 20% simplified
         _performanceFeeAccrued = FHE.add(_performanceFeeAccrued, FHE.select(grew, perfFee, FHE.asEuint64(0)));
         lastNAVUpdateDate = block.timestamp;
@@ -102,8 +106,8 @@ contract PrivateMutualFundNetAssetValueReporting is ZamaEthereumConfig, Ownable,
         externalEuint64 encInvestmentUSD, bytes calldata proof
     ) external nonReentrant {
         euint64 investment = FHE.fromExternal(encInvestmentUSD, proof);
-        // Units = investment / unitNAV
-        euint64 units = FHE.div(investment, _unitNAV);
+        // Units = investment / unitNAVPlain (plaintext divisor required by fhEVM)
+        euint64 units = FHE.div(investment, _unitNAVPlain);
         if (!investorUnits[msg.sender].active) {
             investorUnits[msg.sender].unitsHeld = FHE.asEuint64(0);
             investorUnits[msg.sender].costBasisUSD = FHE.asEuint64(0);

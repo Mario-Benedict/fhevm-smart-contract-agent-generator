@@ -173,10 +173,10 @@ contract PrivateFoundationGrantAllocation is ZamaEthereumConfig, Ownable, Reentr
         require(app.status == ApplicationStatus.UNDER_REVIEW && app.reviewCount >= 2, "Not ready for decision");
         // Compute average scores
         if (app.reviewCount > 0) {
-            app.impactScoreBps = FHE.div(app.impactScoreBps, FHE.asEuint64(app.reviewCount));
-            app.feasibilityScoreBps = FHE.div(app.feasibilityScoreBps, FHE.asEuint64(app.reviewCount));
-            app.innovationScoreBps = FHE.div(app.innovationScoreBps, FHE.asEuint64(app.reviewCount));
-            app.teamCapacityScoreBps = FHE.div(app.teamCapacityScoreBps, FHE.asEuint64(app.reviewCount));
+            app.impactScoreBps = FHE.div(app.impactScoreBps, uint64(app.reviewCount));
+            app.feasibilityScoreBps = FHE.div(app.feasibilityScoreBps, uint64(app.reviewCount));
+            app.innovationScoreBps = FHE.div(app.innovationScoreBps, uint64(app.reviewCount));
+            app.teamCapacityScoreBps = FHE.div(app.teamCapacityScoreBps, uint64(app.reviewCount));
             // Weighted composite: 40% impact, 25% feasibility, 20% innovation, 15% team
             app.compositeScoreBps = FHE.add(
                 FHE.add(FHE.div(FHE.mul(app.impactScoreBps, 4000), 10000),

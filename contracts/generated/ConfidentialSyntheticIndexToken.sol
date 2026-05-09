@@ -94,7 +94,7 @@ contract ConfidentialSyntheticIndexToken is ZamaEthereumConfig, Ownable, Reentra
 
     function accrueManagementFee() external onlyOwner {
         // Daily fee = AUM * annualFeeBps / 10000 / 365
-        euint64 dailyFee = FHE.div(FHE.div(FHE.mul(_aum, FHE.asEuint64(50)), 10000), 365);
+        euint64 dailyFee = FHE.div(FHE.div(FHE.mul(_aum, 50), 10000), 365);
         _totalMgmtFeesUSD = FHE.add(_totalMgmtFeesUSD, dailyFee);
         _indexNAVUSD = FHE.sub(_indexNAVUSD, dailyFee);
         FHE.allowThis(_totalMgmtFeesUSD); FHE.allowThis(_indexNAVUSD);

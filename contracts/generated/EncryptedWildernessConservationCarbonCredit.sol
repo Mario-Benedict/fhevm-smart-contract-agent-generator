@@ -120,14 +120,14 @@ contract EncryptedWildernessConservationCarbonCredit is ZamaEthereumConfig, Owna
     ) external returns (uint256 creditId) {
         require(isBiodiversityAuditor[msg.sender], "Not auditor");
         require(areas[areaId].verified, "Area not verified");
-        euint64 credits = FHE.fromExternal(encCredits, cProof);
+        euint64 _credits = FHE.fromExternal(encCredits, cProof);
         euint64 price   = FHE.fromExternal(encPrice, pProof);
         creditId = creditCount++;
         credits_[creditId] = BiodiversityCredit({
-            areaId: areaId, creditsIssued: credits, pricePerCreditUSD: price,
+            areaId: areaId, creditsIssued: _credits, pricePerCreditUSD: price,
             creditsRetired: FHE.asEuint64(0), vintageYear: vintageYear, listed: true
         });
-        _totalCarbonCreditsIssued = FHE.add(_totalCarbonCreditsIssued, credits);
+        _totalCarbonCreditsIssued = FHE.add(_totalCarbonCreditsIssued, _credits);
         FHE.allowThis(credits_[creditId].creditsIssued);
         FHE.allowThis(credits_[creditId].pricePerCreditUSD);
         FHE.allowThis(credits_[creditId].creditsRetired);

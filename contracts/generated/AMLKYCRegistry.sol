@@ -50,11 +50,11 @@ contract AMLKYCRegistry is ZamaEthereumConfig, AccessControl {
 
     function verifyKYC(
         address subject,
-        externalEuint8 calldata encRisk,
+        externalEuint8 encRisk,
         bytes calldata riskProof,
-        externalEuint8 calldata encPep,
+        externalEuint8 encPep,
         bytes calldata pepProof,
-        externalEuint8 calldata encSanctions,
+        externalEuint8 encSanctions,
         bytes calldata sanctionsProof,
         uint32 validityDays
     ) external onlyRole(VERIFIER_ROLE) {
@@ -89,7 +89,7 @@ contract AMLKYCRegistry is ZamaEthereumConfig, AccessControl {
         emit KYCRejected(subject);
     }
 
-    function updateRiskScore(address subject, externalEuint8 calldata encScore, bytes calldata inputProof)
+    function updateRiskScore(address subject, externalEuint8 encScore, bytes calldata inputProof)
         external
         onlyRole(COMPLIANCE_ROLE)
     {

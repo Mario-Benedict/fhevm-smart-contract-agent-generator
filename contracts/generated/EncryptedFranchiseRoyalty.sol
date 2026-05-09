@@ -44,7 +44,7 @@ contract EncryptedFranchiseRoyalty is ZamaEthereumConfig, Ownable, ReentrancyGua
     function onboardFranchisee(
         address franchisee,
         string calldata locationCode,
-        externalEuint8 calldata encRate, bytes calldata rateProof
+        externalEuint8 encRate, bytes calldata rateProof
     ) external onlyOwner {
         require(!franchisees[franchisee].active, "Already active");
         Franchisee storage f = franchisees[franchisee];
@@ -66,14 +66,14 @@ contract EncryptedFranchiseRoyalty is ZamaEthereumConfig, Ownable, ReentrancyGua
     function reportRevenue(
         uint256 periodStart,
         uint256 periodEnd,
-        externalEuint64 calldata encRevenue, bytes calldata inputProof
+        externalEuint64 encRevenue, bytes calldata inputProof
     ) external returns (uint256 reportIdx) {
         Franchisee storage f = franchisees[msg.sender];
         require(f.active, "Not active");
         euint64 revenue = FHE.fromExternal(encRevenue, inputProof);
         euint64 royalty = FHE.div(
-            FHE.mul(revenue, FHE.asEuint64(f.royaltyRateBps.unwrap())),
-            FHE.asEuint64(10000)
+            FHE.mul(revenue, f.royaltyRateBps),
+            10000
         );
         reports[msg.sender].push(RevenueReport({
             periodStart: periodStart, periodEnd: periodEnd,
@@ -104,7 +104,7 @@ contract EncryptedFranchiseRoyalty is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit RoyaltySettled(franchisee, reportIdx);
     }
 
-    function updateRoyaltyRate(address franchisee, externalEuint8 calldata encRate, bytes calldata inputProof)
+    function updateRoyaltyRate(address franchisee, externalEuint8 encRate, bytes calldata inputProof)
         external onlyOwner
     {
         franchisees[franchisee].royaltyRateBps = FHE.fromExternal(encRate, inputProof);

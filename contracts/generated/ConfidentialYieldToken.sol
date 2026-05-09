@@ -31,7 +31,7 @@ contract ConfidentialYieldToken is ZamaEthereumConfig, Ownable, Pausable, Reentr
     event YieldClaimed(address indexed user);
 
     constructor(uint64 initialSupply, uint64 yieldRateBps) Ownable(msg.sender) {
-        euint64 encSupply = FHE.asEuint64(initialSupply);
+        euint64 encSupply = FHE.asEuint64(uint64(initialSupply));
         _encryptedBalances[msg.sender] = encSupply;
         FHE.allowThis(_encryptedBalances[msg.sender]);
         FHE.allow(_encryptedBalances[msg.sender], msg.sender);
@@ -39,7 +39,7 @@ contract ConfidentialYieldToken is ZamaEthereumConfig, Ownable, Pausable, Reentr
         _totalSupply = encSupply;
         FHE.allowThis(_totalSupply);
 
-        _yieldRate = FHE.asEuint64(yieldRateBps);
+        _yieldRate = FHE.asEuint64(uint64(yieldRateBps));
         FHE.allowThis(_yieldRate);
         FHE.allow(_yieldRate, msg.sender);
     }
@@ -47,7 +47,7 @@ contract ConfidentialYieldToken is ZamaEthereumConfig, Ownable, Pausable, Reentr
     function setVestingSchedule(
         address beneficiary,
         uint256 duration,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external onlyOwner whenNotPaused {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -105,7 +105,7 @@ contract ConfidentialYieldToken is ZamaEthereumConfig, Ownable, Pausable, Reentr
 
     function transfer(
         address to,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external whenNotPaused nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -123,7 +123,7 @@ contract ConfidentialYieldToken is ZamaEthereumConfig, Ownable, Pausable, Reentr
         emit Transfer(msg.sender, to);
     }
 
-    function approve(address spender, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function approve(address spender, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _allowances[msg.sender][spender] = amount;
         FHE.allowThis(_allowances[msg.sender][spender]);

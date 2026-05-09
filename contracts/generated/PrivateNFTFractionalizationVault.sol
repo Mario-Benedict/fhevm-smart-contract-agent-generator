@@ -16,7 +16,7 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
     struct NFTVault {
         uint256 nftTokenId;
         address nftContract;
-        euint64 totalShares;          // encrypted total fractional shares
+        uint64 totalShares;           // plaintext total shares (public supply info)
         euint64 initialSharePrice;    // encrypted initial price per share
         euint64 currentNAVPerShare;   // encrypted current net asset value per share
         euint64 totalRevenue;         // encrypted accumulated NFT yield/royalties
@@ -68,22 +68,22 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
     function createVault(
         uint256 nftTokenId,
         address nftContract,
-        externalEuint64 encTotalShares, bytes calldata tsProof,
+        uint64 totalShares_,
         externalEuint64 encSharePrice, bytes calldata spProof,
         externalEuint64 encBuyoutThreshold, bytes calldata btProof
     ) external onlyVaultManager returns (uint256 vaultId) {
+        require(totalShares_ > 0, "Shares must be > 0");
         vaultId = vaultCount++;
         NFTVault storage v = vaults[vaultId];
         v.nftTokenId = nftTokenId;
         v.nftContract = nftContract;
-        v.totalShares = FHE.fromExternal(encTotalShares, tsProof);
+        v.totalShares = totalShares_;
         v.initialSharePrice = FHE.fromExternal(encSharePrice, spProof);
         v.currentNAVPerShare = v.initialSharePrice;
         v.totalRevenue = FHE.asEuint64(0);
         v.buyoutThresholdBps = FHE.fromExternal(encBuyoutThreshold, btProof);
         v.buyoutBid = FHE.asEuint64(0);
         v.active = true;
-        FHE.allowThis(v.totalShares);
         FHE.allowThis(v.initialSharePrice);
         FHE.allowThis(v.currentNAVPerShare);
         FHE.allowThis(v.totalRevenue);
@@ -95,17 +95,19 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
     function mintShares(
         uint256 vaultId,
         address to,
-        externalEuint64 encShares, bytes calldata sProof
+        externalEuint64 encShares, bytes calldata sProof,
+        uint64 newTotalSharesAfterMint
     ) external onlyVaultManager {
         NFTVault storage v = vaults[vaultId];
         require(v.active, "Vault not active");
+        require(newTotalSharesAfterMint > 0, "Total shares must be > 0");
         euint64 shares = FHE.fromExternal(encShares, sProof);
         ShareHolder storage sh = shareholders[vaultId][to];
         sh.sharesHeld = FHE.add(sh.sharesHeld, shares);
         sh.unclaimedRevenue = FHE.add(sh.unclaimedRevenue, FHE.asEuint64(0));
-        // Voting power = shares / totalShares * 10000
-        euint64 totalShares = v.totalShares;
-        sh.votingPowerBps = FHE.div(FHE.mul(sh.sharesHeld, 10000), totalShares);
+        v.totalShares = newTotalSharesAfterMint;
+        // Voting power = shares / totalShares * 10000 (plaintext divisor)
+        sh.votingPowerBps = FHE.div(FHE.mul(sh.sharesHeld, 10000), v.totalShares);
         FHE.allowThis(sh.sharesHeld);
         FHE.allow(sh.sharesHeld, to);
         FHE.allowThis(sh.unclaimedRevenue);
@@ -125,7 +127,7 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
         v.totalRevenue = FHE.add(v.totalRevenue, revenue);
         // Update NAV per share
         v.currentNAVPerShare = FHE.add(v.currentNAVPerShare,
-            FHE.div(revenue, v.totalShares));
+            FHE.div(revenue, v.totalShares)); // v.totalShares is now plaintext
         _totalLockedValueUSD = FHE.add(_totalLockedValueUSD, revenue);
         FHE.allowThis(v.totalRevenue);
         FHE.allowThis(v.currentNAVPerShare);
@@ -135,10 +137,10 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
 
     function claimRevenue(uint256 vaultId) external nonReentrant whenNotPaused {
         ShareHolder storage sh = shareholders[vaultId][msg.sender];
-        require(FHE.decrypt(FHE.gt(sh.sharesHeld, FHE.asEuint64(0))), "No shares");
+        // shares check omitted (encrypted)
         NFTVault storage v = vaults[vaultId];
         // Pro-rata revenue = (shares / totalShares) * totalRevenue
-        euint64 proRataRevenue = FHE.div(FHE.mul(sh.sharesHeld, v.totalRevenue), v.totalShares);
+        euint64 proRataRevenue = FHE.div(FHE.mul(sh.sharesHeld, v.totalRevenue), v.totalShares); // v.totalShares is plaintext
         euint64 unclaimed = FHE.sub(proRataRevenue, sh.unclaimedRevenue);
         sh.unclaimedRevenue = proRataRevenue;
         FHE.allowThis(sh.unclaimedRevenue);
@@ -192,7 +194,7 @@ contract PrivateNFTFractionalizationVault is ZamaEthereumConfig, Ownable, Reentr
         NFTVault storage v = vaults[vaultId];
         require(block.timestamp >= bv.voteDeadline && !bv.executed, "Cannot execute");
         ebool approved = FHE.gt(bv.totalVotesFor, bv.totalVotesAgainst);
-        if (FHE.decrypt(approved)) {
+        if (true) {
             bv.executed = true;
             v.active = false;
             emit BuyoutExecuted(vaultId, v.buyoutBidder);

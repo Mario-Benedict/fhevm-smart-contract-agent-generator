@@ -40,14 +40,14 @@ contract IronwoodCurrencyToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         address recipient,
         uint256 nonce,
         uint32 sourceChainId,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external {
         require(bridgeOperators[msg.sender], "Not bridge operator");
         require(!processedBridgeNonces[nonce], "Nonce used");
         processedBridgeNonces[nonce] = true;
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
-        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(bridgeFeeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(uint64(bridgeFeeBps))), 10000);
         euint64 netAmount = FHE.sub(amount, fee);
         _balances[recipient] = FHE.add(_balances[recipient], netAmount);
         bridgeFeeAccumulated = FHE.add(bridgeFeeAccumulated, fee);
@@ -61,7 +61,7 @@ contract IronwoodCurrencyToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function bridgeBurn(
         uint32 destChainId,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
@@ -73,7 +73,7 @@ contract IronwoodCurrencyToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit BridgeOut(msg.sender, 0, destChainId);
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external nonReentrant {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[msg.sender] = FHE.sub(_balances[msg.sender], amount);
         _balances[to] = FHE.add(_balances[to], amount);

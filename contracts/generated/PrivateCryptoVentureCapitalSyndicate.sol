@@ -90,7 +90,8 @@ contract PrivateCryptoVentureCapitalSyndicate is ZamaEthereumConfig, Ownable, Re
         externalEuint64 encRoundSize, bytes calldata rsProof,
         externalEuint64 encSyndicateAlloc, bytes calldata saProof,
         externalEuint64 encPricePerShare, bytes calldata ppsProof,
-        externalEuint64 encValCap, bytes calldata vcProof
+        externalEuint64 encValCap, bytes calldata vcProof,
+        uint64 postMoneyValuationPlaintext
     ) external onlyGP returns (uint256 dealId) {
         dealId = dealCount++;
         PortfolioDeal storage pd = deals[dealId];
@@ -103,7 +104,9 @@ contract PrivateCryptoVentureCapitalSyndicate is ZamaEthereumConfig, Ownable, Re
         pd.syndicateAllocationUSD = FHE.fromExternal(encSyndicateAlloc, saProof);
         pd.pricePerShareUSD = FHE.fromExternal(encPricePerShare, ppsProof);
         pd.valuationCapUSD = FHE.fromExternal(encValCap, vcProof);
-        pd.ownershipPctBps = FHE.div(FHE.mul(pd.syndicateAllocationUSD, 10000), pd.postMoneyValuationUSD);
+        pd.ownershipPctBps = postMoneyValuationPlaintext > 0
+            ? FHE.div(FHE.mul(pd.syndicateAllocationUSD, 10000), postMoneyValuationPlaintext)
+            : FHE.asEuint64(0);
         pd.currentMarkUSD = pd.syndicateAllocationUSD;
         pd.conversionDiscountBps = FHE.asEuint64(2000); // 20% default discount
         pd.investmentDate = block.timestamp;

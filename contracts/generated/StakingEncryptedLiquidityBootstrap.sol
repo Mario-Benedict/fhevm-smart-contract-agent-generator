@@ -139,7 +139,7 @@ contract StakingEncryptedLiquidityBootstrap is ZamaEthereumConfig, Ownable, Reen
         // New avg price = (total cost) / (total tokens)
         euint64 newTotalCost = FHE.add(alloc.reserveContributed, actualContrib);
         euint64 newTotalTokens = FHE.add(alloc.tokensAllocated, actualTokens);
-        euint64 newAvgPrice = FHE.div(newTotalCost, FHE.add(newTotalTokens, FHE.asEuint64(1))); // +1 avoid div/0
+        euint64 newAvgPrice = FHE.div(newTotalCost, FHE.add(newTotalTokens, 1)); // +1 avoid div/0
 
         bool isNewParticipant = !alloc.claimable;
         alloc.reserveContributed = newTotalCost;

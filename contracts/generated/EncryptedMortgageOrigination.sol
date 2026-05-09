@@ -52,9 +52,9 @@ contract EncryptedMortgageOrigination is ZamaEthereumConfig, AccessControl, Reen
     }
 
     function applyForMortgage(
-        externalEuint64 calldata encLoan,    bytes calldata loanProof,
-        externalEuint8  calldata encCredit,  bytes calldata creditProof,
-        externalEuint16 calldata encTerm,    bytes calldata termProof
+        externalEuint64 encLoan,    bytes calldata loanProof,
+        externalEuint8 encCredit,  bytes calldata creditProof,
+        externalEuint16 encTerm,    bytes calldata termProof
     ) external returns (uint256 loanId) {
         loanId = applicationCount++;
         MortgageApplication storage a = applications[loanId];
@@ -73,33 +73,32 @@ contract EncryptedMortgageOrigination is ZamaEthereumConfig, AccessControl, Reen
         FHE.allowThis(a.ltvRatio);    FHE.allowThis(a.dtiRatio);
         FHE.allowThis(a.interestRateBps);
         FHE.allow(a.loanAmount, msg.sender);
-        FHE.allow(a.creditScore, getRoleAdmin(UNDERWRITER_ROLE));
+        // FHE.allow to underwriter admin skipped (getRoleAdmin returns bytes32, not address)
         borrowerLoans[msg.sender].push(loanId);
         emit ApplicationReceived(loanId, msg.sender);
     }
 
     function appraise(
         uint256 loanId,
-        externalEuint64 calldata encValue, bytes calldata valueProof
+        uint8 ltvRatioValue,
+        bool insuranceRequiredValue,
+        externalEuint64 encValue, bytes calldata valueProof
     ) external onlyRole(APPRAISER_ROLE) {
         MortgageApplication storage a = applications[loanId];
         a.propertyValue = FHE.fromExternal(encValue, valueProof);
-        // LTV = loanAmount * 100 / propertyValue (integer approximation)
-        a.ltvRatio = FHE.asEuint8(uint8(
-            FHE.div(FHE.mul(a.loanAmount, FHE.asEuint64(100)), a.propertyValue).unwrap()
-        ));
-        a.insuranceRequired = a.ltvRatio.unwrap() > 80;
+        // LTV provided by appraiser after off-chain computation (encrypted divisor not supported)
+        a.ltvRatio = FHE.asEuint8(ltvRatioValue);
+        a.insuranceRequired = insuranceRequiredValue;
         a.status = LoanStatus.Underwriting;
         FHE.allowThis(a.propertyValue); FHE.allowThis(a.ltvRatio);
-        FHE.allow(a.propertyValue, a.borrower);
-        FHE.allow(a.ltvRatio, getRoleAdmin(UNDERWRITER_ROLE));
+        FHE.allow(a.propertyValue, a.borrower);        // FHE.allow to role admin skipped (getRoleAdmin returns bytes32, not address)
         emit PropertyAppraised(loanId);
     }
 
     function underwrite(
         uint256 loanId,
-        externalEuint8  calldata encDti,  bytes calldata dtiProof,
-        externalEuint16 calldata encRate, bytes calldata rateProof,
+        externalEuint8 encDti,  bytes calldata dtiProof,
+        externalEuint16 encRate, bytes calldata rateProof,
         bool approve
     ) external onlyRole(UNDERWRITER_ROLE) {
         MortgageApplication storage a = applications[loanId];

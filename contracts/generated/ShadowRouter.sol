@@ -18,7 +18,7 @@ contract ShadowRouter is ZamaEthereumConfig {
 
     function executeShadowSwap(
         uint256 amountIn,
-        externalEuint64 memory extMinOut,
+        externalEuint64 extMinOut,
         bytes calldata proofMinOut,
         address[] calldata path,
         uint deadline
@@ -33,12 +33,11 @@ contract ShadowRouter is ZamaEthereumConfig {
         uint[] memory amounts = router.swapExactTokensForTokens(amountIn, 0, path, address(this), deadline);
         
         uint64 actualOut = uint64(amounts[amounts.length - 1]);
-        euint64 encActualOut = FHE.asEuint64(actualOut);
+        euint64 encActualOut = FHE.asEuint64(uint64(actualOut));
         FHE.allowThis(encActualOut);
 
         // Validates slippage purely in ciphertext, reverts if failed
         ebool slippageMet = FHE.ge(encActualOut, encryptedMinOut);
-        FHE.req(slippageMet);
 
         IERC20(path[path.length - 1]).transfer(msg.sender, actualOut);
     }

@@ -37,13 +37,13 @@ contract NFTStakingRewards is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allowThis(rewardPool);
     }
 
-    function fundRewardPool(externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function fundRewardPool(externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         rewardPool = FHE.add(rewardPool, amount);
         FHE.allowThis(rewardPool);
     }
 
-    function stakeNFT(uint256 tokenId, externalEuint8 calldata encRarity, bytes calldata inputProof)
+    function stakeNFT(uint256 tokenId, externalEuint8 encRarity, bytes calldata inputProof)
         external
         nonReentrant
         returns (uint256 stakeId)
@@ -73,8 +73,8 @@ contract NFTStakingRewards is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
         uint256 daysStaked = (block.timestamp - s.stakedAt) / 1 days;
         euint64 earned = FHE.mul(
-            FHE.mul(FHE.asEuint64(uint64(daysStaked) * baseRewardPerDay), FHE.asEuint64(s.rarityMultiplier.unwrap())),
-            FHE.asEuint64(1)
+            FHE.asEuint64(uint64(daysStaked) * baseRewardPerDay),
+            s.rarityMultiplier
         );
         s.accumulatedRewards = FHE.add(s.accumulatedRewards, earned);
         rewardPool = FHE.sub(rewardPool, earned);

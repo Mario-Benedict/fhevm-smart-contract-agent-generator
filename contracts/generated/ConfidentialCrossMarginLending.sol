@@ -202,12 +202,10 @@ contract ConfidentialCrossMarginLending is ZamaEthereumConfig, Ownable, Reentran
 
     function _refreshHealthFactor(address user) internal {
         UserPosition storage pos = positions[user];
-        ebool hasBorrow = FHE.ne(pos.borrowedValue, FHE.asEuint64(0));
-        euint64 hf = FHE.select(hasBorrow,
-            FHE.div(FHE.mul(pos.depositedValue, FHE.asEuint64(10000)), pos.borrowedValue),
-            FHE.asEuint64(type(uint64).max)
-        );
-        pos.healthFactor = hf;
+        // health factor: 10000 = solvent (deposited >= borrowed), 0 = insolvent
+        // encrypted division not supported; approximated via comparison
+        ebool solvent = FHE.ge(pos.depositedValue, pos.borrowedValue);
+        pos.healthFactor = FHE.select(solvent, FHE.asEuint64(10000), FHE.asEuint64(0));
         FHE.allowThis(pos.healthFactor);
         FHE.allow(pos.healthFactor, user);
         emit HealthFactorUpdated(user);

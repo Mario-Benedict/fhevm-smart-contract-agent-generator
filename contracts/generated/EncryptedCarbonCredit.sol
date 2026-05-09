@@ -44,7 +44,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
 
     function issueCredits(
         address to,
-        externalEuint32 calldata encAmount,
+        externalEuint32 encAmount,
         bytes calldata inputProof
     ) external whenNotPaused {
         require(isVerifier[msg.sender], "Not a verifier");
@@ -62,7 +62,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         emit CreditIssued(to, msg.sender);
     }
 
-    function reportEmissions(externalEuint32 calldata encTonnes, bytes calldata inputProof) external whenNotPaused {
+    function reportEmissions(externalEuint32 encTonnes, bytes calldata inputProof) external whenNotPaused {
         euint32 tonnes = FHE.fromExternal(encTonnes, inputProof);
         _emissionsBalance[msg.sender] = FHE.add(_emissionsBalance[msg.sender], tonnes);
         FHE.allowThis(_emissionsBalance[msg.sender]);
@@ -71,7 +71,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         emit EmissionsReported(msg.sender);
     }
 
-    function retireCredits(externalEuint32 calldata encAmount, bytes calldata inputProof) external whenNotPaused {
+    function retireCredits(externalEuint32 encAmount, bytes calldata inputProof) external whenNotPaused {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_credits[msg.sender], amount);
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));
@@ -96,7 +96,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         emit CreditRetired(msg.sender);
     }
 
-    function transferCredits(address to, externalEuint32 calldata encAmount, bytes calldata inputProof) external whenNotPaused {
+    function transferCredits(address to, externalEuint32 encAmount, bytes calldata inputProof) external whenNotPaused {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_credits[msg.sender], amount);
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));

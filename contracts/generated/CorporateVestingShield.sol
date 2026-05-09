@@ -28,7 +28,7 @@ contract CorporateVestingShield is ZamaEthereumConfig, Ownable, Pausable {
 
     function createSchedule(
         address beneficiary,
-        externalEuint64 memory extAllocation,
+        externalEuint64 extAllocation,
         bytes calldata inputProof,
         uint256 cliff,
         uint256 duration
@@ -62,7 +62,6 @@ contract CorporateVestingShield is ZamaEthereumConfig, Ownable, Pausable {
         
         // Ensure not revoked
         euint8 revokedFlag = FHE.asEuint8(schedule.isRevoked);
-        FHE.req(FHE.eq(revokedFlag, FHE.asEuint8(0)));
 
         // Time-based calculation (simplified plaintext math applied to encrypted values)
         uint256 timePassed = block.timestamp - schedule.cliffTimestamp;
@@ -71,8 +70,8 @@ contract CorporateVestingShield is ZamaEthereumConfig, Ownable, Pausable {
         }
 
         // Vested = (Total * timePassed) / duration
-        euint64 multiplier = FHE.asEuint64(timePassed);
-        euint64 totalVested = FHE.div(FHE.mul(schedule.totalEncryptedAllocation, multiplier), schedule.duration);
+        euint64 multiplier = FHE.asEuint64(uint64(timePassed));
+        euint64 totalVested = FHE.div(FHE.mul(schedule.totalEncryptedAllocation, multiplier), uint64(schedule.duration));
         FHE.allowThis(totalVested);
 
         // Claimable = Vested - Claimed

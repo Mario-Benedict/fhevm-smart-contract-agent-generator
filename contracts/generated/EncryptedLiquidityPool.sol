@@ -28,8 +28,8 @@ contract EncryptedLiquidityPool is ZamaEthereumConfig, Ownable, ReentrancyGuard 
     }
 
     function addLiquidity(
-        externalEuint64 calldata encAmountA,
-        externalEuint64 calldata encAmountB,
+        externalEuint64 encAmountA,
+        externalEuint64 encAmountB,
         bytes calldata proofA,
         bytes calldata proofB
     ) external nonReentrant {
@@ -48,11 +48,12 @@ contract EncryptedLiquidityPool is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit LiquidityAdded(msg.sender);
     }
 
-    function swapAforB(externalEuint64 calldata encAmountIn, bytes calldata inputProof) external nonReentrant {
+    function swapAforB(externalEuint64 encAmountIn, bytes calldata inputProof, uint64 reserveAPlaintext, uint64 amtInPlaintext) external nonReentrant {
         euint64 amtIn = FHE.fromExternal(encAmountIn, inputProof);
-        euint64 fee = FHE.div(FHE.mul(amtIn, FHE.asEuint64(feeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(amtIn, FHE.asEuint64(uint64(feeBps))), 10000);
         euint64 amtInAfterFee = FHE.sub(amtIn, fee);
-        euint64 amtOut = FHE.div(FHE.mul(amtInAfterFee, reserveB), FHE.add(reserveA, amtInAfterFee));
+        uint64 denom = reserveAPlaintext + amtInPlaintext;
+        euint64 amtOut = denom > 0 ? FHE.div(FHE.mul(amtInAfterFee, reserveB), denom) : FHE.asEuint64(0);
         reserveA = FHE.add(reserveA, amtIn);
         reserveB = FHE.sub(reserveB, amtOut);
         FHE.allowThis(reserveA);
@@ -61,11 +62,12 @@ contract EncryptedLiquidityPool is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit Swapped(msg.sender);
     }
 
-    function swapBforA(externalEuint64 calldata encAmountIn, bytes calldata inputProof) external nonReentrant {
+    function swapBforA(externalEuint64 encAmountIn, bytes calldata inputProof, uint64 reserveBPlaintext, uint64 amtInPlaintext) external nonReentrant {
         euint64 amtIn = FHE.fromExternal(encAmountIn, inputProof);
-        euint64 fee = FHE.div(FHE.mul(amtIn, FHE.asEuint64(feeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(amtIn, FHE.asEuint64(uint64(feeBps))), 10000);
         euint64 amtInAfterFee = FHE.sub(amtIn, fee);
-        euint64 amtOut = FHE.div(FHE.mul(amtInAfterFee, reserveA), FHE.add(reserveB, amtInAfterFee));
+        uint64 denom = reserveBPlaintext + amtInPlaintext;
+        euint64 amtOut = denom > 0 ? FHE.div(FHE.mul(amtInAfterFee, reserveA), denom) : FHE.asEuint64(0);
         reserveB = FHE.add(reserveB, amtIn);
         reserveA = FHE.sub(reserveA, amtOut);
         FHE.allowThis(reserveA);

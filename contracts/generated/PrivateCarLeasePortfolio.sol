@@ -52,10 +52,10 @@ contract PrivateCarLeasePortfolio is ZamaEthereumConfig, Ownable, ReentrancyGuar
         address lessee,
         string  calldata vehicleVIN,
         uint16  termMonths,
-        externalEuint64 calldata encVehicleVal, bytes calldata vehicleValProof,
-        externalEuint64 calldata encResidual,   bytes calldata residualProof,
-        externalEuint64 calldata encMonthly,    bytes calldata monthlyProof,
-        externalEuint8  calldata encCreditTier, bytes calldata creditTierProof
+        externalEuint64 encVehicleVal, bytes calldata vehicleValProof,
+        externalEuint64 encResidual,   bytes calldata residualProof,
+        externalEuint64 encMonthly,    bytes calldata monthlyProof,
+        externalEuint8 encCreditTier, bytes calldata creditTierProof
     ) external returns (uint256 leaseId) {
         require(approvedDealers[msg.sender], "Not approved dealer");
         leaseId = leaseCount++;
@@ -83,7 +83,7 @@ contract PrivateCarLeasePortfolio is ZamaEthereumConfig, Ownable, ReentrancyGuar
 
     function recordPayment(
         uint256 leaseId, bool onTime,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external onlyOwner nonReentrant {
         LeaseContract storage l = leases[leaseId];
         require(l.active && !l.defaulted, "Lease inactive");
@@ -97,10 +97,9 @@ contract PrivateCarLeasePortfolio is ZamaEthereumConfig, Ownable, ReentrancyGuar
         FHE.allow(paymentHistory[leaseId][idx].amount, l.lessee);
         FHE.allow(l.totalPaid, l.lessee);
         ebool matured = FHE.ge(l.monthsPaid, l.termMonths);
-        if (matured.unwrap() != 0) {
-            l.active = false;
-            emit LeaseMatured(leaseId);
-        }
+        FHE.allowThis(matured);
+        FHE.allow(matured, l.lessee);
+        FHE.allow(matured, owner());
         emit PaymentReceived(leaseId, idx);
     }
 

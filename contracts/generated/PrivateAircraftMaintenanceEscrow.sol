@@ -109,7 +109,8 @@ contract PrivateAircraftMaintenanceEscrow is ZamaEthereumConfig, Ownable, Reentr
         e.aogPenaltyPerDayUSD = aogPenalty;
         e.totalEscrowAmountUSD = totalAmount;
         e.aogPenaltyAccruedUSD = FHE.asEuint64(0);
-        e.estimatedCompletionDuration = estimatedDuration;
+        e.estimatedCompletionDuration = FHE.asEuint32(estimatedDuration);
+        FHE.allowThis(e.estimatedCompletionDuration);
         e.status = EscrowStatus.Created;
 
         FHE.allowThis(e.agreedLaborCostUSD); FHE.allow(e.agreedLaborCostUSD, msg.sender); FHE.allow(e.agreedLaborCostUSD, mroProvider);
@@ -162,7 +163,7 @@ contract PrivateAircraftMaintenanceEscrow is ZamaEthereumConfig, Ownable, Reentr
         euint16 structural = FHE.fromExternal(encStructural, structProof);
         euint16 avionics = FHE.fromExternal(encAvionics, avioProof);
         euint16 engine = FHE.fromExternal(encEngine, engProof);
-        euint16 overall = FHE.div(FHE.add(FHE.add(structural, avionics), engine), FHE.asEuint16(3));
+        euint16 overall = FHE.div(FHE.add(FHE.add(structural, avionics), engine), 3);
 
         QualityInspection storage insp = inspections[escrowId];
         insp.escrowId = escrowId;

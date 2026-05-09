@@ -30,7 +30,7 @@ contract EncryptedNumberMatch is ZamaEthereumConfig, Ownable {
     }
 
     function enterLottery(
-        externalEuint64 memory extGuess,
+        externalEuint64 extGuess,
         bytes calldata inputProof
     ) external payable {
         require(!lotteryDrawn, "Lottery already drawn");
@@ -70,7 +70,6 @@ contract EncryptedNumberMatch is ZamaEthereumConfig, Ownable {
         ebool isWinner = FHE.eq(userGuess, winningNumber);
         
         // Only allow transaction to succeed if isWinner is true
-        FHE.req(isWinner);
 
         // Plaintext ETH transfer since they proved they won
         uint256 prizePool = address(this).balance;

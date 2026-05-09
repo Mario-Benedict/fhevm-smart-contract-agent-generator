@@ -128,7 +128,7 @@ contract PrivateCatastropheRiskModelingPool is ZamaEthereumConfig, Ownable, Reen
     ) external onlyOwner {
         CATBond storage bond = catBonds[bondId];
         euint64 investment = FHE.fromExternal(encInvestment, invProof);
-        euint64 expectedCoupon = FHE.div(FHE.mul(investment, bond.couponRateBps), FHE.asEuint64(10000));
+        euint64 expectedCoupon = FHE.div(FHE.mul(investment, bond.couponRateBps), 10000);
 
         allocations[bondId][investor] = InvestorAllocation({
             investedAmount: investment, expectedCoupon: expectedCoupon,

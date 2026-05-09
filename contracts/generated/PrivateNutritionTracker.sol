@@ -57,10 +57,10 @@ contract PrivateNutritionTracker is ZamaEthereumConfig, Ownable {
     }
 
     function setGoal(
-        externalEuint16 calldata encCal,     bytes calldata calProof,
-        externalEuint8  calldata encProtein, bytes calldata proteinProof,
-        externalEuint8  calldata encCarbs,   bytes calldata carbsProof,
-        externalEuint8  calldata encFat,     bytes calldata fatProof
+        externalEuint16 encCal,     bytes calldata calProof,
+        externalEuint8 encProtein, bytes calldata proteinProof,
+        externalEuint8 encCarbs,   bytes calldata carbsProof,
+        externalEuint8 encFat,     bytes calldata fatProof
     ) external {
         HealthGoal storage g = goals[msg.sender];
         g.targetCalories = FHE.fromExternal(encCal,     calProof);
@@ -77,12 +77,12 @@ contract PrivateNutritionTracker is ZamaEthereumConfig, Ownable {
 
     function recordDailyLog(
         uint32 logDate,
-        externalEuint16 calldata encCal,    bytes calldata calProof,
-        externalEuint8  calldata encProt,   bytes calldata protProof,
-        externalEuint8  calldata encCarb,   bytes calldata carbProof,
-        externalEuint8  calldata encFat,    bytes calldata fatProof,
-        externalEuint8  calldata encFiber,  bytes calldata fiberProof,
-        externalEuint8  calldata encSugar,  bytes calldata sugarProof
+        externalEuint16 encCal,    bytes calldata calProof,
+        externalEuint8 encProt,   bytes calldata protProof,
+        externalEuint8 encCarb,   bytes calldata carbProof,
+        externalEuint8 encFat,    bytes calldata fatProof,
+        externalEuint8 encFiber,  bytes calldata fiberProof,
+        externalEuint8 encSugar,  bytes calldata sugarProof
     ) external {
         NutritionLog storage l = dailyLogs[msg.sender][logDate];
         require(!l.logged, "Already logged today");

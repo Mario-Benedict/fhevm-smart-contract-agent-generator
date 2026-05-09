@@ -51,10 +51,10 @@ contract PrivateCarbonFootprintTracker is ZamaEthereumConfig, AccessControl {
     }
 
     function reportEmissions(
-        externalEuint64 calldata encS1, bytes calldata s1Proof,
-        externalEuint64 calldata encS2, bytes calldata s2Proof,
-        externalEuint64 calldata encS3, bytes calldata s3Proof,
-        externalEuint32 calldata encYear, bytes calldata yearProof
+        externalEuint64 encS1, bytes calldata s1Proof,
+        externalEuint64 encS2, bytes calldata s2Proof,
+        externalEuint64 encS3, bytes calldata s3Proof,
+        externalEuint32 encYear, bytes calldata yearProof
     ) external onlyRole(COMPANY_ROLE) returns (uint256 idx) {
         EmissionRecord memory r;
         r.scope1Tonnes = FHE.fromExternal(encS1, s1Proof);
@@ -92,7 +92,7 @@ contract PrivateCarbonFootprintTracker is ZamaEthereumConfig, AccessControl {
     function issueOffset(
         address company,
         string calldata projectId,
-        externalEuint64 calldata encTonnes, bytes calldata inputProof
+        externalEuint64 encTonnes, bytes calldata inputProof
     ) external onlyRole(AUDITOR_ROLE) returns (uint256 offsetId) {
         offsetId = offsetCount++;
         OffsetCertificate storage o = offsets[offsetId];

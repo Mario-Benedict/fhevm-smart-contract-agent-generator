@@ -17,6 +17,8 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         euint64 whiteWager;
         euint64 blackWager;
         euint64 totalPot;
+        bool whiteCommitted;
+        bool blackCommitted;
         MatchStatus status;
         Outcome outcome;
         uint256 startTime;
@@ -56,7 +58,7 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit MatchCreated(matchId, msg.sender, blackPlayer);
     }
 
-    function commitWager(uint256 matchId, externalEuint64 calldata encWager, bytes calldata inputProof)
+    function commitWager(uint256 matchId, externalEuint64 encWager, bytes calldata inputProof)
         external
         nonReentrant
     {
@@ -66,9 +68,11 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
         if (msg.sender == m.whitePlayer) {
             m.whiteWager = wager;
+            m.whiteCommitted = true;
             FHE.allowThis(m.whiteWager);
         } else if (msg.sender == m.blackPlayer) {
             m.blackWager = wager;
+            m.blackCommitted = true;
             FHE.allowThis(m.blackWager);
         } else {
             revert("Not a player");
@@ -77,7 +81,7 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         m.totalPot = FHE.add(m.whiteWager, m.blackWager);
         FHE.allowThis(m.totalPot);
 
-        if (m.whiteWager.unwrap() != 0 && m.blackWager.unwrap() != 0) {
+        if (m.whiteCommitted && m.blackCommitted) {
             m.status = MatchStatus.Active;
         }
         emit WagerCommitted(matchId, msg.sender);
@@ -90,7 +94,7 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         m.gameHash = gameHash;
         m.status = MatchStatus.Completed;
 
-        euint64 fee = FHE.div(FHE.mul(m.totalPot, FHE.asEuint64(platformFeeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(m.totalPot, FHE.asEuint64(uint64(platformFeeBps))), 10000);
         euint64 payout = FHE.sub(m.totalPot, fee);
 
         address winner;
@@ -99,7 +103,7 @@ contract EncryptedChessWager is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         } else if (outcome == Outcome.BlackWins) {
             winner = m.blackPlayer;
         } else {
-            euint64 half = FHE.div(payout, FHE.asEuint64(2));
+            euint64 half = FHE.div(payout, 2);
             playerWinnings[m.whitePlayer] = FHE.add(playerWinnings[m.whitePlayer], half);
             playerWinnings[m.blackPlayer] = FHE.add(playerWinnings[m.blackPlayer], half);
             FHE.allowThis(playerWinnings[m.whitePlayer]);

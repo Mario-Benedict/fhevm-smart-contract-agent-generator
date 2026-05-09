@@ -98,7 +98,7 @@ contract PrivatePharmacyBenefitManagerRebate is ZamaEthereumConfig, Ownable, Ree
         euint64 marketShareTarget = FHE.fromExternal(encMarketShareTarget, mstProof);
         euint64 annualClaims = FHE.fromExternal(encAnnualClaims, acProof);
 
-        euint64 netPrice = FHE.sub(listPrice, FHE.div(FHE.mul(listPrice, rebateBps), FHE.asEuint64(10000)));
+        euint64 netPrice = FHE.sub(listPrice, FHE.div(FHE.mul(listPrice, rebateBps), 10000));
 
         contractId = keccak256(abi.encodePacked(manufacturer, ndcHash, block.timestamp));
 
@@ -127,7 +127,7 @@ contract PrivatePharmacyBenefitManagerRebate is ZamaEthereumConfig, Ownable, Ree
         FHE.allowThis(annualClaims); FHE.allow(annualClaims, manufacturer);
         FHE.allowThis(drugContracts[contractId].currentMarketShare);
 
-        _totalRebatesNegotiated = FHE.add(_totalRebatesNegotiated, FHE.div(FHE.mul(annualClaims, rebateBps), FHE.asEuint64(10000)));
+        _totalRebatesNegotiated = FHE.add(_totalRebatesNegotiated, FHE.div(FHE.mul(annualClaims, rebateBps), 10000));
         FHE.allowThis(_totalRebatesNegotiated);
 
         emit DrugContractCreated(contractId, manufacturer);
@@ -147,12 +147,12 @@ contract PrivatePharmacyBenefitManagerRebate is ZamaEthereumConfig, Ownable, Ree
         euint64 currentMarketShare = FHE.fromExternal(encCurrentMarketShare, cmsProof);
         dc.currentMarketShare = currentMarketShare;
 
-        euint64 grossRebate = FHE.div(FHE.mul(FHE.mul(claimsVolume, dc.listPrice), dc.guaranteedRebateBps), FHE.asEuint64(10000));
+        euint64 grossRebate = FHE.div(FHE.mul(FHE.mul(claimsVolume, dc.listPrice), dc.guaranteedRebateBps), 10000);
 
         // Performance bonus if market share >= target
         ebool performanceMet = FHE.ge(currentMarketShare, dc.marketShareTarget);
         euint64 perfBonus = FHE.select(performanceMet,
-            FHE.div(FHE.mul(grossRebate, FHE.asEuint64(500)), FHE.asEuint64(10000)), // extra 5%
+            FHE.div(FHE.mul(grossRebate, 500), 10000), // extra 5%
             FHE.asEuint64(0));
 
         euint64 netRebate = FHE.add(grossRebate, perfBonus);
@@ -192,7 +192,7 @@ contract PrivatePharmacyBenefitManagerRebate is ZamaEthereumConfig, Ownable, Ree
         require(authorizedPlanSponsor[planSponsor], "Not authorized plan sponsor");
 
         PlanSponsorAccount storage plan = planSponsors[planSponsor];
-        euint64 pbmFee = FHE.div(FHE.mul(accrual.netRebateDue, FHE.asEuint64(1000)), FHE.asEuint64(10000)); // 10% PBM admin fee
+        euint64 pbmFee = FHE.div(FHE.mul(accrual.netRebateDue, 1000), 10000); // 10% PBM admin fee
         euint64 passThrough = FHE.sub(accrual.netRebateDue, pbmFee);
 
         if (plan.transparencyModel) {

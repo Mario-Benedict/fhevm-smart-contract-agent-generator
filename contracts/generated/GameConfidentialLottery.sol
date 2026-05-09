@@ -68,7 +68,7 @@ contract GameConfidentialLottery is ZamaEthereumConfig, Ownable, ReentrancyGuard
         ebool paidEnough = FHE.ge(payment, r.ticketPrice);
         euint64 contribution = FHE.select(paidEnough, r.ticketPrice, FHE.asEuint64(0));
         // Generate a pseudo-random ticket number using FHE randomness
-        euint32 ticketNum = FHE.randEuint64(); // Simplified - will truncate to euint32 logic
+        euint32 ticketNum = FHE.randEuint32();
         euint32 assignedNum = FHE.asEuint32(0); // placeholder
         Ticket memory t = Ticket({ ticketNumber: FHE.asEuint32(0), roundId: roundId, claimed: false });
         userTickets[roundId][msg.sender].push(t);

@@ -34,17 +34,17 @@ contract PrivateEscrowToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     event EscrowResolved(uint256 indexed id, address winner);
 
     constructor(uint64 initialSupply) Ownable(msg.sender) {
-        _balances[msg.sender] = FHE.asEuint64(initialSupply);
+        _balances[msg.sender] = FHE.asEuint64(uint64(initialSupply));
         FHE.allowThis(_balances[msg.sender]);
         FHE.allow(_balances[msg.sender], msg.sender);
-        _totalSupply = FHE.asEuint64(initialSupply);
+        _totalSupply = FHE.asEuint64(uint64(initialSupply));
         FHE.allowThis(_totalSupply);
     }
 
     function createEscrow(
         address seller,
         address arbiter,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof,
         uint256 lockDuration
     ) external nonReentrant returns (uint256) {
@@ -111,7 +111,7 @@ contract PrivateEscrowToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit EscrowResolved(id, winner);
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         ebool sufficient = FHE.ge(_balances[msg.sender], amount);
         euint64 actual = FHE.select(sufficient, amount, FHE.asEuint64(0));
@@ -123,7 +123,7 @@ contract PrivateEscrowToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allow(_balances[to], to);
     }
 
-    function mint(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function mint(address to, externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[to] = FHE.add(_balances[to], amount);
         _totalSupply = FHE.add(_totalSupply, amount);

@@ -50,7 +50,7 @@ contract CryptoLotteryDraw is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function buyTicket(
         uint256 drawId,
-        externalEuint8 calldata encNumber,
+        externalEuint8 encNumber,
         bytes calldata inputProof
     ) external nonReentrant returns (uint256 ticketId) {
         Draw storage d = draws[drawId];
@@ -64,7 +64,7 @@ contract CryptoLotteryDraw is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allow(tickets[drawId][ticketId].pickedNumber, msg.sender);
         playerTickets[drawId][msg.sender].push(ticketId);
 
-        d.prizePool = FHE.add(d.prizePool, FHE.asEuint64(ticketPriceUSD));
+        d.prizePool = FHE.add(d.prizePool, FHE.asEuint64(uint64(ticketPriceUSD)));
         FHE.allowThis(d.prizePool);
         emit TicketPurchased(drawId, msg.sender, ticketId);
     }
@@ -74,7 +74,7 @@ contract CryptoLotteryDraw is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         require(block.timestamp > d.closeTime, "Not closed");
         require(!d.drawn, "Done");
         euint8 rand = FHE.randEuint8();
-        d.winningNumber = FHE.add(FHE.rem(rand, FHE.asEuint8(100)), FHE.asEuint8(1));
+        d.winningNumber = FHE.add(FHE.rem(rand, 100), FHE.asEuint8(1));
         FHE.allowThis(d.winningNumber);
         d.drawn = true;
         emit NumberDrawn(drawId);

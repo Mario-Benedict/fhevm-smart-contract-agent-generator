@@ -40,7 +40,7 @@ contract ShieldedCredentials is ZamaEthereumConfig, Ownable {
     // An employer adds an encrypted performance score (e.g., 1 to 100)
     function addEncryptedEndorsement(
         address professional,
-        externalEuint32 memory extScore,
+        externalEuint32 extScore,
         bytes calldata proof
     ) external {
         require(profiles[professional].isRegistered, "Profile not found");

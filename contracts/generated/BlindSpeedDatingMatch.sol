@@ -23,7 +23,7 @@ contract BlindSpeedDatingMatch is ZamaEthereumConfig, Ownable {
     mapping(uint256 => address[]) public roundParticipants;
     mapping(uint256 => mapping(address => mapping(address => Preference))) private prefs;
     mapping(uint256 => mapping(address => bool)) public enrolled;
-    mapping(uint256 => mapping(address => mapping(address => bool))) public matched;
+    mapping(uint256 => mapping(address => mapping(address => ebool))) private matchResults;
     uint256 public roundCount;
 
     event RoundCreated(uint256 indexed roundId);
@@ -52,7 +52,7 @@ contract BlindSpeedDatingMatch is ZamaEthereumConfig, Ownable {
     function submitPreference(
         uint256 roundId,
         address target,
-        externalEuint8 calldata encScore,
+        externalEuint8 encScore,
         bytes calldata inputProof
     ) external {
         require(enrolled[roundId][msg.sender], "Not enrolled");
@@ -81,20 +81,21 @@ contract BlindSpeedDatingMatch is ZamaEthereumConfig, Ownable {
                         FHE.ge(scoreAB, FHE.asEuint8(50)),
                         FHE.ge(scoreBA, FHE.asEuint8(50))
                     );
-                    if (mutualInterest.unwrap() != 0) {
-                        matched[roundId][a][b] = true;
-                        matched[roundId][b][a] = true;
-                        FHE.allow(scoreAB, b);
-                        FHE.allow(scoreBA, a);
-                        emit MatchRevealed(roundId, a, b);
-                    }
+                    matchResults[roundId][a][b] = mutualInterest;
+                    matchResults[roundId][b][a] = mutualInterest;
+                    FHE.allowThis(mutualInterest);
+                    FHE.allow(mutualInterest, a);
+                    FHE.allow(mutualInterest, b);
+                    FHE.allow(scoreAB, b);
+                    FHE.allow(scoreBA, a);
+                    emit MatchRevealed(roundId, a, b);
                 }
             }
         }
         r.finalized = true;
     }
 
-    function isMatch(uint256 roundId, address other) external view returns (bool) {
-        return matched[roundId][msg.sender][other];
+    function getMatchResult(uint256 roundId, address other) external view returns (ebool) {
+        return matchResults[roundId][msg.sender][other];
     }
 }

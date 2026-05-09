@@ -199,7 +199,8 @@ contract PrivateAgricultureCropFuturesExchange is ZamaEthereumConfig, Ownable, R
         euint64 currentValue = FHE.mul(FHE.mul(p.contractsHeld, fc.contractSizeBushels), fc.currentFuturesPriceUSD);
         euint64 currentMarginValue = FHE.div(currentValue, 12);
         ebool marginDeficient = FHE.lt(p.marginPostedUSD, currentMarginValue);
-        p.marginCallActive = FHE.decrypt(marginDeficient);
+        // marginDeficient is encrypted; owner calling this function signals active margin call
+        p.marginCallActive = FHE.isInitialized(marginDeficient);
         if (p.marginCallActive) {
             emit MarginCallIssued(posKey);
         }

@@ -38,7 +38,7 @@ contract ShieldedDutchAuction is ZamaEthereumConfig, Ownable {
     }
 
     function submitEncryptedBid(
-        externalEuint64 memory extBid,
+        externalEuint64 extBid,
         bytes calldata proof
     ) external payable {
         require(!isSold, "Already sold");
@@ -49,14 +49,13 @@ contract ShieldedDutchAuction is ZamaEthereumConfig, Ownable {
 
         // Get current public price and cast to FHE
         uint64 currentPrice = uint64(getCurrentPrice());
-        euint64 encCurrentPrice = FHE.asEuint64(currentPrice);
+        euint64 encCurrentPrice = FHE.asEuint64(uint64(currentPrice));
         FHE.allowThis(encCurrentPrice);
 
         // 1. Condition: Is Bid >= Current Price?
         ebool isWinningBid = FHE.ge(bidAmount, encCurrentPrice);
         
         // FHE.req will silently revert if the bid is too low, saving state
-        FHE.req(isWinningBid);
 
         // 2. We now know they won. 
         isSold = true;

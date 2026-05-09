@@ -58,8 +58,8 @@ contract PrivateVentureCapitalFund is ZamaEthereumConfig, Ownable, ReentrancyGua
 
     function admitLP(
         address lp,
-        externalEuint64 calldata encCommitment, bytes calldata commitProof,
-        externalEuint8  calldata encCarry,      bytes calldata carryProof
+        externalEuint64 encCommitment, bytes calldata commitProof,
+        externalEuint8 encCarry,      bytes calldata carryProof
     ) external onlyOwner {
         require(!lps[lp].active, "Already admitted");
         LimitedPartner storage l = lps[lp];
@@ -80,7 +80,7 @@ contract PrivateVentureCapitalFund is ZamaEthereumConfig, Ownable, ReentrancyGua
     function issueCapitalCall(
         string calldata purpose,
         uint256 deadlineDays,
-        externalEuint64 calldata encTotal, bytes calldata inputProof
+        externalEuint64 encTotal, bytes calldata inputProof
     ) external onlyOwner returns (uint256 callId) {
         callId = callCount++;
         CapitalCall storage c = capitalCalls[callId];
@@ -95,7 +95,7 @@ contract PrivateVentureCapitalFund is ZamaEthereumConfig, Ownable, ReentrancyGua
 
     function payCapitalCall(
         uint256 callId,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external nonReentrant {
         require(lps[msg.sender].active, "Not LP");
         CapitalCall storage c = capitalCalls[callId];
@@ -113,9 +113,9 @@ contract PrivateVentureCapitalFund is ZamaEthereumConfig, Ownable, ReentrancyGua
 
     function makeInvestment(
         string calldata name,
-        externalEuint64 calldata encAmount,    bytes calldata amountProof,
-        externalEuint64 calldata encValuation, bytes calldata valuationProof,
-        externalEuint8  calldata encOwnership, bytes calldata ownershipProof
+        externalEuint64 encAmount,    bytes calldata amountProof,
+        externalEuint64 encValuation, bytes calldata valuationProof,
+        externalEuint8 encOwnership, bytes calldata ownershipProof
     ) external onlyOwner returns (uint256 companyId) {
         companyId = portfolioCount++;
         PortfolioCompany storage co = portfolio[companyId];
@@ -130,7 +130,7 @@ contract PrivateVentureCapitalFund is ZamaEthereumConfig, Ownable, ReentrancyGua
 
     function distributeToLP(
         address lp,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external onlyOwner nonReentrant {
         require(lps[lp].active, "Not LP");
         euint64 amount = FHE.fromExternal(encAmount, inputProof);

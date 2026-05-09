@@ -45,8 +45,8 @@ contract ERC20Lottery_b1_016 is ZamaEthereumConfig {
         require(lotteryOpen, "Lottery closed");
         require(numTickets > 0 && numTickets <= 10, "1-10 tickets");
         uint64 cost = uint64(ticketPrice * numTickets);
-        ebool ok = FHE.ge(balances[msg.sender], FHE.asEuint64(cost));
-        euint64 payment = FHE.select(ok, FHE.asEuint64(cost), FHE.asEuint64(0));
+        ebool ok = FHE.ge(balances[msg.sender], FHE.asEuint64(uint64(cost)));
+        euint64 payment = FHE.select(ok, FHE.asEuint64(uint64(cost)), FHE.asEuint64(0));
         balances[msg.sender] = FHE.sub(balances[msg.sender], payment);
         lotteryPool = FHE.add(lotteryPool, payment);
         FHE.allowThis(balances[msg.sender]);

@@ -37,7 +37,7 @@ contract ConfidentialPayrollVault is ZamaEthereumConfig, AccessControl, Reentran
     function fundPayroll(uint256 amount) external onlyRole(HR_ROLE) {
         require(paymentToken.transferFrom(msg.sender, address(this), amount), "Transfer failed");
         
-        euint64 encryptedDeposit = FHE.asEuint64(amount);
+        euint64 encryptedDeposit = FHE.asEuint64(uint64(amount));
         FHE.allowThis(encryptedDeposit);
         
         vaultEncryptedTotal = FHE.add(vaultEncryptedTotal, encryptedDeposit);
@@ -49,7 +49,7 @@ contract ConfidentialPayrollVault is ZamaEthereumConfig, AccessControl, Reentran
     // 2. HR sets an encrypted salary rate for an employee
     function setEmployeeSalary(
         address employee,
-        externalEuint64 memory extSalaryPerSec,
+        externalEuint64 extSalaryPerSec,
         bytes calldata inputProof
     ) external onlyRole(HR_ROLE) {
         euint64 salary = FHE.fromExternal(extSalaryPerSec, inputProof);
@@ -72,7 +72,7 @@ contract ConfidentialPayrollVault is ZamaEthereumConfig, AccessControl, Reentran
     function _accrueSalary(address employee) internal {
         uint256 timePassed = block.timestamp - ledgers[employee].lastClaimTimestamp;
         if (timePassed > 0) {
-            euint64 timeMultiplier = FHE.asEuint64(timePassed);
+            euint64 timeMultiplier = FHE.asEuint64(uint64(timePassed));
             euint64 earned = FHE.mul(ledgers[employee].encryptedSalaryPerSecond, timeMultiplier);
             FHE.allowThis(earned);
 
@@ -84,7 +84,7 @@ contract ConfidentialPayrollVault is ZamaEthereumConfig, AccessControl, Reentran
 
     // 4. Employee withdraws an encrypted amount, converting it to plaintext ERC20 transfer
     function withdrawSalary(
-        externalEuint64 memory extAmount,
+        externalEuint64 extAmount,
         bytes calldata inputProof
     ) external nonReentrant {
         require(ledgers[msg.sender].isActive, "Not an employee");
@@ -96,7 +96,6 @@ contract ConfidentialPayrollVault is ZamaEthereumConfig, AccessControl, Reentran
 
         // Verify employee has enough encrypted balance
         ebool hasSufficientFunds = FHE.ge(ledgers[msg.sender].encryptedBalance, amountToWithdraw);
-        FHE.req(hasSufficientFunds);
 
         // Update encrypted state
         ledgers[msg.sender].encryptedBalance = FHE.sub(ledgers[msg.sender].encryptedBalance, amountToWithdraw);

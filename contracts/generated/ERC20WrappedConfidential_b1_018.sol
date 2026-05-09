@@ -24,8 +24,8 @@ contract ERC20WrappedConfidential_b1_018 is ZamaEthereumConfig {
     function deposit() public payable {
         require(msg.value > 0, "No ETH sent");
         uint64 amount = uint64(msg.value / 1 gwei);
-        balances[msg.sender] = FHE.add(balances[msg.sender], FHE.asEuint64(amount));
-        totalSupply = FHE.add(totalSupply, FHE.asEuint64(amount));
+        balances[msg.sender] = FHE.add(balances[msg.sender], FHE.asEuint64(uint64(amount)));
+        totalSupply = FHE.add(totalSupply, FHE.asEuint64(uint64(amount)));
         FHE.allowThis(balances[msg.sender]);
         FHE.allowThis(totalSupply);
         emit Deposited(msg.sender, msg.value);

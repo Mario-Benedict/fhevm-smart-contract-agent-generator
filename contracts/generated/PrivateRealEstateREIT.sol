@@ -26,6 +26,7 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     mapping(uint256 => Property) public properties;
     mapping(uint256 => mapping(address => InvestorHolding)) private holdings;
+    mapping(uint256 => mapping(address => bool)) private _holdingInitialized;
     mapping(address => bool) public accreditedInvestors;
     uint256 public propertyCount;
     euint64 private totalAUM; // Assets Under Management
@@ -47,13 +48,13 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     function addProperty(
         string calldata address_,
         string calldata propertyType,
-        externalEuint64 calldata encValuation,
+        externalEuint64 encValuation,
         bytes calldata valuationProof,
-        externalEuint64 calldata encRental,
+        externalEuint64 encRental,
         bytes calldata rentalProof,
-        externalEuint32 calldata encShares,
+        externalEuint32 encShares,
         bytes calldata sharesProof,
-        externalEuint64 calldata encSharePrice,
+        externalEuint64 encSharePrice,
         bytes calldata sharePriceProof
     ) external onlyOwner returns (uint256 propId) {
         propId = propertyCount++;
@@ -74,7 +75,7 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit PropertyAdded(propId, address_);
     }
 
-    function purchaseShares(uint256 propId, externalEuint32 calldata encShares, bytes calldata inputProof)
+    function purchaseShares(uint256 propId, externalEuint32 encShares, bytes calldata inputProof)
         external
         nonReentrant
     {
@@ -82,11 +83,14 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         Property storage p = properties[propId];
         require(p.active, "Property inactive");
         euint32 shares = FHE.fromExternal(encShares, inputProof);
-        euint64 cost = FHE.mul(FHE.asEuint64(shares.unwrap()), p.sharePrice);
+        euint64 cost = FHE.mul(p.sharePrice, shares);
         InvestorHolding storage h = holdings[propId][msg.sender];
         h.shares = FHE.add(h.shares, shares);
         h.totalInvested = FHE.add(h.totalInvested, cost);
-        if (h.dividendsReceived.unwrap() == 0) h.dividendsReceived = FHE.asEuint64(0);
+        if (!_holdingInitialized[propId][msg.sender]) {
+            h.dividendsReceived = FHE.asEuint64(0);
+            _holdingInitialized[propId][msg.sender] = true;
+        }
         FHE.allowThis(h.shares);
         FHE.allowThis(h.totalInvested);
         FHE.allowThis(h.dividendsReceived);
@@ -96,12 +100,13 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit SharesPurchased(propId, msg.sender);
     }
 
-    function distributeDividend(uint256 propId, address investor) external onlyOwner nonReentrant {
+    function distributeDividend(uint256 propId, address investor, uint64 totalSharesPlaintext) external onlyOwner nonReentrant {
         Property storage p = properties[propId];
         InvestorHolding storage h = holdings[propId][investor];
+        // totalSharesPlaintext provided by owner after decrypting p.totalShares off-chain
         euint64 dividend = FHE.div(
-            FHE.mul(p.rentalIncome, FHE.asEuint64(h.shares.unwrap())),
-            FHE.asEuint64(p.totalShares.unwrap())
+            FHE.mul(p.rentalIncome, h.shares),
+            totalSharesPlaintext
         );
         h.dividendsReceived = FHE.add(h.dividendsReceived, dividend);
         FHE.allowThis(h.dividendsReceived);
@@ -110,7 +115,7 @@ contract PrivateRealEstateREIT is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit DividendPaid(propId, investor);
     }
 
-    function revalueProperty(uint256 propId, externalEuint64 calldata encNewVal, bytes calldata inputProof)
+    function revalueProperty(uint256 propId, externalEuint64 encNewVal, bytes calldata inputProof)
         external
         onlyOwner
     {

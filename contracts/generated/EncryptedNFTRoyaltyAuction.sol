@@ -105,7 +105,7 @@ contract EncryptedNFTRoyaltyAuction is ZamaEthereumConfig, Ownable {
         euint64 platformFee = FHE.div(FHE.mul(winBid, _platformFeeBps), 10000);
         _totalPlatformFees = FHE.add(_totalPlatformFees, platformFee);
         // Creator royalty
-        euint64 royalty = FHE.div(FHE.mul(winBid, FHE.asEuint64(uint64(0))), 100); // royaltyPct encrypted
+        euint64 royalty = FHE.div(FHE.mul(winBid, 0), 100); // royaltyPct encrypted
         // Seller proceeds
         euint64 sellerNet = FHE.sub(FHE.sub(winBid, platformFee), royalty);
         _creatorRoyalties[a.creator] = FHE.add(_creatorRoyalties[a.creator], royalty);

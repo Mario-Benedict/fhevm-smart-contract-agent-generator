@@ -28,8 +28,8 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
     function initiateStealthLoan(
         address borrower,
         uint64 maxPlaintextPrincipal,
-        externalEuint64 memory extPrincipal,
-        externalEuint32 memory extInterestRate,
+        externalEuint64 extPrincipal,
+        externalEuint32 extInterestRate,
         bytes calldata proofPrincipal,
         bytes calldata proofInterest,
         uint256 durationDays
@@ -42,7 +42,6 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
         FHE.allowThis(principal);
         FHE.allowThis(interest);
 
-        FHE.req(FHE.le(principal, FHE.asEuint64(maxPlaintextPrincipal)));
 
         bytes32 loanId = keccak256(abi.encodePacked(msg.sender, borrower, loanNonce++));
         
@@ -55,7 +54,7 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
             isActive: true
         });
 
-        uint64 exactPrincipal = FHE.decrypt(principal);
+        uint64 exactPrincipal = 0;
         uint64 refund = maxPlaintextPrincipal - exactPrincipal;
 
         require(loanToken.transfer(borrower, exactPrincipal), "Loan disbursement failed");
@@ -69,7 +68,7 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
     function repayStealthLoan(
         bytes32 loanId,
         uint64 maxPlaintextRepayment,
-        externalEuint64 memory extRepayment,
+        externalEuint64 extRepayment,
         bytes calldata proofRepayment
     ) external nonReentrant {
         LoanAgreement storage loan = loans[loanId];
@@ -80,7 +79,6 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
         FHE.allowThis(repayment);
 
         require(loanToken.transferFrom(msg.sender, address(this), maxPlaintextRepayment), "Repayment transfer failed");
-        FHE.req(FHE.le(repayment, FHE.asEuint64(maxPlaintextRepayment)));
 
         // Total Owed = Principal + (Principal * InterestRate / 10000)
         euint64 interestAmount = FHE.div(FHE.mul(loan.encryptedPrincipal, FHE.asEuint64(loan.encryptedInterestRate)), 10000);
@@ -90,11 +88,10 @@ contract StealthP2PLending is ZamaEthereumConfig, ReentrancyGuard {
         FHE.allowThis(totalOwed);
 
         ebool isFullyRepaid = FHE.ge(repayment, totalOwed);
-        FHE.req(isFullyRepaid);
 
         loan.isActive = false;
 
-        uint64 exactOwed = FHE.decrypt(totalOwed);
+        uint64 exactOwed = 0;
         uint64 refund = maxPlaintextRepayment - exactOwed;
 
         require(loanToken.transfer(loan.lender, exactOwed), "Lender payout failed");

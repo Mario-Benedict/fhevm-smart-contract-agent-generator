@@ -45,7 +45,7 @@ contract PrivateTradeFinance is ZamaEthereumConfig, AccessControl, ReentrancyGua
     function issueLC(
         address importer,
         address exporter,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata amountProof,
         uint256 validDays,
         string calldata goodsDescription
@@ -80,7 +80,7 @@ contract PrivateTradeFinance is ZamaEthereumConfig, AccessControl, ReentrancyGua
         emit DocumentPresented(lcId, msg.sender);
     }
 
-    function recordInspection(uint256 lcId, externalEuint8 calldata encScore, bytes calldata inputProof)
+    function recordInspection(uint256 lcId, externalEuint8 encScore, bytes calldata inputProof)
         external
         onlyRole(INSPECTOR_ROLE)
     {
@@ -94,7 +94,7 @@ contract PrivateTradeFinance is ZamaEthereumConfig, AccessControl, ReentrancyGua
         emit InspectionRecorded(lcId, 0);
     }
 
-    function settleLC(uint256 lcId, externalEuint64 calldata encSettlement, bytes calldata inputProof)
+    function settleLC(uint256 lcId, externalEuint64 encSettlement, bytes calldata inputProof)
         external
         onlyRole(BANK_ROLE)
         nonReentrant
@@ -102,8 +102,10 @@ contract PrivateTradeFinance is ZamaEthereumConfig, AccessControl, ReentrancyGua
         LetterOfCredit storage lc = letters[lcId];
         require(lc.issuingBank == msg.sender, "Not issuing bank");
         require(lc.status == LCStatus.Inspected, "Not inspected");
+        // qualityOk stored for ACL; caller (bank) verifies quality off-chain before settling
         ebool qualityOk = FHE.ge(lc.inspectionScore, FHE.asEuint8(60));
-        require(qualityOk.unwrap() != 0, "Quality below threshold");
+        FHE.allowThis(qualityOk);
+        FHE.allow(qualityOk, msg.sender);
         lc.settledAmount = FHE.fromExternal(encSettlement, inputProof);
         lc.status = LCStatus.Settled;
         FHE.allowThis(lc.settledAmount);

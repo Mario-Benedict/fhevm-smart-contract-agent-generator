@@ -32,15 +32,15 @@ contract TaxComplianceAttestation is ZamaEthereumConfig, Ownable {
 
     function attestTaxRecord(
         address taxpayer,
-        externalEuint8 calldata encBracket,
+        externalEuint8 encBracket,
         bytes calldata bracketProof,
-        externalEuint8 calldata encFiling,
+        externalEuint8 encFiling,
         bytes calldata filingProof,
-        externalEuint16 calldata encYear,
+        externalEuint16 encYear,
         bytes calldata yearProof,
-        externalEuint8 calldata encScore,
+        externalEuint8 encScore,
         bytes calldata scoreProof,
-        externalEuint8 calldata encAudit,
+        externalEuint8 encAudit,
         bytes calldata auditProof
     ) external {
         require(authorizedAttestors[msg.sender], "Not authorized");

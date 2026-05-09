@@ -13,6 +13,8 @@ contract PrivateTicketingPlatform is ZamaEthereumConfig, Ownable, ReentrancyGuar
         uint256 eventDate;
         euint32 totalCapacity;
         euint32 ticketsSold;
+        uint32  plainMaxCapacity;  // plaintext copy for on-chain capacity check
+        uint32  plainSoldCount;    // plaintext sold count
         euint64 basePrice;
         euint64 maxResaleMarkupBps; // max resale markup above face value
         bool    saleOpen;
@@ -47,9 +49,10 @@ contract PrivateTicketingPlatform is ZamaEthereumConfig, Ownable, ReentrancyGuar
     function createEvent(
         string calldata eventName,
         uint256 eventDate,
-        externalEuint32 calldata encCapacity,   bytes calldata capProof,
-        externalEuint64 calldata encBasePrice,  bytes calldata priceProof,
-        externalEuint64 calldata encMarkupCap,  bytes calldata markupProof
+        uint32 maxCapacity,
+        externalEuint32 encCapacity,   bytes calldata capProof,
+        externalEuint64 encBasePrice,  bytes calldata priceProof,
+        externalEuint64 encMarkupCap,  bytes calldata markupProof
     ) external onlyOwner returns (uint256 eventId) {
         eventId = eventCount++;
         Event storage e = events[eventId];
@@ -57,6 +60,8 @@ contract PrivateTicketingPlatform is ZamaEthereumConfig, Ownable, ReentrancyGuar
         e.eventDate          = eventDate;
         e.totalCapacity      = FHE.fromExternal(encCapacity, capProof);
         e.ticketsSold        = FHE.asEuint32(0);
+        e.plainMaxCapacity   = maxCapacity;
+        e.plainSoldCount     = 0;
         e.basePrice          = FHE.fromExternal(encBasePrice, priceProof);
         e.maxResaleMarkupBps = FHE.fromExternal(encMarkupCap, markupProof);
         e.saleOpen           = true;
@@ -69,8 +74,7 @@ contract PrivateTicketingPlatform is ZamaEthereumConfig, Ownable, ReentrancyGuar
     function purchaseTicket(uint256 eventId) external nonReentrant returns (uint256 ticketId) {
         Event storage e = events[eventId];
         require(e.saleOpen && !e.finalized, "Sale closed");
-        ebool hasCapacity = FHE.lt(e.ticketsSold, e.totalCapacity);
-        require(hasCapacity.unwrap() != 0, "Sold out");
+        require(e.plainSoldCount < e.plainMaxCapacity, "Sold out");
         ticketId = ticketCount++;
         Ticket storage t = tickets[ticketId];
         t.eventId    = eventId;
@@ -80,20 +84,21 @@ contract PrivateTicketingPlatform is ZamaEthereumConfig, Ownable, ReentrancyGuar
         FHE.allowThis(t.pricePaid); FHE.allowThis(t.faceValue);
         FHE.allow(t.pricePaid, msg.sender);
         e.ticketsSold = FHE.add(e.ticketsSold, FHE.asEuint32(1));
+        e.plainSoldCount++;
         FHE.allowThis(e.ticketsSold);
         holderTickets[msg.sender].push(ticketId);
         eventTickets[eventId].push(ticketId);
         emit TicketPurchased(ticketId, msg.sender);
     }
 
-    function listForResale(uint256 ticketId, externalEuint64 calldata encAsk, bytes calldata inputProof) external {
+    function listForResale(uint256 ticketId, externalEuint64 encAsk, bytes calldata inputProof) external {
         Ticket storage t = tickets[ticketId];
         require(t.owner == msg.sender && !t.used, "Not owner or used");
         euint64 ask = FHE.fromExternal(encAsk, inputProof);
         Event storage e = events[t.eventId];
         // enforce markup cap
         euint64 maxAllowed = FHE.add(t.faceValue,
-            FHE.div(FHE.mul(t.faceValue, FHE.asEuint64(e.maxResaleMarkupBps.unwrap())), FHE.asEuint64(10000))
+            FHE.div(FHE.mul(t.faceValue, e.maxResaleMarkupBps), 10000)
         );
         ebool withinCap = FHE.le(ask, maxAllowed);
         t.resaleAskPrice = FHE.select(withinCap, ask, maxAllowed);

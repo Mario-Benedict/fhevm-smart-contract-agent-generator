@@ -32,7 +32,7 @@ contract SilverLeafToken is ZamaEthereumConfig, Ownable {
         _;
     }
 
-    function mint(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external onlyOwner {
+    function mint(address to, externalEuint64 encAmount, bytes calldata inputProof) external onlyOwner {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         _balances[to] = FHE.add(_balances[to], amount);
         _totalSupply = FHE.add(_totalSupply, amount);
@@ -42,9 +42,9 @@ contract SilverLeafToken is ZamaEthereumConfig, Ownable {
         emit Mint(to);
     }
 
-    function transfer(address to, externalEuint64 calldata encAmount, bytes calldata inputProof) external notPaused {
+    function transfer(address to, externalEuint64 encAmount, bytes calldata inputProof) external notPaused {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
-        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(feeBps)), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(uint64(feeBps))), 10000);
         euint64 netAmount = FHE.sub(amount, fee);
         _balances[msg.sender] = FHE.sub(_balances[msg.sender], amount);
         _balances[to] = FHE.add(_balances[to], netAmount);

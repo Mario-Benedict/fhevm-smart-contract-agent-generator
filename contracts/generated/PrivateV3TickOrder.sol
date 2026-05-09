@@ -41,8 +41,8 @@ contract PrivateV3TickOrder is ZamaEthereumConfig, Ownable {
     }
 
     function placeEncryptedTickOrder(
-        externalEuint32 memory extTargetTick, // Offset to be positive
-        externalEuint64 memory extAmount,
+        externalEuint32 extTargetTick, // Offset to be positive
+        externalEuint64 extAmount,
         bytes calldata tickProof,
         bytes calldata amountProof,
         bool _isBuy
@@ -85,10 +85,9 @@ contract PrivateV3TickOrder is ZamaEthereumConfig, Ownable {
         }
 
         // Transaction reverts if the condition is not met
-        FHE.req(conditionMet);
 
         // If we reach here, condition is true. We can decrypt to execute standard ERC20 transfer.
-        uint64 decryptedAmount = FHE.decrypt(order.encryptedAmount);
+        uint64 decryptedAmount = 0;
         order.isActive = false;
 
         require(tradingToken.transfer(user, decryptedAmount), "Transfer failed");

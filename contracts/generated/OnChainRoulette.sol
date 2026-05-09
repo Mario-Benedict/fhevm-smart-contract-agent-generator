@@ -32,7 +32,7 @@ contract OnChainRoulette is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allowThis(lastSpinResult);
     }
 
-    function deposit(externalEuint64 calldata encAmount, bytes calldata inputProof) external {
+    function deposit(externalEuint64 encAmount, bytes calldata inputProof) external {
         euint64 amount = FHE.fromExternal(encAmount, inputProof);
         playerBalance[msg.sender] = FHE.add(playerBalance[msg.sender], amount);
         FHE.allowThis(playerBalance[msg.sender]);
@@ -40,9 +40,9 @@ contract OnChainRoulette is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     }
 
     function placeSingleBet(
-        externalEuint8 calldata encNumber,
+        externalEuint8 encNumber,
         bytes calldata numProof,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata amtProof
     ) external nonReentrant returns (uint256 betId) {
         euint8 number = FHE.fromExternal(encNumber, numProof);
@@ -63,7 +63,7 @@ contract OnChainRoulette is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function placeBet(
         BetType betType,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata inputProof
     ) external nonReentrant returns (uint256 betId) {
         require(betType != BetType.Single, "Use placeSingleBet");
@@ -86,11 +86,11 @@ contract OnChainRoulette is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         Bet storage b = bets[betId];
         require(!b.settled, "Already settled");
 
-        euint8 spinResult = FHE.rem(FHE.randEuint8(), FHE.asEuint8(37)); // 0-36
+        euint8 spinResult = FHE.rem(FHE.randEuint8(), 37); // 0-36
         lastSpinResult = spinResult;
         FHE.allowThis(lastSpinResult);
 
-        euint8 isEven = FHE.rem(spinResult, FHE.asEuint8(2));
+        euint8 isEven = FHE.rem(spinResult, 2);
         euint64 payout = FHE.asEuint64(0);
 
         if (b.betType == BetType.Single) {

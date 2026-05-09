@@ -86,13 +86,14 @@ contract PrivateEquineRacehorseSyndicateBid is ZamaEthereumConfig, Ownable, Reen
         externalEuint64 encTotalShares, bytes calldata tsProof,
         externalEuint64 encBreedingRightsValue, bytes calldata brvProof,
         externalEuint64 encInsuranceValue, bytes calldata ivProof,
-        bool breedingRights
+        bool breedingRights,
+        uint64 totalSharesPlaintext
     ) external onlyOwner returns (bytes32 syndicateId) {
         euint64 purchasePrice = FHE.fromExternal(encPurchasePrice, ppProof);
         euint64 totalShares = FHE.fromExternal(encTotalShares, tsProof);
         euint64 breedingRightsValue = FHE.fromExternal(encBreedingRightsValue, brvProof);
         euint64 insuranceValue = FHE.fromExternal(encInsuranceValue, ivProof);
-        euint64 shareValue = FHE.div(purchasePrice, totalShares);
+        euint64 shareValue = totalSharesPlaintext > 0 ? FHE.div(purchasePrice, totalSharesPlaintext) : FHE.asEuint64(0);
 
         syndicateId = keccak256(abi.encodePacked(horseNameHash, block.timestamp));
 
@@ -198,17 +199,16 @@ contract PrivateEquineRacehorseSyndicateBid is ZamaEthereumConfig, Ownable, Reen
         emit RaceResultRecorded(syndicateId, raceDate, finishPosition);
     }
 
-    function distributePrizeMoney(bytes32 syndicateId) external onlyOwner {
+    function distributePrizeMoney(bytes32 syndicateId, uint64 totalSharesPlaintext) external onlyOwner {
         HorseSyndicate storage syn = syndicates[syndicateId];
         address[] storage memberList = syndicateMembers[syndicateId];
 
         for (uint256 i = 0; i < memberList.length; i++) {
             SyndicateMember storage m = members[syndicateId][memberList[i]];
             if (!m.active) continue;
-            euint64 memberShare = FHE.div(
-                FHE.mul(syn.totalPrizeMoney, m.sharesOwned),
-                syn.totalSharesIssued
-            );
+            euint64 memberShare = totalSharesPlaintext > 0
+                ? FHE.div(FHE.mul(syn.totalPrizeMoney, m.sharesOwned), totalSharesPlaintext)
+                : FHE.asEuint64(0);
             m.prizeMoneyClaimed = FHE.add(m.prizeMoneyClaimed, memberShare);
             m.currentEquityValue = FHE.add(m.currentEquityValue, memberShare);
             FHE.allowThis(m.prizeMoneyClaimed);
@@ -225,7 +225,8 @@ contract PrivateEquineRacehorseSyndicateBid is ZamaEthereumConfig, Ownable, Reen
     function issueExpenseCall(
         bytes32 syndicateId,
         CostCategory category,
-        externalEuint64 encTotalExpense, bytes calldata teProof
+        externalEuint64 encTotalExpense, bytes calldata teProof,
+        uint64 totalSharesPlaintext
     ) external onlyOwner {
         HorseSyndicate storage syn = syndicates[syndicateId];
         euint64 totalExpense = FHE.fromExternal(encTotalExpense, teProof);
@@ -235,10 +236,9 @@ contract PrivateEquineRacehorseSyndicateBid is ZamaEthereumConfig, Ownable, Reen
         for (uint256 i = 0; i < memberList.length; i++) {
             SyndicateMember storage m = members[syndicateId][memberList[i]];
             if (!m.active) continue;
-            euint64 memberExpenseShare = FHE.div(
-                FHE.mul(totalExpense, m.sharesOwned),
-                syn.totalSharesIssued
-            );
+            euint64 memberExpenseShare = totalSharesPlaintext > 0
+                ? FHE.div(FHE.mul(totalExpense, m.sharesOwned), totalSharesPlaintext)
+                : FHE.asEuint64(0);
             m.expensesPaid = FHE.add(m.expensesPaid, memberExpenseShare);
             FHE.allowThis(m.expensesPaid);
             FHE.allow(m.expensesPaid, memberList[i]);

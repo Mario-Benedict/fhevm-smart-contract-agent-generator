@@ -88,7 +88,7 @@ contract PrivateHealthDataMarketplace is ZamaEthereumConfig, Ownable, Reentrancy
         PatientProfile storage p = profiles[profileId];
         require(p.registered, "Profile not found");
         euint64 fee = p.pricePerAccessUSD;
-        euint64 patientShare = FHE.div(FHE.mul(fee, FHE.asEuint64(80)), 100); // 80% to patient
+        euint64 patientShare = FHE.div(FHE.mul(fee, 80), 100); // 80% to patient
         euint64 platformShare = FHE.sub(fee, patientShare); // 20% platform
         p.totalEarnedUSD = FHE.add(p.totalEarnedUSD, patientShare);
         _totalPatientEarningsUSD = FHE.add(_totalPatientEarningsUSD, patientShare);

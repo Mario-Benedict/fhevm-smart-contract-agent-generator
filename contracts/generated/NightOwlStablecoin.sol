@@ -34,7 +34,7 @@ contract NightOwlStablecoin is ZamaEthereumConfig, AccessControl {
         FHE.allowThis(_totalBurned);
     }
 
-    function mint(address to, externalEuint32 calldata encAmount, bytes calldata proof)
+    function mint(address to, externalEuint32 encAmount, bytes calldata proof)
         external
         onlyRole(MINTER_ROLE)
     {
@@ -50,7 +50,7 @@ contract NightOwlStablecoin is ZamaEthereumConfig, AccessControl {
         emit Minted(to);
     }
 
-    function burn(address from, externalEuint32 calldata encAmount, bytes calldata proof)
+    function burn(address from, externalEuint32 encAmount, bytes calldata proof)
         external
         onlyRole(BURNER_ROLE)
     {
@@ -66,7 +66,7 @@ contract NightOwlStablecoin is ZamaEthereumConfig, AccessControl {
         emit Burned(from);
     }
 
-    function transfer(address to, externalEuint32 calldata encAmount, bytes calldata proof) external {
+    function transfer(address to, externalEuint32 encAmount, bytes calldata proof) external {
         euint32 amount = FHE.fromExternal(encAmount, proof);
         ebool canSend = FHE.le(amount, _balances[msg.sender]);
         euint32 send = FHE.select(canSend, amount, FHE.asEuint32(0));

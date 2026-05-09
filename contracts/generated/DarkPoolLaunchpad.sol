@@ -30,7 +30,7 @@ contract DarkPoolLaunchpad is ZamaEthereumConfig, ERC20, Ownable {
 
     // Admin updates the encrypted market clearing price
     function updateMarketPrice(
-        externalEuint64 memory extPrice,
+        externalEuint64 extPrice,
         bytes calldata inputProof
     ) external onlyOwner {
         currentMarketPrice = FHE.fromExternal(extPrice, inputProof);
@@ -39,8 +39,8 @@ contract DarkPoolLaunchpad is ZamaEthereumConfig, ERC20, Ownable {
 
     // User submits an encrypted bid and maximum acceptable price
     function placeEncryptedLimitOrder(
-        externalEuint64 memory extBidAmount,
-        externalEuint64 memory extMaxPrice,
+        externalEuint64 extBidAmount,
+        externalEuint64 extMaxPrice,
         bytes calldata proofAmount,
         bytes calldata proofPrice
     ) external {
@@ -60,7 +60,7 @@ contract DarkPoolLaunchpad is ZamaEthereumConfig, ERC20, Ownable {
     }
 
     // Keeper or Admin executes the trade if conditions are met
-    function executeOrder(address trader) external onlyOwner {
+    function executeOrder(address trader, uint64 plaintextMarketPrice) external onlyOwner {
         require(orders[trader].isActive, "No active order");
 
         EncryptedOrder storage order = orders[trader];
@@ -70,13 +70,12 @@ contract DarkPoolLaunchpad is ZamaEthereumConfig, ERC20, Ownable {
         
         // If condition met, calculate tokens to mint/transfer. If not, 0.
         // Simplified calculation: Tokens = BidAmount / MarketPrice
-        euint64 tokensToReceive = FHE.div(order.encryptedBidAmount, currentMarketPrice);
+        euint64 tokensToReceive = plaintextMarketPrice > 0 ? FHE.div(order.encryptedBidAmount, plaintextMarketPrice) : FHE.asEuint64(0);
         euint64 actualTransfer = FHE.select(priceConditionMet, tokensToReceive, FHE.asEuint64(0));
         FHE.allowThis(actualTransfer);
 
         // Require that the transfer is greater than 0 to proceed with the transaction
         ebool isTradeValid = FHE.gt(actualTransfer, FHE.asEuint64(0));
-        FHE.req(isTradeValid);
 
         // Deactivate order
         order.isActive = false;

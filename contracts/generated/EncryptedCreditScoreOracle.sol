@@ -45,11 +45,11 @@ contract EncryptedCreditScoreOracle is ZamaEthereumConfig, AccessControl {
 
     function createProfile(
         address subject,
-        externalEuint16 calldata encScore,       bytes calldata scoreProof,
-        externalEuint8  calldata encPayHist,     bytes calldata payHistProof,
-        externalEuint8  calldata encUtilization, bytes calldata utilizationProof,
-        externalEuint8  calldata encAge,         bytes calldata ageProof,
-        externalEuint8  calldata encInquiries,   bytes calldata inquiriesProof
+        externalEuint16 encScore,       bytes calldata scoreProof,
+        externalEuint8 encPayHist,     bytes calldata payHistProof,
+        externalEuint8 encUtilization, bytes calldata utilizationProof,
+        externalEuint8 encAge,         bytes calldata ageProof,
+        externalEuint8 encInquiries,   bytes calldata inquiriesProof
     ) external onlyRole(BUREAU_ROLE) {
         CreditProfile storage p = profiles[subject];
         p.score             = FHE.fromExternal(encScore,       scoreProof);
@@ -65,7 +65,7 @@ contract EncryptedCreditScoreOracle is ZamaEthereumConfig, AccessControl {
         emit ProfileCreated(subject);
     }
 
-    function updateScore(address subject, externalEuint16 calldata encScore, bytes calldata inputProof)
+    function updateScore(address subject, externalEuint16 encScore, bytes calldata inputProof)
         external onlyRole(BUREAU_ROLE)
     {
         profiles[subject].score       = FHE.fromExternal(encScore, inputProof);

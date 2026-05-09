@@ -87,7 +87,7 @@ contract PrivateLuxuryRealEstateTokenization is ZamaEthereumConfig, Ownable, Ree
         require(propertyId < propertyCount && properties[propertyId].active, "Not available");
         euint64 fractions = FHE.fromExternal(encFractions, proof);
         FractionalHolder storage h = holdings[propertyId][msg.sender];
-        if (h.fractionCount.eq(FHE.asEuint64(0)) == FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
+        if (!FHE.isInitialized(h.fractionCount)) {
             h.fractionCount = FHE.asEuint64(0);
             h.accruedRental = FHE.asEuint64(0);
             FHE.allowThis(h.fractionCount);
@@ -101,16 +101,15 @@ contract PrivateLuxuryRealEstateTokenization is ZamaEthereumConfig, Ownable, Ree
         emit FractionsPurchased(propertyId, msg.sender);
     }
 
-    function distributeRental(uint8 propertyId, address holder) external onlyOwner nonReentrant {
+    function distributeRental(uint8 propertyId, address holder, uint64 totalFractionsPlaintext) external onlyOwner nonReentrant {
         require(propertyId < propertyCount && properties[propertyId].active, "Not available");
         FractionalHolder storage h = holdings[propertyId][holder];
         Property storage p = properties[propertyId];
         // Rental share = fractions / totalFractions * monthly * (1 - mgmtFee/10000)
-        euint64 grossShare = FHE.div(
-            FHE.mul(h.fractionCount, p.rentalIncomeMonthly),
-            p.totalFractions
-        );
-        euint64 mgmtFee = FHE.div(FHE.mul(grossShare, FHE.asEuint64(uint64(0))), 10000);
+        euint64 grossShare = totalFractionsPlaintext > 0
+            ? FHE.div(FHE.mul(h.fractionCount, p.rentalIncomeMonthly), totalFractionsPlaintext)
+            : FHE.asEuint64(0);
+        euint64 mgmtFee = FHE.div(FHE.mul(grossShare, 0), 10000);
         mgmtFee = FHE.div(grossShare, 20); // 5% simplified
         euint64 netShare = FHE.sub(grossShare, mgmtFee);
         h.accruedRental = FHE.add(h.accruedRental, netShare);

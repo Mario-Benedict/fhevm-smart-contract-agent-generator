@@ -83,7 +83,7 @@ contract ERC20DEXPrivate_c2_013 is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         euint64 amountIn = FHE.fromExternal(encAmountIn, proof);
         ebool ok = FHE.le(amountIn, _balancesA[msg.sender]);
         euint64 actualIn = FHE.select(ok, amountIn, FHE.asEuint64(0));
-        euint64 feeAmount = FHE.mul(actualIn, FHE.asEuint64(feeNumerator));
+        euint64 feeAmount = FHE.mul(actualIn, FHE.asEuint64(uint64(feeNumerator)));
         // Plaintext divisor required
         feeAmount = FHE.div(feeAmount, 1000);
         euint64 netIn = FHE.sub(actualIn, feeAmount);

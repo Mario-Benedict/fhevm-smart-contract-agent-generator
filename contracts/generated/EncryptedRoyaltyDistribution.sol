@@ -103,7 +103,7 @@ contract EncryptedRoyaltyDistribution is ZamaEthereumConfig, Ownable {
             address holder = asset.rightholders[i];
             if (!rightsHolders[assetId][holder].registered) continue;
             euint64 holderShare = FHE.div(
-                FHE.mul(totalEarned, FHE.asEuint64(uint64(0))), // share from encrypted bps
+                FHE.mul(totalEarned, 0), // share from encrypted bps
                 10000
             );
             rightsHolders[assetId][holder].accumulated = FHE.add(

@@ -50,7 +50,7 @@ contract FantasyFootballPrivate is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit LeagueCreated(leagueId, name);
     }
 
-    function addPrize(uint256 leagueId, externalEuint64 calldata encPrize, bytes calldata inputProof)
+    function addPrize(uint256 leagueId, externalEuint64 encPrize, bytes calldata inputProof)
         external
         onlyOwner
     {
@@ -85,7 +85,7 @@ contract FantasyFootballPrivate is ZamaEthereumConfig, Ownable, ReentrancyGuard 
     function updatePoints(
         uint256 leagueId,
         address manager,
-        externalEuint64 calldata encPoints,
+        externalEuint64 encPoints,
         bytes calldata inputProof
     ) external onlyOwner {
         euint64 points = FHE.fromExternal(encPoints, inputProof);

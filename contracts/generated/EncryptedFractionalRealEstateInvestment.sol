@@ -109,7 +109,8 @@ contract EncryptedFractionalRealEstateInvestment is ZamaEthereumConfig, AccessCo
     function depositRentalIncome(
         uint256 propId,
         externalEuint64 encIncome,
-        bytes calldata proof
+        bytes calldata proof,
+        uint64 totalSharesPlaintext
     ) external onlyRole(MANAGER_ROLE) {
         Property storage p = properties[propId];
         require(p.active, "Not active");
@@ -117,8 +118,8 @@ contract EncryptedFractionalRealEstateInvestment is ZamaEthereumConfig, AccessCo
         euint64 income = FHE.fromExternal(encIncome, proof);
         p.rentalIncomePool = FHE.add(p.rentalIncomePool, income);
         FHE.allowThis(p.rentalIncomePool);
-        // Update income per share (encrypted division)
-        incomePerShare[propId] = FHE.add(incomePerShare[propId], FHE.div(income, uint64(p.totalShares)));
+        // Update income per share (plaintext divisor)
+        incomePerShare[propId] = FHE.add(incomePerShare[propId], totalSharesPlaintext > 0 ? FHE.div(income, totalSharesPlaintext) : FHE.asEuint64(0));
         FHE.allowThis(incomePerShare[propId]);
         emit RentalIncomeDeposited(propId);
     }
@@ -126,7 +127,7 @@ contract EncryptedFractionalRealEstateInvestment is ZamaEthereumConfig, AccessCo
     function claimIncome(uint256 propId) external nonReentrant {
         InvestorPosition storage pos = positions[propId][msg.sender];
         require(pos.investmentDate > 0, "Not investor");
-        euint64 earned = FHE.mul(incomePerShare[propId], FHE.asEuint64(uint64(pos.shares)));
+        euint64 earned = FHE.mul(incomePerShare[propId], FHE.asEuint64(pos.shares));
         euint64 unclaimed = FHE.sub(earned, pos.claimedIncome);
         pos.claimedIncome = earned;
         pos.pendingIncome = FHE.add(pos.pendingIncome, unclaimed);

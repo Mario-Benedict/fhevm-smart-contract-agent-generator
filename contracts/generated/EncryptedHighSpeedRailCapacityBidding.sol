@@ -34,6 +34,7 @@ contract EncryptedHighSpeedRailCapacityBidding is ZamaEthereumConfig, Ownable, R
     mapping(uint256 => mapping(address => OperatorBid)) private bids;
     mapping(address => bool) public licensedOperators;
     mapping(address => euint64) private operatorDeposits;
+    mapping(address => bool) private _depositInitialized;
     uint256 public slotCount;
 
     euint64 private _totalRevenue;
@@ -85,9 +86,10 @@ contract EncryptedHighSpeedRailCapacityBidding is ZamaEthereumConfig, Ownable, R
     ) external {
         require(licensedOperators[msg.sender], "Not licensed");
         euint64 amount = FHE.fromExternal(encAmount, proof);
-        if (operatorDeposits[msg.sender].eq(FHE.asEuint64(0)) == FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
+        if (!_depositInitialized[msg.sender]) {
             operatorDeposits[msg.sender] = FHE.asEuint64(0);
             FHE.allowThis(operatorDeposits[msg.sender]);
+            _depositInitialized[msg.sender] = true;
         }
         operatorDeposits[msg.sender] = FHE.add(operatorDeposits[msg.sender], amount);
         _depositPool = FHE.add(_depositPool, amount);

@@ -44,7 +44,7 @@ contract AzureRemittanceToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit CorridorUpdated(fromCountry, toCountry, feeBps);
     }
 
-    function mint(address to, externalEuint32 calldata encAmount, bytes calldata proof) external onlyOwner {
+    function mint(address to, externalEuint32 encAmount, bytes calldata proof) external onlyOwner {
         euint32 amount = FHE.fromExternal(encAmount, proof);
         _balances[to] = FHE.add(_balances[to], amount);
         FHE.allowThis(_balances[to]);
@@ -53,7 +53,7 @@ contract AzureRemittanceToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     function sendRemittance(
         address recipient,
-        externalEuint32 calldata encAmount,
+        externalEuint32 encAmount,
         bytes calldata proof
     ) external nonReentrant {
         euint32 amount = FHE.fromExternal(encAmount, proof);

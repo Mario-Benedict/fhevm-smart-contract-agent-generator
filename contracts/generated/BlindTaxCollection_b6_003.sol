@@ -32,7 +32,7 @@ contract BlindTaxCollection_b6_003 is ZamaEthereumConfig {
         euint64 currentRevenue = businessRevenue[msg.sender];
         
         // Calculate 10% tax = (revenue * 10) / 100
-        euint64 scaledRevenue = FHE.mul(currentRevenue, FHE.asEuint64(TAX_RATE_PERCENT));
+        euint64 scaledRevenue = FHE.mul(currentRevenue, FHE.asEuint64(uint64(TAX_RATE_PERCENT)));
         euint64 taxOwed = FHE.div(scaledRevenue, 100); // 100 is plaintext divisor
         
         euint64 actualPayment = FHE.select(alreadyPaid, FHE.asEuint64(0), taxOwed);

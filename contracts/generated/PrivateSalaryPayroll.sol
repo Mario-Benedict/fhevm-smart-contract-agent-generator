@@ -49,11 +49,11 @@ contract PrivateSalaryPayroll is ZamaEthereumConfig, AccessControl, ReentrancyGu
 
     function onboardEmployee(
         address employee,
-        externalEuint64 calldata encSalary,
+        externalEuint64 encSalary,
         bytes calldata salaryProof,
-        externalEuint32 calldata encTax,
+        externalEuint32 encTax,
         bytes calldata taxProof,
-        externalEuint8 calldata encGrade,
+        externalEuint8 encGrade,
         bytes calldata gradeProof
     ) external onlyRole(HR_ROLE) {
         Employee storage e = employees[employee];
@@ -77,7 +77,7 @@ contract PrivateSalaryPayroll is ZamaEthereumConfig, AccessControl, ReentrancyGu
         emit EmployeeOnboarded(employee);
     }
 
-    function grantBonus(address employee, externalEuint64 calldata encBonus, bytes calldata inputProof)
+    function grantBonus(address employee, externalEuint64 encBonus, bytes calldata inputProof)
         external
         onlyRole(HR_ROLE)
     {
@@ -88,7 +88,7 @@ contract PrivateSalaryPayroll is ZamaEthereumConfig, AccessControl, ReentrancyGu
         emit BonusGranted(employee);
     }
 
-    function processPayment(address employee, externalEuint64 calldata encTaxRate, bytes calldata inputProof)
+    function processPayment(address employee, externalEuint64 encTaxRate, bytes calldata inputProof)
         external
         onlyRole(PAYROLL_ROLE)
         nonReentrant
@@ -97,7 +97,7 @@ contract PrivateSalaryPayroll is ZamaEthereumConfig, AccessControl, ReentrancyGu
         require(e.active, "Not active");
         euint64 taxRate = FHE.fromExternal(encTaxRate, inputProof);
         euint64 gross = FHE.add(e.baseSalary, e.bonus);
-        euint64 taxAmount = FHE.div(FHE.mul(gross, taxRate), FHE.asEuint64(10000));
+        euint64 taxAmount = FHE.div(FHE.mul(gross, taxRate), 10000);
         euint64 net = FHE.sub(gross, taxAmount);
 
         e.bonus = FHE.asEuint64(0);

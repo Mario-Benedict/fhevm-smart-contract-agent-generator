@@ -45,7 +45,7 @@ contract EncryptedCrossChainLiquidityBridge is ZamaEthereumConfig, AccessControl
     event BridgeFailed(uint256 indexed nonce);
     event LiquidityAdded(address indexed lp);
 
-    constructor(externalEuint32 encDefaultFee, bytes calldata feeProof) {
+    constructor(externalEuint32 encDefaultFee, bytes memory feeProof) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(RELAYER_ROLE, msg.sender);
         _grantRole(VALIDATOR_ROLE, msg.sender);
@@ -84,7 +84,7 @@ contract EncryptedCrossChainLiquidityBridge is ZamaEthereumConfig, AccessControl
     ) external whenNotPaused nonReentrant returns (uint256 nonce) {
         nonce = nextNonce++;
         euint64 amount = FHE.fromExternal(encAmount, amountProof);
-        euint32 fee = FHE.asEuint32(uint32(_defaultFeeBps));
+        euint32 fee = _defaultFeeBps;
 
         requests[nonce] = BridgeRequest({
             sender: msg.sender,

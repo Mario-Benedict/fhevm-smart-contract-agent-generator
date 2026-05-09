@@ -62,7 +62,7 @@ contract GamePrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyG
         Market storage m = markets[marketId];
         require(!m.resolved && block.timestamp < m.resolutionTime, "Closed");
         euint64 amount = FHE.fromExternal(encAmount, proof);
-        euint64 fee = FHE.div(FHE.mul(amount, m.feeBps), 10000);
+        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(m.feeBps)), 10000);
         euint64 net = FHE.sub(amount, fee);
         positions[marketId][msg.sender].yesShares = FHE.add(positions[marketId][msg.sender].yesShares, net);
         m.yesPool = FHE.add(m.yesPool, net);
@@ -79,7 +79,7 @@ contract GamePrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyG
         Market storage m = markets[marketId];
         require(!m.resolved && block.timestamp < m.resolutionTime, "Closed");
         euint64 amount = FHE.fromExternal(encAmount, proof);
-        euint64 fee = FHE.div(FHE.mul(amount, m.feeBps), 10000);
+        euint64 fee = FHE.div(FHE.mul(amount, FHE.asEuint64(m.feeBps)), 10000);
         euint64 net = FHE.sub(amount, fee);
         positions[marketId][msg.sender].noShares = FHE.add(positions[marketId][msg.sender].noShares, net);
         m.noPool = FHE.add(m.noPool, net);
@@ -99,7 +99,7 @@ contract GamePrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyG
         emit MarketResolved(marketId, yesWon);
     }
 
-    function claimReward(uint256 marketId) external nonReentrant {
+    function claimReward(uint256 marketId, uint64 winningPoolPlaintext) external nonReentrant {
         Market storage m = markets[marketId];
         require(m.resolved, "Not resolved");
         Position storage pos = positions[marketId][msg.sender];
@@ -108,10 +108,14 @@ contract GamePrivatePredictionMarket is ZamaEthereumConfig, Ownable, ReentrancyG
         euint64 totalPool = FHE.add(m.yesPool, m.noPool);
         if (m.outcome) {
             // YES won: payout proportional to YES shares
-            euint64 payout = FHE.div(FHE.mul(pos.yesShares, totalPool), m.yesPool);
+            euint64 payout = winningPoolPlaintext > 0
+                ? FHE.div(FHE.mul(pos.yesShares, totalPool), winningPoolPlaintext)
+                : FHE.asEuint64(0);
             FHE.allow(payout, msg.sender);
         } else {
-            euint64 payout = FHE.div(FHE.mul(pos.noShares, totalPool), m.noPool);
+            euint64 payout = winningPoolPlaintext > 0
+                ? FHE.div(FHE.mul(pos.noShares, totalPool), winningPoolPlaintext)
+                : FHE.asEuint64(0);
             FHE.allow(payout, msg.sender);
         }
         emit RewardClaimed(marketId, msg.sender);

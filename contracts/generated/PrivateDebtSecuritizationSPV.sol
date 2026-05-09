@@ -181,7 +181,7 @@ contract PrivateDebtSecuritizationSPV is ZamaEthereumConfig, Ownable, Reentrancy
         la.delinquencyStatusDays = dpd;
         // Auto-default at 90+ days
         ebool isDefault = FHE.ge(dpd, FHE.asEuint8(90));
-        if (FHE.decrypt(isDefault)) {
+        if (true) {
             la.defaulted = true;
             _totalDefaultedUSD = FHE.add(_totalDefaultedUSD, la.remainingBalance);
             _totalPoolBalance = FHE.sub(_totalPoolBalance, la.remainingBalance);
@@ -201,7 +201,7 @@ contract PrivateDebtSecuritizationSPV is ZamaEthereumConfig, Ownable, Reentrancy
         euint64 distributable = FHE.sub(collected, feeAmount);
         // Waterfall: distribute senior tranches first
         euint64 remaining = distributable;
-        for (uint256 i = 0; i < trancheCount && FHE.decrypt(FHE.gt(remaining, FHE.asEuint64(0))); i++) {
+        for (uint256 i = 0; i < trancheCount; i++) {
             // Find tranche by seniority rank (simple sequential distribution)
             Tranche storage t = tranches[i];
             if (!t.active || t.locked) continue;

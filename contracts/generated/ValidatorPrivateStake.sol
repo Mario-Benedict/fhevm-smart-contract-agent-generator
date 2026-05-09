@@ -28,6 +28,7 @@ contract ValidatorPrivateStake is ZamaEthereumConfig, Ownable, ReentrancyGuard {
 
     mapping(address => Validator) public validators;
     mapping(address => mapping(address => Delegation)) private delegations;
+    mapping(address => mapping(address => bool)) private _delegationInitialized;
     euint64 private totalNetworkStake;
     address[] public validatorSet;
 
@@ -43,9 +44,9 @@ contract ValidatorPrivateStake is ZamaEthereumConfig, Ownable, ReentrancyGuard {
     }
 
     function registerValidator(
-        externalEuint64 calldata encSelfStake,
+        externalEuint64 encSelfStake,
         bytes calldata stakeProof,
-        externalEuint8 calldata encCommission,
+        externalEuint8 encCommission,
         bytes calldata commissionProof
     ) external {
         require(!validators[msg.sender].active, "Already registered");
@@ -70,7 +71,7 @@ contract ValidatorPrivateStake is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit ValidatorRegistered(msg.sender);
     }
 
-    function delegate(address validator, externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function delegate(address validator, externalEuint64 encAmount, bytes calldata inputProof)
         external
         nonReentrant
     {
@@ -81,7 +82,10 @@ contract ValidatorPrivateStake is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         d.amount = FHE.add(d.amount, amount);
         d.delegatedAt = block.timestamp;
         d.active = true;
-        if (d.pendingRewards.unwrap() == 0) d.pendingRewards = FHE.asEuint64(0);
+        if (!_delegationInitialized[msg.sender][validator]) {
+            d.pendingRewards = FHE.asEuint64(0);
+            _delegationInitialized[msg.sender][validator] = true;
+        }
         v.delegatedStake = FHE.add(v.delegatedStake, amount);
         totalNetworkStake = FHE.add(totalNetworkStake, amount);
         FHE.allowThis(d.amount);
@@ -93,13 +97,13 @@ contract ValidatorPrivateStake is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit Delegated(msg.sender, validator);
     }
 
-    function distributeRewards(address validator, externalEuint64 calldata encRewards, bytes calldata inputProof)
+    function distributeRewards(address validator, externalEuint64 encRewards, bytes calldata inputProof)
         external
         onlyOwner
     {
         euint64 rewards = FHE.fromExternal(encRewards, inputProof);
         Validator storage v = validators[validator];
-        euint64 commission = FHE.div(FHE.mul(rewards, FHE.asEuint64(v.commissionRate.unwrap())), FHE.asEuint64(10000));
+        euint64 commission = FHE.div(FHE.mul(rewards, v.commissionRate), 10000);
         euint64 delegatorShare = FHE.sub(rewards, commission);
         v.totalRewardsEarned = FHE.add(v.totalRewardsEarned, commission);
         FHE.allowThis(v.totalRewardsEarned);

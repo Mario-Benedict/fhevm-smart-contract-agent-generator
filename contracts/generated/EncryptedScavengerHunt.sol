@@ -11,8 +11,8 @@ contract EncryptedScavengerHunt is ZamaEthereumConfig, Ownable {
         string hint;
         euint32 answerHash; // FHE-encrypted hash of correct answer
         euint64 reward;
-        bool solved;
-        address solver;
+        ebool encSolved;
+        eaddress encSolver;
     }
 
     mapping(uint256 => Clue) public clues;
@@ -35,9 +35,9 @@ contract EncryptedScavengerHunt is ZamaEthereumConfig, Ownable {
 
     function addClue(
         string calldata hint,
-        externalEuint32 calldata encAnswerHash,
+        externalEuint32 encAnswerHash,
         bytes calldata inputProof,
-        externalEuint64 calldata encReward,
+        externalEuint64 encReward,
         bytes calldata rewardProof
     ) external onlyOwner returns (uint256 clueId) {
         clueId = clueCount++;
@@ -45,8 +45,12 @@ contract EncryptedScavengerHunt is ZamaEthereumConfig, Ownable {
         c.hint = hint;
         c.answerHash = FHE.fromExternal(encAnswerHash, inputProof);
         c.reward = FHE.fromExternal(encReward, rewardProof);
+        c.encSolved = FHE.asEbool(false);
+        c.encSolver = FHE.asEaddress(address(0));
         FHE.allowThis(c.answerHash);
         FHE.allowThis(c.reward);
+        FHE.allowThis(c.encSolved);
+        FHE.allowThis(c.encSolver);
         emit ClueAdded(clueId, hint);
     }
 
@@ -58,25 +62,25 @@ contract EncryptedScavengerHunt is ZamaEthereumConfig, Ownable {
         FHE.allow(participantScore[msg.sender], msg.sender);
     }
 
-    function submitAnswer(uint256 clueId, externalEuint32 calldata encAnswer, bytes calldata inputProof) external {
+    function submitAnswer(uint256 clueId, externalEuint32 encAnswer, bytes calldata inputProof) external {
         require(registered[msg.sender], "Not registered");
         require(block.timestamp <= huntEndTime, "Hunt ended");
         Clue storage c = clues[clueId];
-        require(!c.solved, "Already solved");
 
         euint32 answer = FHE.fromExternal(encAnswer, inputProof);
         ebool correct = FHE.eq(answer, c.answerHash);
         euint64 earnedReward = FHE.select(correct, c.reward, FHE.asEuint64(0));
 
         participantScore[msg.sender] = FHE.add(participantScore[msg.sender], earnedReward);
+        c.encSolved = FHE.or(c.encSolved, correct);
+        c.encSolver = FHE.select(correct, FHE.asEaddress(msg.sender), c.encSolver);
         FHE.allowThis(participantScore[msg.sender]);
         FHE.allow(participantScore[msg.sender], msg.sender);
-
-        if (correct.unwrap() != 0) {
-            c.solved = true;
-            c.solver = msg.sender;
-            emit ClueSolved(clueId, msg.sender);
-        }
+        FHE.allowThis(c.encSolved);
+        FHE.allowThis(c.encSolver);
+        FHE.allow(c.encSolved, owner());
+        FHE.allow(c.encSolver, owner());
+        emit ClueSolved(clueId, msg.sender);
     }
 
     function getScore() external view returns (euint64) {

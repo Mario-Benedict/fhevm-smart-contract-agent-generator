@@ -139,8 +139,9 @@ contract PrivateMicrofinanceVillageBank is ZamaEthereumConfig, Ownable, Reentran
         euint64 actual = FHE.select(withinMax, amount, maxLoan);
         // Interest: base 15% + (500-repaymentScore)/500 * 10%
         euint64 interestRate = FHE.asEuint64(1500);
-        euint64 weeklyRepayment = FHE.div(FHE.mul(actual, FHE.asEuint64(uint64(termWeeks + 1))),
-            FHE.asEuint64(uint64(termWeeks * termWeeks)));
+        euint64 weeklyRepayment = (uint64(termWeeks) * uint64(termWeeks)) > 0
+            ? FHE.div(FHE.mul(actual, FHE.asEuint64(uint64(termWeeks + 1))), uint64(termWeeks) * uint64(termWeeks))
+            : FHE.asEuint64(0);
         loanId = loanCount++;
         loans[loanId] = LoanRequest({
             groupId: groupId, member: msg.sender,

@@ -30,6 +30,7 @@ contract GamePrivateSportsBetting is ZamaEthereumConfig, Ownable, ReentrancyGuar
     mapping(uint256 => Event) private events;
     uint256 public eventCount;
     mapping(uint256 => mapping(address => Position)) private positions;
+    mapping(uint256 => mapping(address => bool)) private hasBet;
     mapping(uint256 => mapping(uint256 => euint64)) private poolPerOutcome; // eventId => outcomeIdx => pool
     mapping(uint256 => address[]) private bettors;
 
@@ -67,9 +68,10 @@ contract GamePrivateSportsBetting is ZamaEthereumConfig, Ownable, ReentrancyGuar
         Event storage e = events[eventId];
         require(block.timestamp < e.startTime, "Event started");
         require(outcomeIndex < e.outcomes.length, "Invalid outcome");
-        require(positions[eventId][msg.sender].amount == FHE.asEuint64(0), "Already bet");
+        require(!hasBet[eventId][msg.sender], "Already bet");
         euint64 amount = FHE.fromExternal(encAmount, proof);
         positions[eventId][msg.sender] = Position({ outcomeIndex: outcomeIndex, amount: amount, settled: false });
+        hasBet[eventId][msg.sender] = true;
         poolPerOutcome[eventId][outcomeIndex] = FHE.add(poolPerOutcome[eventId][outcomeIndex], amount);
         e.totalPool = FHE.add(e.totalPool, amount);
         FHE.allowThis(positions[eventId][msg.sender].amount);
@@ -80,21 +82,22 @@ contract GamePrivateSportsBetting is ZamaEthereumConfig, Ownable, ReentrancyGuar
         emit BetPlaced(eventId, msg.sender, outcomeIndex);
     }
 
-    function settleEvent(uint256 eventId, uint256 winningOutcome) external onlyOwner {
+    function settleEvent(uint256 eventId, uint256 winningOutcome, uint64 winnerPoolPlaintext) external onlyOwner {
         Event storage e = events[eventId];
         require(block.timestamp >= e.settleTime && !e.settled, "Cannot settle");
         e.settled = true;
         e.winningOutcome = winningOutcome;
         euint64 houseAmt = FHE.div(FHE.mul(e.totalPool, e.houseEdgeBps), 10000);
         euint64 payPool = FHE.sub(e.totalPool, houseAmt);
-        euint64 winnerPool = poolPerOutcome[eventId][winningOutcome];
         address[] storage bs = bettors[eventId];
         for (uint256 i = 0; i < bs.length; i++) {
             Position storage pos = positions[eventId][bs[i]];
             if (pos.outcomeIndex == winningOutcome && !pos.settled) {
                 pos.settled = true;
                 // payout = bet * payPool / winnerPool
-                euint64 payout = FHE.div(FHE.mul(pos.amount, payPool), winnerPool);
+                euint64 payout = winnerPoolPlaintext > 0
+                    ? FHE.div(FHE.mul(pos.amount, payPool), winnerPoolPlaintext)
+                    : FHE.asEuint64(0);
                 FHE.allow(payout, bs[i]);
             }
         }

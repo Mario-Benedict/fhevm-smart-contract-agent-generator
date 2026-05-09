@@ -177,7 +177,7 @@ contract PrivateSpaceResourceExtractionRights is ZamaEthereumConfig, Ownable, Re
         euint64 actualExtracted = FHE.select(withinCap, extracted, el.extractionCapTonnesPerYear);
         el.extractedToDateTonnes = FHE.add(el.extractedToDateTonnes, actualExtracted);
         // Calculate royalty: royaltyBps * (extracted tonnes * value per tonne)
-        euint64 valuePerTonne = FHE.div(el.estimatedValueUSD, FHE.add(el.estimatedResourceTonnes, FHE.asEuint64(1)));
+        euint64 valuePerTonne = FHE.div(el.estimatedValueUSD, FHE.add(el.estimatedResourceTonnes, 1));
         euint64 extractionValue = FHE.mul(actualExtracted, valuePerTonne);
         euint64 royaltyDue = FHE.div(FHE.mul(extractionValue, el.annualRoyaltyBps), 10000);
         reportId = reportCount++;

@@ -38,7 +38,7 @@ contract PrivateDividendReinvestment is ZamaEthereumConfig, Ownable, ReentrancyG
     constructor() Ownable(msg.sender) {}
 
     function enroll(
-        externalEuint64 calldata encShares, bytes calldata inputProof,
+        externalEuint64 encShares, bytes calldata inputProof,
         bool autoReinvest
     ) external {
         require(!participants[msg.sender].enrolled, "Already enrolled");
@@ -62,8 +62,8 @@ contract PrivateDividendReinvestment is ZamaEthereumConfig, Ownable, ReentrancyG
 
     function createDividendRound(
         uint256 exDateDays, uint256 payDateDays,
-        externalEuint64 calldata encPool,  bytes calldata poolProof,
-        externalEuint64 calldata encPrice, bytes calldata priceProof
+        externalEuint64 encPool,  bytes calldata poolProof,
+        externalEuint64 encPrice, bytes calldata priceProof
     ) external onlyOwner returns (uint256 roundId) {
         roundId = roundCount++;
         DividendRound storage r = rounds[roundId];
@@ -76,17 +76,17 @@ contract PrivateDividendReinvestment is ZamaEthereumConfig, Ownable, ReentrancyG
         emit DividendRoundCreated(roundId);
     }
 
-    function processDividend(uint256 roundId, address participant) external onlyOwner nonReentrant {
+    function processDividend(uint256 roundId, address participant, uint64 sharePricePlaintext) external onlyOwner nonReentrant {
         DividendRound storage r = rounds[roundId];
         require(block.timestamp >= r.payDate, "Not pay date");
         Participant storage p = participants[participant];
         require(p.enrolled, "Not enrolled");
 
-        euint64 perShareDiv = FHE.div(r.totalDividendPool, FHE.asEuint64(uint64(totalEnrolled)));
+        euint64 perShareDiv = totalEnrolled > 0 ? FHE.div(r.totalDividendPool, uint64(totalEnrolled)) : FHE.asEuint64(0);
         euint64 grossDiv    = FHE.mul(p.sharesOwned, perShareDiv);
 
         if (p.autoReinvest) {
-            euint64 newShares = FHE.div(grossDiv, r.sharePrice);
+            euint64 newShares = sharePricePlaintext > 0 ? FHE.div(grossDiv, sharePricePlaintext) : FHE.asEuint64(0);
             p.sharesOwned       = FHE.add(p.sharesOwned, newShares);
             p.reinvestedTotal   = FHE.add(p.reinvestedTotal, grossDiv);
             r.totalSharesReinvested = FHE.add(r.totalSharesReinvested, newShares);

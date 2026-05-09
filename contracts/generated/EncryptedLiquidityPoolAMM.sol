@@ -120,7 +120,7 @@ contract EncryptedLiquidityPoolAMM is ZamaEthereumConfig, Ownable, ReentrancyGua
     ) external whenNotPaused nonReentrant {
         Pool storage p = pools[poolId];
         euint64 amtIn = FHE.fromExternal(encAmtIn, proof);
-        euint64 fee   = FHE.div(FHE.mul(amtIn, FHE.asEuint64(30)), 10000); // 0.3% fee
+        euint64 fee   = FHE.div(FHE.mul(amtIn, 30), 10000); // 0.3% fee
         euint64 amtInNet = FHE.sub(amtIn, fee);
         if (aToB) {
             p.reserveA = FHE.add(p.reserveA, amtInNet);
@@ -136,12 +136,12 @@ contract EncryptedLiquidityPoolAMM is ZamaEthereumConfig, Ownable, ReentrancyGua
         emit SwapExecuted(poolId, msg.sender, block.timestamp);
     }
 
-    function removeLiquidity(uint256 positionId) external whenNotPaused nonReentrant {
+    function removeLiquidity(uint256 positionId, uint64 totalLPSupplyPlaintext) external whenNotPaused nonReentrant {
         LPPosition storage pos = positions[positionId];
         require(pos.provider == msg.sender, "Not provider");
         Pool storage p = pools[pos.poolId];
-        euint64 shareA = FHE.div(FHE.mul(p.reserveA, pos.lpTokensHeld), p.totalLPSupply);
-        euint64 shareB = FHE.div(FHE.mul(p.reserveB, pos.lpTokensHeld), p.totalLPSupply);
+        euint64 shareA = totalLPSupplyPlaintext > 0 ? FHE.div(FHE.mul(p.reserveA, pos.lpTokensHeld), totalLPSupplyPlaintext) : FHE.asEuint64(0);
+        euint64 shareB = totalLPSupplyPlaintext > 0 ? FHE.div(FHE.mul(p.reserveB, pos.lpTokensHeld), totalLPSupplyPlaintext) : FHE.asEuint64(0);
         p.reserveA = FHE.sub(p.reserveA, shareA);
         p.reserveB = FHE.sub(p.reserveB, shareB);
         p.totalLPSupply = FHE.sub(p.totalLPSupply, pos.lpTokensHeld);

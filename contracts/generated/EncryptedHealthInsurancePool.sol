@@ -54,9 +54,9 @@ contract EncryptedHealthInsurancePool is ZamaEthereumConfig, AccessControl, Reen
 
     function enrollMember(
         address member,
-        externalEuint8  calldata encAge,     bytes calldata ageProof,
-        externalEuint8  calldata encRisk,    bytes calldata riskProof,
-        externalEuint64 calldata encPremium, bytes calldata premiumProof,
+        externalEuint8 encAge,     bytes calldata ageProof,
+        externalEuint8 encRisk,    bytes calldata riskProof,
+        externalEuint64 encPremium, bytes calldata premiumProof,
         uint256 coverageDays
     ) external onlyRole(ACTUARY_ROLE) {
         require(!members[member].enrolled, "Already enrolled");
@@ -76,7 +76,7 @@ contract EncryptedHealthInsurancePool is ZamaEthereumConfig, AccessControl, Reen
         emit MemberEnrolled(member);
     }
 
-    function payPremium(externalEuint64 calldata encAmount, bytes calldata inputProof)
+    function payPremium(externalEuint64 encAmount, bytes calldata inputProof)
         external nonReentrant
     {
         require(members[msg.sender].enrolled, "Not enrolled");
@@ -90,8 +90,8 @@ contract EncryptedHealthInsurancePool is ZamaEthereumConfig, AccessControl, Reen
     }
 
     function fileClaim(
-        externalEuint64 calldata encAmount, bytes calldata amtProof,
-        externalEuint8  calldata encType,   bytes calldata typeProof
+        externalEuint64 encAmount, bytes calldata amtProof,
+        externalEuint8 encType,   bytes calldata typeProof
     ) external returns (uint256 claimId) {
         require(members[msg.sender].enrolled, "Not enrolled");
         require(block.timestamp <= members[msg.sender].renewalDate, "Coverage expired");
@@ -102,13 +102,13 @@ contract EncryptedHealthInsurancePool is ZamaEthereumConfig, AccessControl, Reen
         c.claimType      = FHE.fromExternal(encType,   typeProof);
         c.approvedAmount = FHE.asEuint64(0);
         FHE.allowThis(c.claimedAmount); FHE.allowThis(c.approvedAmount); FHE.allowThis(c.claimType);
-        FHE.allow(c.claimedAmount, getRoleAdmin(CLAIMS_ROLE));
+        // FHE.allow to claims admin skipped (getRoleAdmin returns bytes32, not address)
         emit ClaimFiled(claimId, msg.sender);
     }
 
     function processClaim(
         uint256 claimId,
-        externalEuint64 calldata encApproved, bytes calldata inputProof,
+        externalEuint64 encApproved, bytes calldata inputProof,
         bool approve
     ) external onlyRole(CLAIMS_ROLE) nonReentrant {
         ClaimRequest storage c = claims[claimId];

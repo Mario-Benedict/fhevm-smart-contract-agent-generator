@@ -49,9 +49,9 @@ contract ConfidentialReinsuranceTreaty is ZamaEthereumConfig, Ownable, Reentranc
     function executeTreaty(
         address reinsurer,
         uint256 durationDays,
-        externalEuint64 calldata encRetention, bytes calldata retentionProof,
-        externalEuint64 calldata encCover,     bytes calldata coverProof,
-        externalEuint64 calldata encPremium,   bytes calldata premiumProof
+        externalEuint64 encRetention, bytes calldata retentionProof,
+        externalEuint64 encCover,     bytes calldata coverProof,
+        externalEuint64 encPremium,   bytes calldata premiumProof
     ) external returns (uint256 treatyId) {
         require(approvedCedants[msg.sender],    "Not approved cedant");
         require(approvedReinsurers[reinsurer],  "Not approved reinsurer");
@@ -78,7 +78,7 @@ contract ConfidentialReinsuranceTreaty is ZamaEthereumConfig, Ownable, Reentranc
     function reportLoss(
         uint256 treatyId,
         string calldata eventId,
-        externalEuint64 calldata encGrossLoss, bytes calldata inputProof
+        externalEuint64 encGrossLoss, bytes calldata inputProof
     ) external returns (uint256 eventIdx) {
         Treaty storage t = treaties[treatyId];
         require(t.cedant == msg.sender, "Not cedant");

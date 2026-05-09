@@ -45,7 +45,7 @@ contract PrivateStablecoinMinter is ZamaEthereumConfig, Ownable {
         emit VaultOpened(msg.sender);
     }
 
-    function lockCollateral(externalEuint64 calldata encWei, bytes calldata inputProof) external {
+    function lockCollateral(externalEuint64 encWei, bytes calldata inputProof) external {
         require(vaults[msg.sender].open, "No vault");
         euint64 amount = FHE.fromExternal(encWei, inputProof);
         vaults[msg.sender].collateralETH = FHE.add(vaults[msg.sender].collateralETH, amount);
@@ -54,11 +54,11 @@ contract PrivateStablecoinMinter is ZamaEthereumConfig, Ownable {
         emit CollateralLocked(msg.sender);
     }
 
-    function mintPUSD(externalEuint64 calldata encMintAmount, bytes calldata inputProof) external {
+    function mintPUSD(externalEuint64 encMintAmount, bytes calldata inputProof) external {
         require(vaults[msg.sender].open, "No vault");
         euint64 mintAmount = FHE.fromExternal(encMintAmount, inputProof);
-        euint64 collateralValue = FHE.mul(vaults[msg.sender].collateralETH, FHE.asEuint64(ethPriceUSD));
-        euint64 maxMint = FHE.div(FHE.mul(collateralValue, FHE.asEuint64(10000)), FHE.asEuint64(minCollateralRatioBps));
+        euint64 collateralValue = FHE.mul(vaults[msg.sender].collateralETH, FHE.asEuint64(uint64(ethPriceUSD)));
+        euint64 maxMint = FHE.div(FHE.mul(collateralValue, 10000), FHE.asEuint64(uint64(minCollateralRatioBps)));
         euint64 newTotal = FHE.add(vaults[msg.sender].mintedPUSD, mintAmount);
         ebool safe = FHE.le(newTotal, maxMint);
         euint64 safeMint = FHE.select(safe, mintAmount, FHE.asEuint64(0));

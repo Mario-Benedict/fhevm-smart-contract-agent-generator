@@ -47,7 +47,7 @@ contract PrivateScholarshipAllocation is ZamaEthereumConfig, AccessControl, Reen
     function fundPool(
         string calldata name,
         uint256 cycleDays,
-        externalEuint64 calldata encFund, bytes calldata inputProof
+        externalEuint64 encFund, bytes calldata inputProof
     ) external onlyRole(COMMITTEE_ROLE) returns (uint256 poolId) {
         poolId = poolCount++;
         ScholarshipPool storage p = pools[poolId];
@@ -63,8 +63,8 @@ contract PrivateScholarshipAllocation is ZamaEthereumConfig, AccessControl, Reen
 
     function applyForScholarship(
         uint256 poolId,
-        externalEuint8 calldata encAcademic, bytes calldata acadProof,
-        externalEuint8 calldata encNeed,     bytes calldata needProof
+        externalEuint8 encAcademic, bytes calldata acadProof,
+        externalEuint8 encNeed,     bytes calldata needProof
     ) external returns (uint256 appIdx) {
         ScholarshipPool storage p = pools[poolId];
         require(p.active && block.timestamp <= p.cycleEnd, "Closed");
@@ -75,13 +75,12 @@ contract PrivateScholarshipAllocation is ZamaEthereumConfig, AccessControl, Reen
         a.financialNeed = FHE.fromExternal(encNeed,     needProof);
         // composite = 60% academic + 40% need
         a.compositeScore = FHE.add(
-            FHE.div(FHE.mul(a.academicScore, FHE.asEuint8(60)), FHE.asEuint8(100)),
-            FHE.div(FHE.mul(a.financialNeed, FHE.asEuint8(40)), FHE.asEuint8(100))
+            FHE.div(FHE.mul(a.academicScore, 60), 100),
+            FHE.div(FHE.mul(a.financialNeed, 40), 100)
         );
         a.awardedAmount = FHE.asEuint64(0);
         FHE.allowThis(a.academicScore); FHE.allowThis(a.financialNeed);
-        FHE.allowThis(a.compositeScore); FHE.allowThis(a.awardedAmount);
-        FHE.allow(a.compositeScore, getRoleAdmin(COMMITTEE_ROLE));
+        FHE.allowThis(a.compositeScore); FHE.allowThis(a.awardedAmount);        // FHE.allow to role admin skipped (getRoleAdmin returns bytes32, not address)
         emit ApplicationSubmitted(poolId, appIdx, msg.sender);
     }
 
@@ -97,7 +96,7 @@ contract PrivateScholarshipAllocation is ZamaEthereumConfig, AccessControl, Reen
 
     function awardScholarship(
         uint256 poolId, uint256 appIdx,
-        externalEuint64 calldata encAward, bytes calldata inputProof
+        externalEuint64 encAward, bytes calldata inputProof
     ) external onlyRole(COMMITTEE_ROLE) nonReentrant {
         Application storage a = applications[poolId][appIdx];
         require(a.reviewed && !a.awarded, "Invalid state");

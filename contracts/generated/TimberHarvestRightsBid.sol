@@ -18,7 +18,8 @@ contract TimberHarvestRightsBid is
         uint256 permitYears;
         euint64 minReservePrice;
         euint64 leadingBid;
-        address leadingBidder;
+        eaddress encLeadingBidder;
+        address revealedWinner;
         uint256 closeTime;
         bool granted;
     }
@@ -43,7 +44,7 @@ contract TimberHarvestRightsBid is
         uint32 hectares,
         uint256 permitYears,
         uint256 duration,
-        externalEuint64 calldata encReserve,
+        externalEuint64 encReserve,
         bytes calldata inputProof
     ) external onlyOwner returns (uint256 lotId) {
         lotId = lotCount++;
@@ -53,15 +54,17 @@ contract TimberHarvestRightsBid is
         l.permitYears = permitYears;
         l.minReservePrice = FHE.fromExternal(encReserve, inputProof);
         l.leadingBid = FHE.asEuint64(0);
+        l.encLeadingBidder = FHE.asEaddress(address(0));
         l.closeTime = block.timestamp + duration;
         FHE.allowThis(l.minReservePrice);
         FHE.allowThis(l.leadingBid);
+        FHE.allowThis(l.encLeadingBidder);
         emit LotCreated(lotId, locationCode);
     }
 
     function sealBid(
         uint256 lotId,
-        externalEuint64 calldata encBid,
+        externalEuint64 encBid,
         bytes calldata inputProof
     ) external {
         require(licensedBidders[msg.sender], "Not licensed");
@@ -75,18 +78,21 @@ contract TimberHarvestRightsBid is
 
         ebool isHigher = FHE.gt(bid, l.leadingBid);
         l.leadingBid = FHE.select(isHigher, bid, l.leadingBid);
+        l.encLeadingBidder = FHE.select(isHigher, FHE.asEaddress(msg.sender), l.encLeadingBidder);
         FHE.allowThis(l.leadingBid);
-        if (isHigher.unwrap() != 0) l.leadingBidder = msg.sender;
+        FHE.allowThis(l.encLeadingBidder);
         emit BidSealed(lotId, msg.sender);
     }
 
-    function grantLot(uint256 lotId) external onlyOwner nonReentrant {
+    function grantLot(uint256 lotId, address winner) external onlyOwner nonReentrant {
         HarvestLot storage l = lots[lotId];
         require(block.timestamp > l.closeTime, "Not closed");
         require(!l.granted, "Done");
         l.granted = true;
-        FHE.allow(l.leadingBid, l.leadingBidder);
+        l.revealedWinner = winner;
+        FHE.allow(l.leadingBid, winner);
         FHE.allow(l.leadingBid, owner());
-        emit LotGranted(lotId, l.leadingBidder);
+        FHE.allow(l.encLeadingBidder, owner());
+        emit LotGranted(lotId, winner);
     }
 }

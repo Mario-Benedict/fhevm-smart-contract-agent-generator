@@ -32,6 +32,7 @@ contract ConfidentialBountyBoard is ZamaEthereumConfig, Ownable, ReentrancyGuard
     mapping(uint256 => BountyProgram) public programs;
     mapping(uint256 => BugReport)     public reports;
     mapping(address => euint64)       public reporterEarnings;
+    mapping(address => bool)          private _earningsInitialized;
     uint256 public programCount;
     uint256 public reportCount;
 
@@ -46,7 +47,7 @@ contract ConfidentialBountyBoard is ZamaEthereumConfig, Ownable, ReentrancyGuard
         string calldata name,
         externalEuint64[5] calldata encRewards,
         bytes[5] calldata proofs,
-        externalEuint64 calldata encBudget, bytes calldata budgetProof
+        externalEuint64 encBudget, bytes calldata budgetProof
     ) external onlyOwner returns (uint256 programId) {
         programId = programCount++;
         BountyProgram storage p = programs[programId];
@@ -76,9 +77,10 @@ contract ConfidentialBountyBoard is ZamaEthereumConfig, Ownable, ReentrancyGuard
         r.rewardAmount = FHE.asEuint64(0);
         r.submittedAt = block.timestamp;
         FHE.allowThis(r.rewardAmount);
-        if (reporterEarnings[msg.sender].unwrap() == 0) {
+        if (!_earningsInitialized[msg.sender]) {
             reporterEarnings[msg.sender] = FHE.asEuint64(0);
             FHE.allowThis(reporterEarnings[msg.sender]);
+            _earningsInitialized[msg.sender] = true;
         }
         emit ReportSubmitted(reportId, programId);
     }

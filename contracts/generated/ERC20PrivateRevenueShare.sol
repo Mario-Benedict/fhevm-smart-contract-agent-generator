@@ -59,7 +59,7 @@ contract ERC20PrivateRevenueShare is ZamaEthereumConfig, Ownable {
             Stakeholder storage sh = stakeholders[s];
             // share = revenue * weightBps / 10000
             euint64 share = FHE.div(
-                FHE.mul(revenue, FHE.asEuint64(uint64(0))), // placeholder for euint16 cast
+                FHE.mul(revenue, 0), // placeholder for euint16 cast
                 10000
             );
             // Cast euint16 weight to euint64 via arithmetic

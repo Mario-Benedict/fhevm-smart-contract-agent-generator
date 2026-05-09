@@ -43,7 +43,7 @@ contract OnyxInstitutionalToken is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit KYCRevoked(account);
     }
 
-    function mint(address to, externalEuint64 calldata encAmount, bytes calldata proof) external onlyOwner onlyKYC(to) {
+    function mint(address to, externalEuint64 encAmount, bytes calldata proof) external onlyOwner onlyKYC(to) {
         euint64 amount = FHE.fromExternal(encAmount, proof);
         _balances[to] = FHE.add(_balances[to], amount);
         FHE.allowThis(_balances[to]);
@@ -61,7 +61,7 @@ contract OnyxInstitutionalToken is ZamaEthereumConfig, Ownable, ReentrancyGuard 
 
     function transfer(
         address to,
-        externalEuint64 calldata encAmount,
+        externalEuint64 encAmount,
         bytes calldata proof
     ) external onlyKYC(msg.sender) onlyKYC(to) nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, proof);
@@ -84,7 +84,7 @@ contract OnyxInstitutionalToken is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         FHE.allow(_balances[to], to);
     }
 
-    function setDailyLimit(externalEuint64 calldata encLimit, bytes calldata proof) external onlyOwner {
+    function setDailyLimit(externalEuint64 encLimit, bytes calldata proof) external onlyOwner {
         dailyTransferLimit = FHE.fromExternal(encLimit, proof);
         FHE.allowThis(dailyTransferLimit);
     }

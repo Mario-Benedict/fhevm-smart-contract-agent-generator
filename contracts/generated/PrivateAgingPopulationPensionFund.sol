@@ -71,7 +71,7 @@ contract PrivateAgingPopulationPensionFund is ZamaEthereumConfig, Ownable, Reent
         euint64 assets = FHE.fromExternal(encAssets, aProof);
         euint64 liability = FHE.fromExternal(encLiability, lProof);
         euint16 discountRate = FHE.fromExternal(encDiscountRate, drProof);
-        euint64 fundingRatio = FHE.div(FHE.mul(assets, FHE.asEuint64(10000)), FHE.asEuint64(1)); // proxy
+        euint64 fundingRatio = FHE.div(FHE.mul(assets, 10000), 1); // proxy
         id = planCount++;
         plans[id] = PensionPlan({
             planName: planName, planType: planType, actuary: msg.sender,

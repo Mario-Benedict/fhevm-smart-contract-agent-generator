@@ -106,7 +106,7 @@ contract PrivateGeneticDataVault is ZamaEthereumConfig, Ownable, ReentrancyGuard
         GenomicProfile storage p = profiles[profileId];
         require(p.active, "Profile inactive");
         euint64 fee = p.licensingPriceUSD;
-        euint64 ownerShare = FHE.div(FHE.mul(fee, FHE.asEuint64(85)), 100); // 85% to data owner
+        euint64 ownerShare = FHE.div(FHE.mul(fee, 85), 100); // 85% to data owner
         euint64 platformShare = FHE.sub(fee, ownerShare);
         licenseId = licenseCount++;
         licenses[licenseId] = GenomicLicense({

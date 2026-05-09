@@ -38,13 +38,13 @@ contract AcademicDegreeRegistry is ZamaEthereumConfig, AccessControl {
     function issueDegree(
         address holder,
         string calldata institutionName,
-        externalEuint8 calldata encLevel,
+        externalEuint8 encLevel,
         bytes calldata levelProof,
-        externalEuint16 calldata encField,
+        externalEuint16 encField,
         bytes calldata fieldProof,
-        externalEuint16 calldata encYear,
+        externalEuint16 encYear,
         bytes calldata yearProof,
-        externalEuint8 calldata encHonor,
+        externalEuint8 encHonor,
         bytes calldata honorProof
     ) external onlyRole(INSTITUTION_ROLE) {
         Degree memory d;

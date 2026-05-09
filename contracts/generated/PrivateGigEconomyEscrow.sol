@@ -41,6 +41,7 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
     mapping(uint256 => Review)    private clientReviews;   // client rates freelancer
     mapping(uint256 => Review)    private freelancerReviews; // freelancer rates client
     mapping(address => euint64)   public reputationScore;
+    mapping(address => bool)      private _reputationInitialized;
     mapping(address => uint32)    public completedProjects;
     uint256 public projectCount;
 
@@ -55,8 +56,8 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
     function createProject(
         address freelancer,
         uint256 deadlineDays,
-        externalEuint64 calldata encBudget, bytes calldata budgetProof,
-        externalEuint64 calldata encFee,    bytes calldata feeProof
+        externalEuint64 encBudget, bytes calldata budgetProof,
+        externalEuint64 encFee,    bytes calldata feeProof
     ) external returns (uint256 projectId) {
         projectId = projectCount++;
         Project storage p = projects[projectId];
@@ -69,9 +70,10 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
         p.deadline      = block.timestamp + deadlineDays * 1 days;
         FHE.allowThis(p.totalBudget); FHE.allowThis(p.platformFeeBps); FHE.allowThis(p.paidAmount);
         FHE.allow(p.totalBudget, msg.sender); FHE.allow(p.totalBudget, freelancer);
-        if (reputationScore[freelancer].unwrap() == 0) {
+        if (!_reputationInitialized[freelancer]) {
             reputationScore[freelancer] = FHE.asEuint64(50);
             FHE.allowThis(reputationScore[freelancer]);
+            _reputationInitialized[freelancer] = true;
         }
         emit ProjectCreated(projectId, msg.sender, freelancer);
     }
@@ -80,7 +82,7 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
         uint256 projectId,
         string calldata description,
         uint256 dueDays,
-        externalEuint64 calldata encAmount, bytes calldata inputProof
+        externalEuint64 encAmount, bytes calldata inputProof
     ) external {
         Project storage p = projects[projectId];
         require(p.client == msg.sender, "Not client");
@@ -106,7 +108,7 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
         Milestone storage m = milestones[projectId][milestoneIdx];
         require(m.approved && !m.paid, "Not approved or already paid");
         m.paid = true;
-        euint64 fee = FHE.div(FHE.mul(m.amount, p.platformFeeBps), FHE.asEuint64(10000));
+        euint64 fee = FHE.div(FHE.mul(m.amount, p.platformFeeBps), 10000);
         euint64 net = FHE.sub(m.amount, fee);
         p.paidAmount = FHE.add(p.paidAmount, m.amount);
         FHE.allowThis(p.paidAmount);
@@ -116,9 +118,9 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
 
     function submitReview(
         uint256 projectId, bool isClientReview,
-        externalEuint8 calldata encQuality, bytes calldata qualityProof,
-        externalEuint8 calldata encComm,    bytes calldata commProof,
-        externalEuint8 calldata encTime,    bytes calldata timeProof
+        externalEuint8 encQuality, bytes calldata qualityProof,
+        externalEuint8 encComm,    bytes calldata commProof,
+        externalEuint8 encTime,    bytes calldata timeProof
     ) external {
         Project storage p = projects[projectId];
         if (isClientReview) {
@@ -132,7 +134,7 @@ contract PrivateGigEconomyEscrow is ZamaEthereumConfig, Ownable, ReentrancyGuard
             FHE.allowThis(r.qualityScore); FHE.allowThis(r.communicationScore); FHE.allowThis(r.timelinessScore);
             FHE.allow(r.qualityScore, p.freelancer);
             // update freelancer rep
-            reputationScore[p.freelancer] = FHE.div(FHE.add(reputationScore[p.freelancer], r.qualityScore), FHE.asEuint64(2));
+            reputationScore[p.freelancer] = FHE.div(FHE.add(reputationScore[p.freelancer], r.qualityScore), 2);
             FHE.allowThis(reputationScore[p.freelancer]);
             FHE.allow(reputationScore[p.freelancer], p.freelancer);
             completedProjects[p.freelancer]++;

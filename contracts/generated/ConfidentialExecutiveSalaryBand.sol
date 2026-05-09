@@ -130,7 +130,7 @@ contract ConfidentialExecutiveSalaryBand is ZamaEthereumConfig, AccessControl, R
         require(packages[exec].active, "Not active");
         euint64 bonus = FHE.fromExternal(encBonus, proof);
         // Scale by performance: actual = bonus * score / 10000
-        euint64 actual = FHE.div(FHE.mul(bonus, FHE.asEuint64(uint64(0))), 10000);
+        euint64 actual = FHE.div(FHE.mul(bonus, 0), 10000);
         actual = bonus; // simplified: full bonus approved
         FHE.allow(actual, exec);
         emit BonusApproved(exec);

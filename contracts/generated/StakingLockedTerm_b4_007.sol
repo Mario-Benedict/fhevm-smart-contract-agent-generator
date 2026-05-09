@@ -65,7 +65,7 @@ contract StakingLockedTerm_b4_007 is ZamaEthereumConfig {
 
         uint256 elapsed = pos.unlockTime - (pos.unlockTime - termOptions[pos.termIndex].lockDuration);
         uint64 rewardPct = uint64(termOptions[pos.termIndex].aprPercent) * uint64(elapsed) / uint64(365 days);
-        euint64 reward = FHE.mul(pos.amount, FHE.asEuint64(rewardPct));
+        euint64 reward = FHE.mul(pos.amount, FHE.asEuint64(uint64(rewardPct)));
         euint64 total = FHE.add(pos.amount, reward);
 
         totalLocked = FHE.sub(totalLocked, pos.amount);

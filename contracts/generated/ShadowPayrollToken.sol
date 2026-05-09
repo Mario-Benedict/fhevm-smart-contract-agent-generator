@@ -52,7 +52,7 @@ contract ShadowPayrollToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         FHE.allowThis(_totalSupply);
     }
 
-    function mint(address to, externalEuint64 calldata encryptedAmount, bytes calldata inputProof)
+    function mint(address to, externalEuint64 encryptedAmount, bytes calldata inputProof)
         external
         onlyOwner
         notPaused
@@ -67,7 +67,7 @@ contract ShadowPayrollToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         emit Transfer(address(0), to);
     }
 
-    function transfer(address to, externalEuint64 calldata encryptedAmount, bytes calldata inputProof)
+    function transfer(address to, externalEuint64 encryptedAmount, bytes calldata inputProof)
         external
         notPaused
         notBlacklisted(msg.sender)

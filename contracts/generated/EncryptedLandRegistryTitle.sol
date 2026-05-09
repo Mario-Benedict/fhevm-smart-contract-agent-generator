@@ -59,8 +59,8 @@ contract EncryptedLandRegistryTitle is ZamaEthereumConfig, AccessControl, Reentr
         string  calldata legalDescription,
         address          owner,
         uint32           areaSqM,
-        externalEuint64 calldata encPrice,    bytes calldata priceProof,
-        externalEuint64 calldata encAssessed, bytes calldata assessedProof
+        externalEuint64 encPrice,    bytes calldata priceProof,
+        externalEuint64 encAssessed, bytes calldata assessedProof
     ) external onlyRole(REGISTRAR_ROLE) returns (uint256 titleId) {
         require(parcelToTitleId[parcelId] == 0, "Parcel already registered");
         titleId = ++titleCount;
@@ -71,7 +71,8 @@ contract EncryptedLandRegistryTitle is ZamaEthereumConfig, AccessControl, Reentr
         t.purchasePrice     = FHE.fromExternal(encPrice,    priceProof);
         t.assessedValue     = FHE.fromExternal(encAssessed, assessedProof);
         t.outstandingMortgage = FHE.asEuint64(0);
-        t.areaSquareMeters  = areaSqM;
+        t.areaSquareMeters  = FHE.asEuint32(areaSqM);
+        FHE.allowThis(t.areaSquareMeters);
         t.lastTransferAt    = block.timestamp;
         t.active            = true;
         FHE.allowThis(t.purchasePrice); FHE.allowThis(t.assessedValue); FHE.allowThis(t.outstandingMortgage);
@@ -84,8 +85,8 @@ contract EncryptedLandRegistryTitle is ZamaEthereumConfig, AccessControl, Reentr
     function initiateTransfer(
         uint256 titleId,
         address newOwner,
-        externalEuint64 calldata encSalePrice, bytes calldata salePriceProof,
-        externalEuint64 calldata encTax,       bytes calldata taxProof
+        externalEuint64 encSalePrice, bytes calldata salePriceProof,
+        externalEuint64 encTax,       bytes calldata taxProof
     ) external onlyRole(NOTARY_ROLE) returns (uint256 histIdx) {
         LandTitle storage t = titles[titleId];
         require(t.active && !t.encumbered, "Title unavailable");
@@ -120,18 +121,18 @@ contract EncryptedLandRegistryTitle is ZamaEthereumConfig, AccessControl, Reentr
         emit TransferConfirmed(titleId, histIdx);
     }
 
-    function updateMortgage(uint256 titleId, externalEuint64 calldata encMortgage, bytes calldata inputProof)
+    function updateMortgage(uint256 titleId, bool encumbered, externalEuint64 encMortgage, bytes calldata inputProof)
         external onlyRole(REGISTRAR_ROLE)
     {
         euint64 mortgage = FHE.fromExternal(encMortgage, inputProof);
         titles[titleId].outstandingMortgage = mortgage;
-        titles[titleId].encumbered = mortgage.unwrap() != 0;
+        titles[titleId].encumbered = encumbered;
         FHE.allowThis(titles[titleId].outstandingMortgage);
         FHE.allow(titles[titleId].outstandingMortgage, titles[titleId].currentOwner);
         emit MortgageUpdated(titleId);
     }
 
-    function updateAssessedValue(uint256 titleId, externalEuint64 calldata encValue, bytes calldata inputProof)
+    function updateAssessedValue(uint256 titleId, externalEuint64 encValue, bytes calldata inputProof)
         external onlyRole(ASSESSOR_ROLE)
     {
         titles[titleId].assessedValue = FHE.fromExternal(encValue, inputProof);
