@@ -4,7 +4,10 @@
       "Bash(npx hardhat *)",
       "Bash(echo \"EXIT:$?\")",
       "Bash(node node_modules/.bin/hardhat compile)",
-      "Bash(Measure-Object)"
+      "Bash(Measure-Object)",
+      "Bash(powershell -ExecutionPolicy Bypass -File compile_batches.ps1)",
+      "Bash(powershell -ExecutionPolicy Bypass -File compile_one_by_one.ps1)",
+      "Bash(powershell -Command ' *)"
     ]
   }
 }
