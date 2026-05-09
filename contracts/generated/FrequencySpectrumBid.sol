@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@fhevm/solidity/lib/FHE.sol";
-import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title FrequencySpectrumBid - Government spectrum license sealed-bid auction
@@ -34,34 +34,43 @@ contract FrequencySpectrumBid is ZamaEthereumConfig, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function qualifyBidder(address bidder, externalEuint64 calldata encDeposit, bytes calldata inputProof)
-        external
-        onlyOwner
-    {
+    function qualifyBidder(
+        address bidder,
+        externalEuint64 calldata encDeposit,
+        bytes calldata inputProof
+    ) external onlyOwner {
         euint64 deposit = FHE.fromExternal(encDeposit, inputProof);
-        bidders[bidder] = BidderProfile({ qualified: true, depositAmount: deposit });
+        bidders[bidder] = BidderProfile({
+            qualified: true,
+            depositAmount: deposit
+        });
         FHE.allowThis(bidders[bidder].depositAmount);
         FHE.allow(bidders[bidder].depositAmount, bidder);
         emit BidderQualified(bidder);
     }
 
-    function offerLicense(string calldata band, string calldata region, uint256 years, uint256 duration)
-        external
-        onlyOwner
-        returns (uint256 licenseId)
-    {
+    function offerLicense(
+        string calldata band,
+        string calldata region,
+        uint256 _years,
+        uint256 duration
+    ) external onlyOwner returns (uint256 licenseId) {
         licenseId = licenseCount++;
         SpectrumLicense storage l = licenses[licenseId];
         l.band = band;
         l.region = region;
-        l.licenseYears = years;
+        l.licenseYears = _years;
         l.winningBid = FHE.asEuint64(0);
         l.auctionEnd = block.timestamp + duration;
         FHE.allowThis(l.winningBid);
         emit LicenseOffered(licenseId, band, region);
     }
 
-    function placeBid(uint256 licenseId, externalEuint64 calldata encBid, bytes calldata inputProof) external {
+    function placeBid(
+        uint256 licenseId,
+        externalEuint64 calldata encBid,
+        bytes calldata inputProof
+    ) external {
         require(bidders[msg.sender].qualified, "Not qualified");
         SpectrumLicense storage l = licenses[licenseId];
         require(block.timestamp <= l.auctionEnd, "Ended");

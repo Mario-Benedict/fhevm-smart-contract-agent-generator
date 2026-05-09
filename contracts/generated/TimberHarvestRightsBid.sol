@@ -2,12 +2,16 @@
 pragma solidity ^0.8.24;
 
 import "@fhevm/solidity/lib/FHE.sol";
-import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/// @title TimberHarvestRightsBid - Sealed-bid auction for forestry harvest concessions
-contract TimberHarvestRightsBid is ZamaEthereumConfig, Ownable, ReentrancyGuard {
+/// @title TimberHarvestRightsBid - _sealed-bid auction for forestry harvest concessions
+contract TimberHarvestRightsBid is
+    ZamaEthereumConfig,
+    Ownable,
+    ReentrancyGuard
+{
     struct HarvestLot {
         string locationCode;
         uint32 hectares;
@@ -20,7 +24,7 @@ contract TimberHarvestRightsBid is ZamaEthereumConfig, Ownable, ReentrancyGuard 
     }
 
     mapping(uint256 => HarvestLot) public lots;
-    mapping(uint256 => mapping(address => euint64)) private sealed;
+    mapping(uint256 => mapping(address => euint64)) private _sealed;
     mapping(address => bool) public licensedBidders;
     uint256 public lotCount;
 
@@ -55,15 +59,19 @@ contract TimberHarvestRightsBid is ZamaEthereumConfig, Ownable, ReentrancyGuard 
         emit LotCreated(lotId, locationCode);
     }
 
-    function sealBid(uint256 lotId, externalEuint64 calldata encBid, bytes calldata inputProof) external {
+    function sealBid(
+        uint256 lotId,
+        externalEuint64 calldata encBid,
+        bytes calldata inputProof
+    ) external {
         require(licensedBidders[msg.sender], "Not licensed");
         HarvestLot storage l = lots[lotId];
         require(block.timestamp <= l.closeTime, "Closed");
         require(!l.granted, "Granted");
 
         euint64 bid = FHE.fromExternal(encBid, inputProof);
-        sealed[lotId][msg.sender] = bid;
-        FHE.allowThis(sealed[lotId][msg.sender]);
+        _sealed[lotId][msg.sender] = bid;
+        FHE.allowThis(_sealed[lotId][msg.sender]);
 
         ebool isHigher = FHE.gt(bid, l.leadingBid);
         l.leadingBid = FHE.select(isHigher, bid, l.leadingBid);

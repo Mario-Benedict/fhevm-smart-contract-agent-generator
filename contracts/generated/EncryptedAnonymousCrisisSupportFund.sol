@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@fhevm/solidity/lib/FHE.sol";
-import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
@@ -11,19 +11,24 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 /// @notice A crisis support funding contract where donated amounts,
 ///         caller statistics, and resource allocation amounts remain encrypted
 ///         to protect both donors and individuals seeking help.
-contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, ReentrancyGuard, Pausable {
+contract EncryptedAnonymousCrisisSupportFund is
+    ZamaEthereumConfig,
+    Ownable,
+    ReentrancyGuard,
+    Pausable
+{
     struct CrisisResource {
-        euint64 allocatedBudget;    // encrypted budget for this resource
-        euint32 utilizationScore;   // how heavily used (0-10000)
-        euint32 impactScore;        // outcome effectiveness
+        euint64 allocatedBudget; // encrypted budget for this resource
+        euint32 utilizationScore; // how heavily used (0-10000)
+        euint32 impactScore; // outcome effectiveness
         bool active;
-        string resourceType;        // "counselor", "shelter", "medication", etc.
+        string resourceType; // "counselor", "shelter", "medication", etc.
     }
 
     struct DonorRecord {
         euint64 totalGiven;
         euint32 donationFrequency; // donations per year
-        bool anonymous;
+        bool _anonymous;
         bool recurring;
     }
 
@@ -36,8 +41,8 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
     euint64 private _totalFundBalance;
     euint64 private _totalAllocated;
     euint64 private _anonymousDonations;
-    euint32 private _crisisCallVolume;      // encrypted monthly call volume
-    euint32 private _successOutcomeRate;    // encrypted positive outcome rate
+    euint32 private _crisisCallVolume; // encrypted monthly call volume
+    euint32 private _successOutcomeRate; // encrypted positive outcome rate
 
     event DonationReceived(address indexed donor);
     event ResourceCreated(uint8 indexed resourceId);
@@ -58,12 +63,13 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
     }
 
     function donate(
-        externalEuint64 encAmount, bytes calldata proof,
-        bool anonymous
+        externalEuint64 encAmount,
+        bytes calldata proof,
+        bool _anonymous
     ) external nonReentrant whenNotPaused {
         euint64 amount = FHE.fromExternal(encAmount, proof);
         _totalFundBalance = FHE.add(_totalFundBalance, amount);
-        if (anonymous) {
+        if (_anonymous) {
             _anonymousDonations = FHE.add(_anonymousDonations, amount);
             FHE.allowThis(_anonymousDonations);
         }
@@ -75,13 +81,17 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
             donorInitialized[msg.sender] = true;
             donorList.push(msg.sender);
         }
-        donorRecords[msg.sender].totalGiven = FHE.add(donorRecords[msg.sender].totalGiven, amount);
-        donorRecords[msg.sender].donationFrequency = FHE.add(
-            donorRecords[msg.sender].donationFrequency, FHE.asEuint32(1)
+        donorRecords[msg.sender].totalGiven = FHE.add(
+            donorRecords[msg.sender].totalGiven,
+            amount
         );
-        donorRecords[msg.sender].anonymous = anonymous;
+        donorRecords[msg.sender].donationFrequency = FHE.add(
+            donorRecords[msg.sender].donationFrequency,
+            FHE.asEuint32(1)
+        );
+        donorRecords[msg.sender]._anonymous = _anonymous;
         FHE.allowThis(donorRecords[msg.sender].totalGiven);
-        if (!anonymous) {
+        if (!_anonymous) {
             FHE.allow(donorRecords[msg.sender].totalGiven, msg.sender);
         }
         FHE.allowThis(_totalFundBalance);
@@ -89,12 +99,17 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
     }
 
     function createResource(
-        externalEuint32 encUtilization, bytes calldata utilProof,
-        externalEuint32 encImpact, bytes calldata impactProof,
+        externalEuint32 encUtilization,
+        bytes calldata utilProof,
+        externalEuint32 encImpact,
+        bytes calldata impactProof,
         string calldata resourceType
     ) external onlyOwner {
         uint8 id = resourceCount++;
-        resources[id].utilizationScore = FHE.fromExternal(encUtilization, utilProof);
+        resources[id].utilizationScore = FHE.fromExternal(
+            encUtilization,
+            utilProof
+        );
         resources[id].impactScore = FHE.fromExternal(encImpact, impactProof);
         resources[id].allocatedBudget = FHE.asEuint64(0);
         resources[id].active = true;
@@ -107,13 +122,20 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
 
     function allocateBudget(
         uint8 resourceId,
-        externalEuint64 encAmount, bytes calldata proof
+        externalEuint64 encAmount,
+        bytes calldata proof
     ) external onlyOwner nonReentrant {
-        require(resourceId < resourceCount && resources[resourceId].active, "Invalid resource");
+        require(
+            resourceId < resourceCount && resources[resourceId].active,
+            "Invalid resource"
+        );
         euint64 amount = FHE.fromExternal(encAmount, proof);
         ebool sufficient = FHE.le(amount, _totalFundBalance);
         euint64 actual = FHE.select(sufficient, amount, _totalFundBalance);
-        resources[resourceId].allocatedBudget = FHE.add(resources[resourceId].allocatedBudget, actual);
+        resources[resourceId].allocatedBudget = FHE.add(
+            resources[resourceId].allocatedBudget,
+            actual
+        );
         _totalFundBalance = FHE.sub(_totalFundBalance, actual);
         _totalAllocated = FHE.add(_totalAllocated, actual);
         FHE.allowThis(resources[resourceId].allocatedBudget);
@@ -123,8 +145,10 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
     }
 
     function updateCrisisMetrics(
-        externalEuint32 encCallVolume, bytes calldata volProof,
-        externalEuint32 encOutcomeRate, bytes calldata rateProof
+        externalEuint32 encCallVolume,
+        bytes calldata volProof,
+        externalEuint32 encOutcomeRate,
+        bytes calldata rateProof
     ) external onlyOwner {
         _crisisCallVolume = FHE.fromExternal(encCallVolume, volProof);
         _successOutcomeRate = FHE.fromExternal(encOutcomeRate, rateProof);
@@ -140,6 +164,10 @@ contract EncryptedAnonymousCrisisSupportFund is ZamaEthereumConfig, Ownable, Ree
         FHE.allow(_successOutcomeRate, viewer);
     }
 
-    function pause() external onlyOwner { _pause(); }
-    function unpause() external onlyOwner { _unpause(); }
+    function pause() external onlyOwner {
+        _pause();
+    }
+    function unpause() external onlyOwner {
+        _unpause();
+    }
 }

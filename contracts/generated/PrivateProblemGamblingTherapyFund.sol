@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@fhevm/solidity/lib/FHE.sol";
-import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -10,11 +10,15 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 /// @notice A confidential charitable fund for problem gambling rehabilitation.
 ///         Donation amounts, recipient identities, and treatment costs are encrypted
 ///         to protect both donors and beneficiaries from stigma and privacy violations.
-contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, ReentrancyGuard {
+contract PrivateProblemGamblingTherapyFund is
+    ZamaEthereumConfig,
+    Ownable,
+    ReentrancyGuard
+{
     struct Beneficiary {
-        euint64 treatmentCostApproved;  // encrypted approved treatment budget
-        euint64 amountDisbursed;        // total disbursed
-        euint32 riskSeverityScore;      // 0-10000 problem gambling severity
+        euint64 treatmentCostApproved; // encrypted approved treatment budget
+        euint64 amountDisbursed; // total disbursed
+        euint32 riskSeverityScore; // 0-10000 problem gambling severity
         euint32 sessionsCompleted;
         euint32 sessionsApproved;
         bool enrolled;
@@ -24,8 +28,8 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
 
     struct Donor {
         euint64 totalDonated;
-        euint32 donationTier;    // 1-4 tier
-        bool anonymous;
+        euint32 donationTier; // 1-4 tier
+        bool _anonymous;
     }
 
     mapping(address => Beneficiary) private beneficiaries;
@@ -57,18 +61,25 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
     }
 
     function donate(
-        externalEuint64 encAmount, bytes calldata proof,
+        externalEuint64 encAmount,
+        bytes calldata proof,
         bool isAnonymous
     ) external nonReentrant {
         euint64 amount = FHE.fromExternal(encAmount, proof);
         _fundBalance = FHE.add(_fundBalance, amount);
         _totalDonated = FHE.add(_totalDonated, amount);
-        if (donors[msg.sender].totalDonated.eq(FHE.asEuint64(0)) == FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))) {
+        if (
+            donors[msg.sender].totalDonated.eq(FHE.asEuint64(0)) ==
+            FHE.eq(FHE.asEuint64(0), FHE.asEuint64(0))
+        ) {
             donors[msg.sender].totalDonated = FHE.asEuint64(0);
             FHE.allowThis(donors[msg.sender].totalDonated);
         }
-        donors[msg.sender].totalDonated = FHE.add(donors[msg.sender].totalDonated, amount);
-        donors[msg.sender].anonymous = isAnonymous;
+        donors[msg.sender].totalDonated = FHE.add(
+            donors[msg.sender].totalDonated,
+            amount
+        );
+        donors[msg.sender]._anonymous = isAnonymous;
         FHE.allowThis(donors[msg.sender].totalDonated);
         if (!isAnonymous) {
             FHE.allow(donors[msg.sender].totalDonated, msg.sender);
@@ -80,12 +91,20 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
 
     function enrollBeneficiary(
         address beneficiary,
-        externalEuint32 encSeverity, bytes calldata sevProof,
-        externalEuint32 encSessions, bytes calldata sessProof
+        externalEuint32 encSeverity,
+        bytes calldata sevProof,
+        externalEuint32 encSessions,
+        bytes calldata sessProof
     ) external onlyOwner {
         require(!beneficiaries[beneficiary].enrolled, "Already enrolled");
-        beneficiaries[beneficiary].riskSeverityScore = FHE.fromExternal(encSeverity, sevProof);
-        beneficiaries[beneficiary].sessionsApproved = FHE.fromExternal(encSessions, sessProof);
+        beneficiaries[beneficiary].riskSeverityScore = FHE.fromExternal(
+            encSeverity,
+            sevProof
+        );
+        beneficiaries[beneficiary].sessionsApproved = FHE.fromExternal(
+            encSessions,
+            sessProof
+        );
         beneficiaries[beneficiary].sessionsCompleted = FHE.asEuint32(0);
         beneficiaries[beneficiary].treatmentCostApproved = FHE.asEuint64(0);
         beneficiaries[beneficiary].amountDisbursed = FHE.asEuint64(0);
@@ -106,7 +125,8 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
 
     function approveTreatmentBudget(
         address beneficiary,
-        externalEuint64 encBudget, bytes calldata proof
+        externalEuint64 encBudget,
+        bytes calldata proof
     ) external onlyOwner {
         require(beneficiaries[beneficiary].enrolled, "Not enrolled");
         euint64 budget = FHE.fromExternal(encBudget, proof);
@@ -114,14 +134,22 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
         euint64 approved = FHE.select(fundSufficient, budget, _fundBalance);
         beneficiaries[beneficiary].treatmentCostApproved = approved;
         FHE.allowThis(beneficiaries[beneficiary].treatmentCostApproved);
-        FHE.allow(beneficiaries[beneficiary].treatmentCostApproved, beneficiary);
+        FHE.allow(
+            beneficiaries[beneficiary].treatmentCostApproved,
+            beneficiary
+        );
         emit TreatmentApproved(beneficiary);
     }
 
     function recordSessionCompletion(address beneficiary) external onlyOwner {
-        require(beneficiaries[beneficiary].enrolled && !beneficiaries[beneficiary].graduated, "Not active");
+        require(
+            beneficiaries[beneficiary].enrolled &&
+                !beneficiaries[beneficiary].graduated,
+            "Not active"
+        );
         beneficiaries[beneficiary].sessionsCompleted = FHE.add(
-            beneficiaries[beneficiary].sessionsCompleted, FHE.asEuint32(1)
+            beneficiaries[beneficiary].sessionsCompleted,
+            FHE.asEuint32(1)
         );
         FHE.allowThis(beneficiaries[beneficiary].sessionsCompleted);
         FHE.allow(beneficiaries[beneficiary].sessionsCompleted, beneficiary);
@@ -130,9 +158,14 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
 
     function disburseFunds(
         address beneficiary,
-        externalEuint64 encAmount, bytes calldata proof
+        externalEuint64 encAmount,
+        bytes calldata proof
     ) external onlyOwner nonReentrant {
-        require(beneficiaries[beneficiary].enrolled && !beneficiaries[beneficiary].graduated, "Not active");
+        require(
+            beneficiaries[beneficiary].enrolled &&
+                !beneficiaries[beneficiary].graduated,
+            "Not active"
+        );
         euint64 amount = FHE.fromExternal(encAmount, proof);
         ebool withinBudget = FHE.le(
             FHE.add(beneficiaries[beneficiary].amountDisbursed, amount),
@@ -141,7 +174,10 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
         ebool fundSufficient = FHE.le(amount, _fundBalance);
         ebool canDisburse = FHE.and(withinBudget, fundSufficient);
         euint64 actual = FHE.select(canDisburse, amount, FHE.asEuint64(0));
-        beneficiaries[beneficiary].amountDisbursed = FHE.add(beneficiaries[beneficiary].amountDisbursed, actual);
+        beneficiaries[beneficiary].amountDisbursed = FHE.add(
+            beneficiaries[beneficiary].amountDisbursed,
+            actual
+        );
         _fundBalance = FHE.sub(_fundBalance, actual);
         _totalDisbursed = FHE.add(_totalDisbursed, actual);
         FHE.allowThis(beneficiaries[beneficiary].amountDisbursed);
@@ -153,7 +189,11 @@ contract PrivateProblemGamblingTherapyFund is ZamaEthereumConfig, Ownable, Reent
     }
 
     function graduateBeneficiary(address beneficiary) external onlyOwner {
-        require(beneficiaries[beneficiary].enrolled && !beneficiaries[beneficiary].graduated, "Not active");
+        require(
+            beneficiaries[beneficiary].enrolled &&
+                !beneficiaries[beneficiary].graduated,
+            "Not active"
+        );
         beneficiaries[beneficiary].graduated = true;
         activeBeneficiaryCount--;
         emit BeneficiaryGraduated(beneficiary);

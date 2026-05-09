@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@fhevm/solidity/lib/FHE.sol";
-import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -10,19 +10,35 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 /// @notice Criminal justice system for tracking inmate rehabilitation progress
 ///         with encrypted recidivism risk scores, program participation weights,
 ///         and parole board recommendations — protecting inmate dignity and privacy.
-contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, ReentrancyGuard {
-    enum ProgramType { EDUCATION, VOCATIONAL, THERAPY, RELIGIOUS, SUBSTANCE_ABUSE, ANGER_MANAGEMENT }
-    enum ParoleDecision { PENDING, GRANTED, DEFERRED, DENIED }
+contract EncryptedPrisonInmateRehabilitation is
+    ZamaEthereumConfig,
+    Ownable,
+    ReentrancyGuard
+{
+    enum ProgramType {
+        EDUCATION,
+        VOCATIONAL,
+        THERAPY,
+        RELIGIOUS,
+        SUBSTANCE_ABUSE,
+        ANGER_MANAGEMENT
+    }
+    enum ParoleDecision {
+        PENDING,
+        GRANTED,
+        DEFERRED,
+        DENIED
+    }
 
     struct InmateRecord {
-        euint16 anonymizedInmateId;    // encrypted inmate ID
-        euint8  riskScore;             // encrypted ORAS/LSI-R recidivism risk 0-100
-        euint8  programParticipation;  // encrypted % participation
-        euint8  behaviorScore;         // encrypted conduct score 0-100
-        euint8  educationProgress;     // encrypted GED/literacy progress
-        euint8  employabilityScore;    // encrypted vocational readiness
-        euint32 daysServed;            // encrypted
-        euint32 goodTimeCredits;       // encrypted earned time off
+        euint16 anonymizedInmateId; // encrypted inmate ID
+        euint8 riskScore; // encrypted ORAS/LSI-R recidivism risk 0-100
+        euint8 programParticipation; // encrypted % participation
+        euint8 behaviorScore; // encrypted conduct score 0-100
+        euint8 educationProgress; // encrypted GED/literacy progress
+        euint8 employabilityScore; // encrypted vocational readiness
+        euint32 daysServed; // encrypted
+        euint32 goodTimeCredits; // encrypted earned time off
         uint256 admissionDate;
         bool paroleEligible;
     }
@@ -30,20 +46,20 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
     struct RehabProgram {
         string programName;
         ProgramType pType;
-        euint8  completionRate;        // encrypted % of enrolled who complete
-        euint32 enrolledCount;         // encrypted participants
-        euint64 programCostUSD;        // encrypted annual budget
-        euint8  recidivismReductionBps;// encrypted effectiveness (bps)
+        euint8 completionRate; // encrypted % of enrolled who complete
+        euint32 enrolledCount; // encrypted participants
+        euint64 programCostUSD; // encrypted annual budget
+        euint8 recidivismReductionBps; // encrypted effectiveness (bps)
         bool active;
     }
 
     struct ParoleHearing {
         uint256 inmateId;
-        euint8  boardRiskScore;        // encrypted re-assessment
-        euint8  communitySupport;      // encrypted support network score
+        euint8 boardRiskScore; // encrypted re-assessment
+        euint8 communitySupport; // encrypted support network score
         euint64 victimRestitutionPaid; // encrypted
-        euint32 votesGranted;          // encrypted parole board votes for
-        euint32 votesAgainst;          // encrypted votes against
+        euint32 votesGranted; // encrypted parole board votes for
+        euint32 votesAgainst; // encrypted votes against
         ParoleDecision decision;
         uint256 hearingDate;
     }
@@ -63,7 +79,10 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
     event InmateAdmitted(uint256 indexed inmateId);
     event ProgramEnrolled(uint256 indexed inmateId, uint256 programId);
     event ParoleHearingScheduled(uint256 indexed hearingId, uint256 inmateId);
-    event ParoleDecisionMade(uint256 indexed hearingId, ParoleDecision decision);
+    event ParoleDecisionMade(
+        uint256 indexed hearingId,
+        ParoleDecision decision
+    );
     event RiskScoreUpdated(uint256 indexed inmateId);
 
     constructor() Ownable(msg.sender) {
@@ -75,16 +94,22 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
         isParoleBoardMember[msg.sender] = true;
     }
 
-    function addOfficer(address officer) external onlyOwner { isCorrectionOfficer[officer] = true; }
-    function addBoardMember(address member) external onlyOwner { isParoleBoardMember[member] = true; }
+    function addOfficer(address officer) external onlyOwner {
+        isCorrectionOfficer[officer] = true;
+    }
+    function addBoardMember(address member) external onlyOwner {
+        isParoleBoardMember[member] = true;
+    }
 
     function admitInmate(
-        externalEuint8  encRisk,    bytes calldata rProof,
-        externalEuint8  encBehavior,bytes calldata bProof,
+        externalEuint8 encRisk,
+        bytes calldata rProof,
+        externalEuint8 encBehavior,
+        bytes calldata bProof,
         uint256 admissionDate
     ) external returns (uint256 inmateId) {
         require(isCorrectionOfficer[msg.sender], "Not officer");
-        euint8 risk     = FHE.fromExternal(encRisk, rProof);
+        euint8 risk = FHE.fromExternal(encRisk, rProof);
         euint8 behavior = FHE.fromExternal(encBehavior, bProof);
         inmateId = inmateCount++;
         inmates[inmateId] = InmateRecord({
@@ -113,12 +138,14 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
     function createProgram(
         string calldata name,
         ProgramType pType,
-        externalEuint64 encBudget,     bytes calldata bProof,
-        externalEuint8  encEffective,  bytes calldata eProof
+        externalEuint64 encBudget,
+        bytes calldata bProof,
+        externalEuint8 encEffective,
+        bytes calldata eProof
     ) external returns (uint256 progId) {
         require(isCorrectionOfficer[msg.sender], "Not officer");
         euint64 budget = FHE.fromExternal(encBudget, bProof);
-        euint8  effect = FHE.fromExternal(encEffective, eProof);
+        euint8 effect = FHE.fromExternal(encEffective, eProof);
         progId = programCount++;
         programs[progId] = RehabProgram({
             programName: name,
@@ -141,32 +168,50 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
         require(isCorrectionOfficer[msg.sender], "Not officer");
         require(!inmatePrograms[inmateId][programId], "Already enrolled");
         inmatePrograms[inmateId][programId] = true;
-        programs[programId].enrolledCount = FHE.add(programs[programId].enrolledCount, FHE.asEuint32(1));
-        inmates[inmateId].programParticipation = FHE.add(inmates[inmateId].programParticipation, FHE.asEuint8(1));
+        programs[programId].enrolledCount = FHE.add(
+            programs[programId].enrolledCount,
+            FHE.asEuint32(1)
+        );
+        inmates[inmateId].programParticipation = FHE.add(
+            inmates[inmateId].programParticipation,
+            FHE.asEuint8(1)
+        );
         FHE.allowThis(programs[programId].enrolledCount);
         FHE.allowThis(inmates[inmateId].programParticipation);
         emit ProgramEnrolled(inmateId, programId);
     }
 
-    function updateRiskScore(uint256 inmateId, externalEuint8 encRisk, bytes calldata proof) external {
+    function updateRiskScore(
+        uint256 inmateId,
+        externalEuint8 encRisk,
+        bytes calldata proof
+    ) external {
         require(isParoleBoardMember[msg.sender], "Not board member");
         inmates[inmateId].riskScore = FHE.fromExternal(encRisk, proof);
         FHE.allowThis(inmates[inmateId].riskScore);
         emit RiskScoreUpdated(inmateId);
     }
 
-    function awardGoodTimeCredits(uint256 inmateId, externalEuint32 encDays, bytes calldata proof) external {
+    function awardGoodTimeCredits(
+        uint256 inmateId,
+        externalEuint32 encDays,
+        bytes calldata proof
+    ) external {
         require(isCorrectionOfficer[msg.sender], "Not officer");
-        euint32 days = FHE.fromExternal(encDays, proof);
-        inmates[inmateId].goodTimeCredits = FHE.add(inmates[inmateId].goodTimeCredits, days);
-        _totalGoodTimeGranted = FHE.add(_totalGoodTimeGranted, days);
+        euint32 _days = FHE.fromExternal(encDays, proof);
+        inmates[inmateId].goodTimeCredits = FHE.add(
+            inmates[inmateId].goodTimeCredits,
+            _days
+        );
+        _totalGoodTimeGranted = FHE.add(_totalGoodTimeGranted, _days);
         FHE.allowThis(inmates[inmateId].goodTimeCredits);
         FHE.allowThis(_totalGoodTimeGranted);
     }
 
     function scheduleParoleHearing(
         uint256 inmateId,
-        externalEuint64 encRestitution, bytes calldata rProof
+        externalEuint64 encRestitution,
+        bytes calldata rProof
     ) external returns (uint256 hearingId) {
         require(isParoleBoardMember[msg.sender], "Not board member");
         euint64 restitution = FHE.fromExternal(encRestitution, rProof);
@@ -192,15 +237,24 @@ contract EncryptedPrisonInmateRehabilitation is ZamaEthereumConfig, Ownable, Ree
     function castParoleVote(uint256 hearingId, bool voteGrant) external {
         require(isParoleBoardMember[msg.sender], "Not board member");
         if (voteGrant) {
-            hearings[hearingId].votesGranted = FHE.add(hearings[hearingId].votesGranted, FHE.asEuint32(1));
+            hearings[hearingId].votesGranted = FHE.add(
+                hearings[hearingId].votesGranted,
+                FHE.asEuint32(1)
+            );
             FHE.allowThis(hearings[hearingId].votesGranted);
         } else {
-            hearings[hearingId].votesAgainst = FHE.add(hearings[hearingId].votesAgainst, FHE.asEuint32(1));
+            hearings[hearingId].votesAgainst = FHE.add(
+                hearings[hearingId].votesAgainst,
+                FHE.asEuint32(1)
+            );
             FHE.allowThis(hearings[hearingId].votesAgainst);
         }
     }
 
-    function finalizeParoleDecision(uint256 hearingId, ParoleDecision decision) external {
+    function finalizeParoleDecision(
+        uint256 hearingId,
+        ParoleDecision decision
+    ) external {
         require(isParoleBoardMember[msg.sender], "Not board member");
         hearings[hearingId].decision = decision;
         if (decision == ParoleDecision.GRANTED) {
