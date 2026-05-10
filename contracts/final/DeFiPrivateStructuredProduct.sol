@@ -99,19 +99,19 @@ contract DeFiPrivateStructuredProduct is ZamaEthereumConfig, Ownable, Reentrancy
         euint64 yield = FHE.fromExternal(encYield, proof);
         _reportedYield = FHE.add(_reportedYield, yield);
         // Senior tranche gets paid first
-        euint64 seniorYield = FHE.div(
-            ebool _safeMul27 = FHE.le(tranches[Tranche.Senior].totalCapital, FHE.asEuint64(type(uint32).max));
+        ebool _safeMul27 = FHE.le(tranches[Tranche.Senior].totalCapital, FHE.asEuint64(type(uint32).max));
+        euint64 seniorYield = FHE.select(_safeMul27, FHE.div(
             FHE.mul(tranches[Tranche.Senior].totalCapital, tranches[Tranche.Senior].targetYieldBps),
             10000
-        );
+        ), FHE.asEuint64(type(uint32).max));
         euint64 seniorActual = FHE.select(FHE.ge(yield, seniorYield), seniorYield, yield);
         ebool _safeSub127 = FHE.ge(yield, seniorActual);
         euint64 remaining = FHE.select(_safeSub127, FHE.sub(yield, seniorActual), FHE.asEuint64(0));
-        euint64 mezzYield = FHE.div(
-            ebool _safeMul28 = FHE.le(tranches[Tranche.Mezzanine].totalCapital, FHE.asEuint64(type(uint32).max));
+        ebool _safeMul28 = FHE.le(tranches[Tranche.Mezzanine].totalCapital, FHE.asEuint64(type(uint32).max));
+        euint64 mezzYield = FHE.select(_safeMul28, FHE.div(
             FHE.mul(tranches[Tranche.Mezzanine].totalCapital, tranches[Tranche.Mezzanine].targetYieldBps),
             10000
-        );
+        ), FHE.asEuint64(type(uint32).max));
         euint64 mezzActual = FHE.select(FHE.ge(remaining, mezzYield), mezzYield, remaining);
         FHE.allowThis(_reportedYield);
         emit YieldDistributed();

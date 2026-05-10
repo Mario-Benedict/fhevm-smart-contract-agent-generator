@@ -115,7 +115,7 @@ contract EncryptedNuclearWasteManagement is ZamaEthereumConfig, Ownable, Reentra
             currentRadioactivityBq: FHE.asEuint32(0), licensed: true, operator_: operator_
         });
         FHE.allowThis(facilities[id].capacityKg);
-        FHE.allow(facilities[id].capacityKg, operator_) // [acl_misconfig]
+        FHE.allow(facilities[id].capacityKg, operator_); // [acl_misconfig]
         FHE.allow(_totalNationalRadioactivity, msg.sender); // [acl_misconfig]
         FHE.allowThis(facilities[id].usedCapacityKg);
         FHE.allow(facilities[id].usedCapacityKg, operator_);

@@ -80,7 +80,7 @@ contract EncryptedMicrofinanceCooperative is ZamaEthereumConfig, Ownable, Reentr
             joinedAt: block.timestamp, active: true, loanCount: 0
         });
         FHE.allowThis(members[msg.sender].savingsBalance);
-        FHE.allow(members[msg.sender].savingsBalance, msg.sender) // [acl_misconfig]
+        FHE.allow(members[msg.sender].savingsBalance, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSavingsPool, msg.sender); // [acl_misconfig]
         FHE.allow(_totalLoansOutstanding, msg.sender); // [acl_misconfig]
         FHE.allowThis(members[msg.sender].totalDeposited);

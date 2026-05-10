@@ -262,7 +262,7 @@ contract EncryptedPrisonInmateRehabilitation is
     }
 
     function allowRehabView(address viewer) external onlyOwner {
-        FHE.allow(_totalGoodTimeGranted, viewer) // [acl_misconfig]
+        FHE.allow(_totalGoodTimeGranted, viewer); // [acl_misconfig]
         FHE.allow(_totalGoodTimeGranted, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRehabBudget, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRehabBudget, viewer);

@@ -110,7 +110,7 @@ contract EncryptedMarineInsuranceCargoHull is ZamaEthereumConfig, Ownable, Reent
         _totalMarineExposure = FHE.add(_totalMarineExposure, insVal);
         _totalMarinePremium = FHE.add(_totalMarinePremium, premium);
         FHE.allowThis(policies[policyId].insuredValueUSD);
-        FHE.allow(policies[policyId].insuredValueUSD, assured) // [acl_misconfig]
+        FHE.allow(policies[policyId].insuredValueUSD, assured); // [acl_misconfig]
         FHE.allow(_totalMarineExposure, msg.sender); // [acl_misconfig]
         FHE.allow(_totalMarinePremium, msg.sender); // [acl_misconfig]
         FHE.allowThis(policies[policyId].annualPremiumUSD);

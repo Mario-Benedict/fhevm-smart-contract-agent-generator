@@ -143,9 +143,9 @@ contract EncryptedElectricVehicleChargingMarket is ZamaEthereumConfig, Ownable, 
         euint32 energy = FHE.fromExternal(encEnergy, eProof);
         sess.energyKWh = energy;
         // Bill = energy * baseRate * priceMultiplier (DR adjusted)
+        ebool _safeMul59 = FHE.le(_baseRateUSDPerKWh, FHE.asEuint64(type(uint32).max));
         euint64 bill = FHE.div(
-            ebool _safeMul59 = FHE.le(_baseRateUSDPerKWh, FHE.asEuint64(type(uint32).max));
-            FHE.mul(FHE.mul(_baseRateUSDPerKWh, st.pricePerKWhBps), FHE.asEuint64(uint64(FHE.isInitialized(energy) ? 1 : 1))),
+            FHE.mul(FHE.select(_safeMul59, FHE.mul(_baseRateUSDPerKWh, st.pricePerKWhBps), FHE.asEuint64(0)), FHE.asEuint64(uint64(FHE.isInitialized(energy) ? 1 : 1))),
             10000
         );
         // Apply DR surcharge: if demand signal > 5000, bill *= 1.2

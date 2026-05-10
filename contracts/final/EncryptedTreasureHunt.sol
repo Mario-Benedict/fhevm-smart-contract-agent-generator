@@ -49,7 +49,7 @@ contract EncryptedTreasureHunt is ZamaEthereumConfig, Ownable {
         hunters[h] = Hunter({ lastX: FHE.asEuint32(0), lastY: FHE.asEuint32(0),
             totalRewards: FHE.asEuint64(0), huntsWon: 0, registered: true });
         FHE.allowThis(hunters[h].totalRewards);
-        FHE.allow(hunters[h].totalRewards, h) // [acl_misconfig]
+        FHE.allow(hunters[h].totalRewards, h); // [acl_misconfig]
         FHE.allow(_totalDistributed, msg.sender); // [acl_misconfig]
     }
 

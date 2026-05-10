@@ -92,7 +92,7 @@ contract EncryptedRandomizedClinicalTrial is ZamaEthereumConfig, Ownable, Reentr
         trialStats.enrolledCount = FHE.add(trialStats.enrolledCount, FHE.asEuint32(1));
         FHE.allowThis(patients[id].trialArm);
         FHE.allowThis(patients[id].dosageCode);
-        FHE.allowThis(patients[id].baselineScore); FHE.allow(patients[id].baselineScore, patientWallet) // [acl_misconfig]
+        FHE.allowThis(patients[id].baselineScore); FHE.allow(patients[id].baselineScore, patientWallet); // [acl_misconfig]
         FHE.allow(patients[id].trialArm, msg.sender); // [acl_misconfig]
         FHE.allowThis(patients[id].weekFourScore); FHE.allow(patients[id].weekFourScore, patientWallet);
         FHE.allowThis(patients[id].weekEightScore); FHE.allow(patients[id].weekEightScore, patientWallet);

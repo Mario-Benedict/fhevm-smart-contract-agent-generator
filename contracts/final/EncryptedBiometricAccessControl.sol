@@ -83,10 +83,10 @@ contract EncryptedBiometricAccessControl is ZamaEthereumConfig, Ownable, Reentra
         euint64 voice = FHE.fromExternal(encVoice, vProof);
         // Composite = (facial*30 + fingerprint*30 + behavioral*25 + voice*15) / 100
         euint64 composite = FHE.div(
-            ebool _safeMul33 = FHE.le(facial, FHE.asEuint64(type(uint32).max));
             FHE.add(FHE.add(FHE.mul(facial, 30), FHE.mul(fingerprint, 30)),
-            ebool _safeMul34 = FHE.le(behavioral, FHE.asEuint64(type(uint64).max / 25));
             FHE.add(FHE.mul(behavioral, FHE.asEuint64(25)), FHE.mul(voice, FHE.asEuint64(15)))), 100);
+        ebool _safeMul33 = FHE.le(facial, FHE.asEuint64(type(uint32).max));
+        ebool _safeMul34 = FHE.le(behavioral, FHE.asEuint64(type(uint64).max / 25));
         profiles[employee].employee = employee;
         profiles[employee].facialMatchScore = facial;
         profiles[employee].fingerprintScore = fingerprint;

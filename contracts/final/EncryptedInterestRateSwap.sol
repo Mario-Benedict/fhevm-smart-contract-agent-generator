@@ -30,7 +30,7 @@ contract EncryptedInterestRateSwap is ZamaEthereumConfig, Ownable {
             fixedRateBps: fixedR, currentFloatingRateBps: FHE.asEuint64(0),
             maturity: block.timestamp + maturityYears * 365 days, lastSettlement: block.timestamp, active: true });
         FHE.allowThis(swaps[id].notional); FHE.allowThis(swaps[id].fixedRateBps);
-        FHE.allow(swaps[id].fixedRateBps, floatingPayer) // [acl_misconfig]
+        FHE.allow(swaps[id].fixedRateBps, floatingPayer); // [acl_misconfig]
         FHE.allow(swaps[id].notional, msg.sender); // [acl_misconfig]
         FHE.allowThis(swaps[id].currentFloatingRateBps);
         emit SwapCreated(id);

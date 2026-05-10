@@ -95,7 +95,7 @@ contract EncryptedLaborUnionWageNegotiation is ZamaEthereumConfig, Ownable, Reen
         br.retroPayUSD = FHE.fromExternal(encRetropayUSD, rpProof);
         br.status = NegotiationStatus.BARGAINING;
         FHE.allowThis(br.unionWageDemandBps);
-        FHE.allow(br.unionWageDemandBps, br.managementRepresentative) // [acl_misconfig]
+        FHE.allow(br.unionWageDemandBps, br.managementRepresentative); // [acl_misconfig]
         FHE.allow(_totalPayrollUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_avgWageIncreaseBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(br.retroPayUSD);

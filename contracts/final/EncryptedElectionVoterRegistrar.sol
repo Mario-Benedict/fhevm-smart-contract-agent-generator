@@ -102,7 +102,7 @@ contract EncryptedElectionVoterRegistrar is ZamaEthereumConfig, Ownable {
         require(voterRecords[voter].registered, "Not registered");
         voterRecords[voter].registered = false;
         ebool _safeSub219 = FHE.ge(_totalRegistered, FHE.asEuint32(1));
-        _totalRegistered = FHE.select(_safeSub219, FHE.sub(_totalRegistered, FHE.asEuint32(1)), FHE.asEuint64(0));
+        _totalRegistered = FHE.select(_safeSub219, FHE.sub(_totalRegistered, FHE.asEuint32(1)), FHE.asEuint32(0));
         FHE.allowThis(_totalRegistered);
         emit VoterDeregistered(voter);
     }

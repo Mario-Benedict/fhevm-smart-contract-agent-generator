@@ -99,7 +99,7 @@ contract EncryptedPredictionMarketResolution is ZamaEthereumConfig, Ownable, Ree
         posId = positionCount++;
         positions[posId] = Position({ trader: msg.sender, marketId: marketId, sideA: sideA, stakeUSD: netStake, payoutUSD: payout, claimed: false });
         marketPositions[marketId].push(posId);
-        FHE.allowThis(positions[posId].stakeUSD); FHE.allow(positions[posId].stakeUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(positions[posId].stakeUSD); FHE.allow(positions[posId].stakeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTradingVolume, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFeesEarned, msg.sender); // [acl_misconfig]
         FHE.allowThis(positions[posId].payoutUSD); FHE.allow(positions[posId].payoutUSD, msg.sender);

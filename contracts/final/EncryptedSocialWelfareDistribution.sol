@@ -103,7 +103,7 @@ contract EncryptedSocialWelfareDistribution is ZamaEthereumConfig, Ownable {
             enrolledAt: block.timestamp, programId: programId, enrolled: true, suspended: false
         });
         FHE.allowThis(beneficiaries[person].eligibilityScore);
-        FHE.allow(beneficiaries[person].eligibilityScore, person) // [acl_misconfig]
+        FHE.allow(beneficiaries[person].eligibilityScore, person); // [acl_misconfig]
         FHE.allow(_totalDistributed, msg.sender); // [acl_misconfig]
         FHE.allowThis(beneficiaries[person].weeklyBenefitAmount);
         FHE.allow(beneficiaries[person].weeklyBenefitAmount, person);

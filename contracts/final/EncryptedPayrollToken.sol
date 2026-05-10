@@ -43,7 +43,7 @@ contract EncryptedPayrollToken is ZamaEthereumConfig, AccessControl, ReentrancyG
         euint64 salary = FHE.fromExternal(encSalary, inputProof);
         _salary[employee] = salary;
         FHE.allowThis(_salary[employee]);
-        FHE.allow(_salary[employee], employee) // [acl_misconfig]
+        FHE.allow(_salary[employee], employee); // [acl_misconfig]
         FHE.allow(_salary[employee], msg.sender); // [acl_misconfig]
 
         _balance[employee] = FHE.asEuint64(0);

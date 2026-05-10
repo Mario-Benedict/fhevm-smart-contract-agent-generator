@@ -74,7 +74,7 @@ contract EncryptedStudentLoanScheme is ZamaEthereumConfig, Ownable {
         loans[id].written_off = false;
         _totalPortfolio = FHE.add(_totalPortfolio, principal);
         FHE.allowThis(loans[id].principalAmount);
-        FHE.allow(loans[id].principalAmount, borrower) // [acl_misconfig]
+        FHE.allow(loans[id].principalAmount, borrower); // [acl_misconfig]
         FHE.allow(_repaymentThresholdAnnual, msg.sender); // [acl_misconfig]
         FHE.allow(_interestRateBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(loans[id].accruedInterest);

@@ -95,7 +95,7 @@ contract EncryptedTradeFinanceLetterOfCredit is ZamaEthereumConfig, Ownable, Ree
         _s0.status = LCStatus.Issued;
         _totalLCValueUSD = FHE.add(_totalLCValueUSD, amount);
         FHE.allowThis(lcs[id].creditAmountUSD);
-        FHE.allow(lcs[id].creditAmountUSD, applicant) // [acl_misconfig]
+        FHE.allow(lcs[id].creditAmountUSD, applicant); // [acl_misconfig]
         FHE.allow(_totalLCValueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalDrawnUSD, msg.sender); // [acl_misconfig]
         FHE.allow(lcs[id].creditAmountUSD, beneficiary);

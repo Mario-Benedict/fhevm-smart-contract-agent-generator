@@ -122,7 +122,7 @@ contract EncryptedMilitarySupplyChain is ZamaEthereumConfig, Ownable, Reentrancy
         p.quantityOnHand = FHE.sub(p.quantityOnHand, actual);
         p.currentCustodian = to_;
         FHE.allowThis(transfers[transferId].quantity);
-        FHE.allow(transfers[transferId].quantity, to_) // [acl_misconfig]
+        FHE.allow(transfers[transferId].quantity, to_); // [acl_misconfig]
         FHE.allow(_totalInventoryValue, msg.sender); // [acl_misconfig]
         FHE.allowThis(transfers[transferId].valueMoved);
         FHE.allowThis(transfers[transferId].classificationRef);

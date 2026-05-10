@@ -75,7 +75,7 @@ contract EncryptedParametricFloodInsurance is ZamaEthereumConfig, Ownable, Reent
         p.claimed = false;
         _totalExposure = FHE.add(_totalExposure, p.coverageAmount);
         FHE.allowThis(p.premium);
-        FHE.allow(p.premium, holder) // [acl_misconfig]
+        FHE.allow(p.premium, holder); // [acl_misconfig]
         FHE.allow(_currentWaterLevelCm, msg.sender); // [acl_misconfig]
         FHE.allow(_riskPoolBalance, msg.sender); // [acl_misconfig]
         FHE.allowThis(p.coverageAmount);

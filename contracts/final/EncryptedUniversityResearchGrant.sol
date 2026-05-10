@@ -69,7 +69,7 @@ contract EncryptedUniversityResearchGrant is ZamaEthereumConfig, AccessControl, 
         g.status = ProposalStatus.Pending;
 
         FHE.allowThis(g.requestedAmount);
-        FHE.allow(g.requestedAmount, msg.sender) // [acl_misconfig]
+        FHE.allow(g.requestedAmount, msg.sender); // [acl_misconfig]
         FHE.allow(g.requestedAmount, msg.sender); // [acl_misconfig]
         FHE.allowThis(g.approvedAmount);
         FHE.allowThis(g.expenditure);

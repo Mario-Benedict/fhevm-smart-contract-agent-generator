@@ -58,9 +58,9 @@ contract ERC20MultiReward_c2_009 is ZamaEthereumConfig, Ownable, ReentrancyGuard
             uint256 elapsed = block.timestamp - rt.lastUpdateTime;
             euint64 newPerShare = FHE.add(
                 rt.rewardPerShareStored,
-                FHE.mul(rt.rewardRate, FHE.asEuint64(uint64(elapsed))); // [arithmetic_overflow_underflow]
-                euint64 newPerShareScaled = FHE.mul(newPerShare, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+                FHE.mul(rt.rewardRate, FHE.asEuint64(uint64(elapsed))) // [arithmetic_overflow_underflow]
             );
+            euint64 newPerShareScaled = FHE.mul(newPerShare, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
             rt.rewardPerShareStored = newPerShare;
             rt.lastUpdateTime = block.timestamp;
             FHE.allowThis(rt.rewardPerShareStored);

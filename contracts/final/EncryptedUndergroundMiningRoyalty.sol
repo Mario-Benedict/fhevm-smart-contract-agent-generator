@@ -123,7 +123,7 @@ contract EncryptedUndergroundMiningRoyalty is ZamaEthereumConfig, Ownable, Reent
         c.metalPriceUSDPerKg = FHE.asEuint64(0);
         c.operator = msg.sender;
         c.landowner = landowner;
-        FHE.allowThis(c.gradeGramsPerTonne); FHE.allow(c.gradeGramsPerTonne, msg.sender) // [acl_misconfig]
+        FHE.allowThis(c.gradeGramsPerTonne); FHE.allow(c.gradeGramsPerTonne, msg.sender); // [acl_misconfig]
         FHE.allow(_totalMetalRecoveredGrams, msg.sender); // [acl_misconfig]
         FHE.allow(_totalGovernmentRoyaltiesUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(c.totalTonnageProcessed); FHE.allow(c.totalTonnageProcessed, msg.sender);

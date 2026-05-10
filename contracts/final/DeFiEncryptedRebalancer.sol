@@ -93,8 +93,8 @@ contract DeFiEncryptedRebalancer is ZamaEthereumConfig, Ownable, ReentrancyGuard
         for (uint256 i = 0; i < assetIds.length; i++) {
             euint64 buy = FHE.fromExternal(encBuys[i], buyProofs[i]);
             euint64 sell = FHE.fromExternal(encSells[i], sellProofs[i]);
+            ebool _safeSub115 = FHE.ge(assets[assetIds[i]].currentBalance, sell);
             assets[assetIds[i]].currentBalance = FHE.add(
-                ebool _safeSub115 = FHE.ge(assets[assetIds[i]].currentBalance, sell);
                 FHE.select(_safeSub115, FHE.sub(assets[assetIds[i]].currentBalance, sell), FHE.asEuint64(0)), buy
             );
             FHE.allowThis(assets[assetIds[i]].currentBalance);

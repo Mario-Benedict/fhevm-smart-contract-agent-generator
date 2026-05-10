@@ -104,7 +104,7 @@ contract EncryptedPrivateBankingWealth is ZamaEthereumConfig, Ownable, Reentranc
         isClient[client] = true;
         _totalBankAUM = FHE.add(_totalBankAUM, aum);
         FHE.allowThis(profiles[client].aumUSD);
-        FHE.allow(profiles[client].aumUSD, client) // [acl_misconfig]
+        FHE.allow(profiles[client].aumUSD, client); // [acl_misconfig]
         FHE.allow(_totalBankAUM, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFeesEarned, msg.sender); // [acl_misconfig]
         FHE.allow(profiles[client].aumUSD, msg.sender);

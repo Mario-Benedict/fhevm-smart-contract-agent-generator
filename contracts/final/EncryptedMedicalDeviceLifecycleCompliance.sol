@@ -107,7 +107,7 @@ contract EncryptedMedicalDeviceLifecycleCompliance is ZamaEthereumConfig, Ownabl
         _s0.status = DeviceStatus.ACTIVE;
         _totalFleetValue = FHE.add(_totalFleetValue, cost);
         FHE.allowThis(devices[deviceId].acquisitionCostUSD);
-        FHE.allow(devices[deviceId].acquisitionCostUSD, facility) // [acl_misconfig]
+        FHE.allow(devices[deviceId].acquisitionCostUSD, facility); // [acl_misconfig]
         FHE.allow(_totalFleetValue, msg.sender); // [acl_misconfig]
         FHE.allow(_totalMaintenanceCosts, msg.sender); // [acl_misconfig]
         FHE.allowThis(devices[deviceId].currentValueUSD);

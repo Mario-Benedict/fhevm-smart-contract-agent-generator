@@ -69,7 +69,7 @@ contract EncryptedSpaceSatelliteDataMarket is ZamaEthereumConfig, Ownable {
         datasets[id].accessGranted = FHE.asEuint32(0);
         datasets[id].active = true;
         FHE.allowThis(datasets[id].baseAccessFeeUSD);
-        FHE.allow(datasets[id].baseAccessFeeUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(datasets[id].baseAccessFeeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_platformFeesBps, msg.sender); // [acl_misconfig]
         FHE.allow(_totalMarketVolume, msg.sender); // [acl_misconfig]
         FHE.allowThis(datasets[id].perKm2FeeUSD);

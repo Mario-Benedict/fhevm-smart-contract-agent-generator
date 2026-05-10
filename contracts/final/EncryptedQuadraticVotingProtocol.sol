@@ -71,7 +71,7 @@ contract EncryptedQuadraticVotingProtocol is ZamaEthereumConfig, Ownable, Reentr
         euint64 credits = FHE.fromExternal(encCredits, proof);
         balances[voter] = VoiceCreditBalance({ totalCredits: credits, spentCredits: FHE.asEuint64(0), registered: true });
         _totalVoiceCreditsDistributed = FHE.add(_totalVoiceCreditsDistributed, credits);
-        FHE.allowThis(balances[voter].totalCredits); FHE.allow(balances[voter].totalCredits, voter) // [acl_misconfig]
+        FHE.allowThis(balances[voter].totalCredits); FHE.allow(balances[voter].totalCredits, voter); // [acl_misconfig]
         FHE.allow(_matchingPool, msg.sender); // [acl_misconfig]
         FHE.allow(_totalVoiceCreditsDistributed, msg.sender); // [acl_misconfig]
         FHE.allowThis(balances[voter].spentCredits); FHE.allow(balances[voter].spentCredits, voter);

@@ -76,7 +76,7 @@ contract EncryptedSpaceDebrisRemovalBounty is ZamaEthereumConfig, Ownable, Reent
             missionsCompleted: 0, certified: false
         });
         FHE.allowThis(contractors[contractor].capabilityScore);
-        FHE.allow(contractors[contractor].capabilityScore, contractor) // [acl_misconfig]
+        FHE.allow(contractors[contractor].capabilityScore, contractor); // [acl_misconfig]
         FHE.allow(_totalBountiesPosted, msg.sender); // [acl_misconfig]
         FHE.allow(_totalBountiesPaid, msg.sender); // [acl_misconfig]
         FHE.allowThis(contractors[contractor].totalEarnedUSD);

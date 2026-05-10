@@ -112,7 +112,7 @@ contract EncryptedUniversityEndowmentFund is ZamaEthereumConfig, Ownable, Reentr
         _s0.active = true;
         _totalEndowmentValue = FHE.add(_totalEndowmentValue, principal);
         FHE.allowThis(accounts[accountId].principalUSD);
-        FHE.allow(accounts[accountId].principalUSD, donorAddr) // [acl_misconfig]
+        FHE.allow(accounts[accountId].principalUSD, donorAddr); // [acl_misconfig]
         FHE.allow(_totalEndowmentValue, msg.sender); // [acl_misconfig]
         FHE.allow(_totalGrantsDisbursed, msg.sender); // [acl_misconfig]
         FHE.allowThis(accounts[accountId].marketValueUSD);

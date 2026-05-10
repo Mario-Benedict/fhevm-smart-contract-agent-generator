@@ -68,7 +68,7 @@ contract EncryptedSovereignCreditDefaultSwap is ZamaEthereumConfig, AccessContro
         swaps[swapId].referenceEntity = referenceEntity;
 
         FHE.allowThis(swaps[swapId].notionalUSD);
-        FHE.allow(swaps[swapId].notionalUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(swaps[swapId].notionalUSD, msg.sender); // [acl_misconfig]
         FHE.allow(swaps[swapId].notionalUSD, msg.sender); // [acl_misconfig]
         FHE.allow(swaps[swapId].notionalUSD, seller);
         FHE.allowThis(swaps[swapId].premiumBps);

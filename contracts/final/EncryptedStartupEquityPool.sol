@@ -72,7 +72,7 @@ contract EncryptedStartupEquityPool is ZamaEthereumConfig, Ownable {
             vestingTotal: isEarlyEmployee ? 48 : 36, active: true
         });
         FHE.allowThis(shareholders[holder].commonShares);
-        FHE.allow(shareholders[holder].commonShares, holder) // [acl_misconfig]
+        FHE.allow(shareholders[holder].commonShares, holder); // [acl_misconfig]
         FHE.allow(_totalShares, msg.sender); // [acl_misconfig]
         FHE.allow(_optionPool, msg.sender); // [acl_misconfig]
         FHE.allowThis(shareholders[holder].preferredShares);

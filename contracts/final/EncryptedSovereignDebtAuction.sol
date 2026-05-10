@@ -79,7 +79,7 @@ contract EncryptedSovereignDebtAuction is ZamaEthereumConfig, Ownable, Reentranc
         bidderKYC[bidder].maxBidCapUSD = FHE.fromExternal(encMaxBid, mbProof);
         bidderKYC[bidder].approved = true;
         FHE.allowThis(bidderKYC[bidder].investorClass);
-        FHE.allow(bidderKYC[bidder].investorClass, bidder) // [acl_misconfig]
+        FHE.allow(bidderKYC[bidder].investorClass, bidder); // [acl_misconfig]
         FHE.allow(_totalDebtOutstanding, msg.sender); // [acl_misconfig]
         FHE.allow(_weightedAvgYield, msg.sender); // [acl_misconfig]
         FHE.allowThis(bidderKYC[bidder].maxBidCapUSD);

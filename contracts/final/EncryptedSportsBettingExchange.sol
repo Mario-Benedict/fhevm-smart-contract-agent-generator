@@ -106,7 +106,7 @@ contract EncryptedSportsBettingExchange is ZamaEthereumConfig, Ownable, Reentran
         bets[betId].odds = oddsUsed;
         bets[betId].matched = true;
         bets[betId].settled = false;
-        FHE.allowThis(bets[betId].stakeUSD); FHE.allow(bets[betId].stakeUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(bets[betId].stakeUSD); FHE.allow(bets[betId].stakeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalExchangeVolumeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCommissionEarnedUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(bets[betId].potentialWinUSD); FHE.allow(bets[betId].potentialWinUSD, msg.sender);

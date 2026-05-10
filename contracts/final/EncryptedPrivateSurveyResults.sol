@@ -82,7 +82,7 @@ contract EncryptedPrivateSurveyResults is ZamaEthereumConfig, Ownable, Reentranc
         surveys[id].aggregateScoreSum = FHE.asEuint64(0);
         surveys[id].deadline = block.timestamp + durationDays * 1 days;
         surveys[id].active = true;
-        FHE.allowThis(surveys[id].rewardPerResponseUSD); FHE.allow(surveys[id].rewardPerResponseUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(surveys[id].rewardPerResponseUSD); FHE.allow(surveys[id].rewardPerResponseUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRewardsDistributed, msg.sender); // [acl_misconfig]
         FHE.allowThis(surveys[id].totalBudgetUSD); FHE.allow(surveys[id].totalBudgetUSD, msg.sender);
         FHE.allowThis(surveys[id].spentBudgetUSD); FHE.allow(surveys[id].spentBudgetUSD, msg.sender);

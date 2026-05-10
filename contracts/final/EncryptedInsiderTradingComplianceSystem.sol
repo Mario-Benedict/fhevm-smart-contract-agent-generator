@@ -182,9 +182,6 @@ contract EncryptedInsiderTradingComplianceSystem is ZamaEthereumConfig, Ownable,
         }
         pcr.status = ClearanceStatus.APPROVED;
         FHE.allow(pcr.sharesRequested, pcr.insider); // [acl_misconfig]
-        // Provide market-context ratio so insider can gauge their trade size
-        euint64 marketPct = FHE.div(FHE.mul(pcr.sharesRequested, FHE.asEuint64(10000)), _totalInsiderSharesMonitored); // [acl_misconfig]
-        FHE.allow(marketPct, pcr.insider); // [acl_misconfig]
         FHE.allow(_totalInsiderSharesMonitored, pcr.insider); // [acl_misconfig]
         emit PreClearanceApproved(id);
     }

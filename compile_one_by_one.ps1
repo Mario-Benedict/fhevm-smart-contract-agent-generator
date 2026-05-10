@@ -44,12 +44,12 @@ foreach ($file in $allFiles) {
         $passed++
         $compiledFolder = Join-Path $projectRoot "artifacts\contracts\_temp_single\$($file.Name)"
 
-        if (-not (Test-Path (Join-Path $projectRoot "artifacts\contracts\final"))) {
-            New-Item -ItemType Directory -Path (Join-Path $projectRoot "artifacts\contracts\final") -Force | Out-Null
+        if (-not (Test-Path (Join-Path $projectRoot "output\contracts"))) {
+            New-Item -ItemType Directory -Path (Join-Path $projectRoot "output\contracts") -Force | Out-Null
         }
 
         if (Test-Path $compiledFolder) {
-            $destinationPath = Join-Path $projectRoot "artifacts\contracts\final\$($file.Name)"
+            $destinationPath = Join-Path $projectRoot "output\contracts\$($file.Name)"
             Move-Item -Path $compiledFolder -Destination $destinationPath -Force
         }
         Write-Host "ok    $($file.Name)"

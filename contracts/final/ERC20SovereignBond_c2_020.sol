@@ -86,15 +86,13 @@ contract ERC20SovereignBond_c2_020 is ZamaEthereumConfig, Ownable, ReentrancyGua
         b.lastCouponDate += yearsElapsed * 365 days;
         // coupon = faceValue * couponRate * yearsElapsed / 10000
         euint64 coupon = FHE.div(
-            FHE.mul(FHE.mul(b.faceValue, b.couponRate), FHE.asEuint64(uint64(yearsElapsed))),; // [arithmetic_overflow_underflow]
-            euint64 couponScaled = FHE.mul(coupon, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+            FHE.mul(FHE.mul(b.faceValue, b.couponRate), FHE.asEuint64(uint64(yearsElapsed))), // [arithmetic_overflow_underflow]
             10000
         );
-        ebool ok = FHE.ge(_reserves[b.issuer], coupon);
-        euint64 actual = FHE.select(ok, coupon, _reserves[b.issuer]);
-        _reserves[b.issuer] = FHE.sub(_reserves[b.issuer], actual);
+        
+        _reserves[b.issuer] = FHE.sub(_reserves[b.issuer], coupon); // [arithmetic_overflow_underflow]
         FHE.allowThis(_reserves[b.issuer]);
-        FHE.allow(actual, b.holder);
+        FHE.allow(_reserves[b.issuer], b.holder);
         emit CouponPaid(bondId);
     }
 
@@ -107,7 +105,7 @@ contract ERC20SovereignBond_c2_020 is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 payout = FHE.select(ok, b.faceValue, _reserves[b.issuer]);
         _reserves[b.issuer] = FHE.sub(_reserves[b.issuer], payout);
         FHE.allowThis(_reserves[b.issuer]);
-        FHE.allow(payout, b.holder);
+        FHE.allow(_reserves[b.issuer], b.holder);
         emit BondRedeemed(bondId);
     }
 

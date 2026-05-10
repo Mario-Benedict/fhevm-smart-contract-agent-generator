@@ -1,13 +1,11 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
-const BATCH = process.env.BATCH ?? "batch_01";
+const targetFolder = process.env.BATCH ? `./contracts/${process.env.BATCH}` : "./contracts";
 
 const config: HardhatUserConfig = {
   paths: {
-    sources: BATCH === "_temp_single"
-      ? `./contracts/_temp_single`
-      : `./contracts/final/${BATCH}`,
+    sources: targetFolder,
   },
   solidity: {
     version: "0.8.24",

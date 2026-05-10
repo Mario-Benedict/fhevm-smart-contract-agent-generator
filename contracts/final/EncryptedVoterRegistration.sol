@@ -44,7 +44,7 @@ contract EncryptedVoterRegistration is ZamaEthereumConfig, Ownable {
             registeredAt: block.timestamp, eligible: true
         });
         FHE.allowThis(voters[voter].districtCode);
-        FHE.allow(voters[voter].districtCode, voter) // [acl_misconfig]
+        FHE.allow(voters[voter].districtCode, voter); // [acl_misconfig]
         FHE.allow(voters[voter].districtCode, msg.sender); // [acl_misconfig]
         FHE.allowThis(voters[voter].ageGroup);
         FHE.allow(voters[voter].ageGroup, voter);

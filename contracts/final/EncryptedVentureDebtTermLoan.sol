@@ -110,7 +110,7 @@ contract EncryptedVentureDebtTermLoan is ZamaEthereumConfig, Ownable, Reentrancy
         _s0.maturityDate = maturityDate;
         _s0.drawdownComplete = false;
         authorizedBorrower[borrower] = true;
-        FHE.allowThis(principal); FHE.allow(principal, borrower) // [acl_misconfig]
+        FHE.allowThis(principal); FHE.allow(principal, borrower); // [acl_misconfig]
         FHE.allow(_totalPortfolioOutstanding, msg.sender); // [acl_misconfig]
         FHE.allow(_totalInterestEarned, msg.sender); // [acl_misconfig]
         FHE.allowThis(interestRate); FHE.allow(interestRate, borrower);

@@ -65,7 +65,7 @@ contract EncryptedRetailLoyaltyCashback is ZamaEthereumConfig, AccessControl, Pa
         members[msg.sender].cashbackBalance = FHE.asEuint64(0);
         FHE.allowThis(members[msg.sender].lifetimePurchase);
         FHE.allowThis(members[msg.sender].cashbackBalance);
-        FHE.allow(members[msg.sender].cashbackBalance, msg.sender) // [acl_misconfig]
+        FHE.allow(members[msg.sender].cashbackBalance, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCashbackLiability, msg.sender); // [acl_misconfig]
         emit MemberEnrolled(msg.sender);
     }

@@ -51,7 +51,7 @@ contract EncryptedMediaRatingAgency is ZamaEthereumConfig, Ownable {
             credibilityWeight: weight, reviewsCompleted: FHE.asEuint32(0), certified: true
         });
         FHE.allowThis(reviewers[reviewer].credibilityWeight);
-        FHE.allow(reviewers[reviewer].credibilityWeight, reviewer) // [acl_misconfig]
+        FHE.allow(reviewers[reviewer].credibilityWeight, reviewer); // [acl_misconfig]
         FHE.allow(reviewers[reviewer].credibilityWeight, msg.sender); // [acl_misconfig]
         FHE.allowThis(reviewers[reviewer].reviewsCompleted);
         emit ReviewerCertified(reviewer);

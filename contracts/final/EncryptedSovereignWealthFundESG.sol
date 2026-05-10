@@ -237,7 +237,7 @@ contract EncryptedSovereignWealthFundESG is ZamaEthereumConfig, AccessControl, R
     }
 
     function allowMetricsView(address viewer) external onlyRole(AUDITOR_ROLE) {
-        FHE.allow(portfolioMetrics.totalAUM, viewer) // [acl_misconfig]
+        FHE.allow(portfolioMetrics.totalAUM, viewer); // [acl_misconfig]
         FHE.allow(_carbonNeutralityTarget, msg.sender); // [acl_misconfig]
         FHE.allow(_greenBondMinQuota, msg.sender); // [acl_misconfig]
         FHE.allow(portfolioMetrics.weightedAvgESGScore, viewer);

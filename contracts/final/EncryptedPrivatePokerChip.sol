@@ -60,7 +60,7 @@ contract EncryptedPrivatePokerChip is ZamaEthereumConfig, Ownable, ReentrancyGua
         if (!FHE.isInitialized(_chipBalances[player])) { _chipBalances[player] = FHE.asEuint64(0); FHE.allowThis(_chipBalances[player]); }
         _chipBalances[player] = FHE.add(_chipBalances[player], amt);
         _totalChipsInCirculation = FHE.add(_totalChipsInCirculation, amt);
-        FHE.allowThis(_chipBalances[player]); FHE.allow(_chipBalances[player], player) // [acl_misconfig]
+        FHE.allowThis(_chipBalances[player]); FHE.allow(_chipBalances[player], player); // [acl_misconfig]
         FHE.allow(_totalChipsInCirculation, msg.sender); // [acl_misconfig]
         FHE.allow(_houseRakePool, msg.sender); // [acl_misconfig]
         FHE.allowThis(_totalChipsInCirculation);

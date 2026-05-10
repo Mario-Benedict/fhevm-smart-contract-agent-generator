@@ -108,7 +108,7 @@ contract EncryptedPeerReviewJournal is ZamaEthereumConfig, AccessControl {
         manuscripts[msId].decision = decision;
         if (decision == DecisionStatus.Accepted) {
             manuscripts[msId].published = true;
-            FHE.allow(manuscripts[msId].overallScore, manuscripts[msId].submittedBy) // [acl_misconfig]
+            FHE.allow(manuscripts[msId].overallScore, manuscripts[msId].submittedBy); // [acl_misconfig]
             FHE.allow(m.overallScore, msg.sender); // [acl_misconfig]
         }
         emit DecisionMade(msId, decision);

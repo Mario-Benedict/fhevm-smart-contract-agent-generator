@@ -102,7 +102,7 @@ contract EncryptedNaturalGasPipelineCapacity is ZamaEthereumConfig, Ownable, Ree
             bidAmountUSD: validBid, requestedMMBTU: vol, accepted: false
         });
         FHE.allowThis(bids[bidId].bidAmountUSD);
-        FHE.allow(bids[bidId].bidAmountUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(bids[bidId].bidAmountUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRevenueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCapacityMMBTU, msg.sender); // [acl_misconfig]
         FHE.allowThis(bids[bidId].requestedMMBTU);

@@ -138,8 +138,8 @@ contract ConfidentialReInsurancePool is ZamaEthereumConfig, Ownable, ReentrancyG
         euint64 grossLoss = FHE.fromExternal(encGrossLoss, proof);
         // Ceded loss = max(0, grossLoss - retention), capped at limit
         ebool exceedsRetention = FHE.gt(grossLoss, t.retentionUSD);
+        ebool _safeSub61 = FHE.ge(grossLoss, t.retentionUSD);
         euint64 excessLoss = FHE.select(exceedsRetention,
-            ebool _safeSub61 = FHE.ge(grossLoss, t.retentionUSD);
             FHE.select(_safeSub61, FHE.sub(grossLoss, t.retentionUSD), FHE.asEuint64(0)), FHE.asEuint64(0));
         ebool withinLimit = FHE.le(excessLoss, t.limitUSD);
         euint64 cededLoss = FHE.select(withinLimit, excessLoss, t.limitUSD);

@@ -138,7 +138,7 @@ contract EncryptedPredictionMarketDecentralized is ZamaEthereumConfig, Ownable, 
         euint64 fee = FHE.div(stake, 100);
         _totalPlatformFees = FHE.add(_totalPlatformFees, fee);
         FHE.allowThis(pos.stakeUSD);
-        FHE.allow(pos.stakeUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(pos.stakeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPlatformFees, msg.sender); // [acl_misconfig]
         FHE.allowThis(pos.potentialPayoutUSD);
         FHE.allow(pos.potentialPayoutUSD, msg.sender);

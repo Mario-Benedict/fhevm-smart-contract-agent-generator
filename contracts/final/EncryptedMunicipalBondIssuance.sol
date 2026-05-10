@@ -90,7 +90,7 @@ contract EncryptedMunicipalBondIssuance is ZamaEthereumConfig, Ownable, Reentran
         _s0.status = BondStatus.Announced;
         _s0.issuer = issuer;
         FHE.allowThis(bonds[id].faceValueUSD);
-        FHE.allow(bonds[id].faceValueUSD, issuer) // [acl_misconfig]
+        FHE.allow(bonds[id].faceValueUSD, issuer); // [acl_misconfig]
         FHE.allow(_totalIssuanceVolume, msg.sender); // [acl_misconfig]
         FHE.allowThis(bonds[id].couponRateBps);
         FHE.allowThis(bonds[id].yieldToMaturityBps);

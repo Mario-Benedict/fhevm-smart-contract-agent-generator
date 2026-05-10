@@ -114,7 +114,7 @@ contract EncryptedMortgagePoolSecuritization is ZamaEthereumConfig, Ownable, Ree
             trancheHoldings[msg.sender][trancheId], amount
         );
         FHE.allowThis(trancheHoldings[msg.sender][trancheId]);
-        FHE.allow(trancheHoldings[msg.sender][trancheId], msg.sender) // [acl_misconfig]
+        FHE.allow(trancheHoldings[msg.sender][trancheId], msg.sender); // [acl_misconfig]
         FHE.allow(_totalPoolBalance, msg.sender); // [acl_misconfig]
         FHE.allow(_seniorFaceValue, msg.sender); // [acl_misconfig]
         investorTranches[msg.sender].push(trancheId);

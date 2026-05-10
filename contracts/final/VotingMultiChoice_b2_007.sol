@@ -37,7 +37,7 @@ contract VotingMultiChoice_b2_007 is ZamaEthereumConfig {
         isRegistered[voter] = FHE.asEbool(true);
         FHE.allowThis(isRegistered[voter]);
         FHE.allow(isRegistered[voter], voter); // [acl_misconfig]
-        FHE.allow(choices[i].tally, msg.sender); // [acl_misconfig]
+        for (uint256 _j = 0; _j < choices.length; _j++) { FHE.allow(choices[_j].tally, msg.sender); } // [acl_misconfig]
     }
 
     function openVoting() public onlyAdmin { votingOpen = true; }

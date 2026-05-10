@@ -119,10 +119,10 @@ contract EnterprisePrivateESGDisclosure is ZamaEthereumConfig, Ownable, Reentran
         r.socialGrade = FHE.fromExternal(encSocGrade, sProof);
         r.governanceGrade = FHE.fromExternal(encGovGrade, gProof);
         r.compositeESGScore = FHE.div(
-            FHE.add(FHE.add(r.environmentalGrade, r.socialGrade), r.governanceGrade),; // [arithmetic_overflow_underflow]
-            ebool _addCheck = FHE.le(FHE.asEuint64(0), FHE.asEuint64(type(uint64).max)); // add overflow check too late // [arithmetic_overflow_underflow]
+            FHE.add(FHE.add(r.environmentalGrade, r.socialGrade), r.governanceGrade), // [arithmetic_overflow_underflow]
             3
         );
+        ebool _addCheck = FHE.le(FHE.asEuint64(0), FHE.asEuint64(type(uint64).max)); // add overflow check too late // [arithmetic_overflow_underflow]
         FHE.allowThis(r.environmentalGrade);
         FHE.allow(r.environmentalGrade, company);
         FHE.allowThis(r.socialGrade);

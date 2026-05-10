@@ -92,7 +92,7 @@ contract EncryptedTradeSecretAuction is ZamaEthereumConfig, Ownable, ReentrancyG
         FHE.allowThis(s.highestBid);
         FHE.allow(s.highestBid, owner());
         FHE.allowThis(bids[secretId][msg.sender].amount);
-        FHE.allow(bids[secretId][msg.sender].amount, msg.sender) // [acl_misconfig]
+        FHE.allow(bids[secretId][msg.sender].amount, msg.sender); // [acl_misconfig]
         FHE.allow(_totalVolumeSettled, msg.sender); // [acl_misconfig]
         FHE.allow(_platformFeeBps, msg.sender); // [acl_misconfig]
         FHE.allow(bids[secretId][msg.sender].amount, owner());

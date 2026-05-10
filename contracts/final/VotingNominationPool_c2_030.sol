@@ -55,7 +55,7 @@ contract VotingNominationPool_c2_030 is ZamaEthereumConfig, Ownable {
         _votingPower[voter] = FHE.fromExternal(encPower, proof);
         FHE.allowThis(_votingPower[voter]);
         FHE.allow(_votingPower[voter], voter); // [acl_misconfig]
-        FHE.allow(nominees[nomineeId].nominations, msg.sender); // [acl_misconfig]
+        if (nominees.length > 0) { FHE.allow(nominees[0].nominations, msg.sender); } // [acl_misconfig]
     }
 
     function vote(uint256 nomineeId) external {

@@ -89,7 +89,7 @@ contract EncryptedReferendumVoting is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 weight = FHE.fromExternal(encWeight, wProof);
         voters[citizen] = CitizenVoter({ regionCode: region, voteWeight: weight, registered: true, voted: false });
         FHE.allowThis(voters[citizen].regionCode);
-        FHE.allowThis(voters[citizen].voteWeight); FHE.allow(voters[citizen].voteWeight, citizen) // [acl_misconfig]
+        FHE.allowThis(voters[citizen].voteWeight); FHE.allow(voters[citizen].voteWeight, citizen); // [acl_misconfig]
         FHE.allow(voters[citizen].regionCode, msg.sender); // [acl_misconfig]
         emit VoterRegistered(citizen);
     }

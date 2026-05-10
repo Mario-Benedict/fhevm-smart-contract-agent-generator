@@ -105,10 +105,10 @@ contract ConfidentialStakingYieldOptimizer is ZamaEthereumConfig, Ownable, Reent
         Strategy storage strat = strategies[us.strategyId];
         // Daily yield = stakedAmount * APY / 10000 / 365
         euint64 dailyYield = FHE.div(
-            ebool _safeMul14 = FHE.le(us.stakedAmount, FHE.asEuint64(type(uint32).max));
             FHE.mul(us.stakedAmount, 0), // apyBps as euint64
             10000 * 365
         );
+        ebool _safeMul14 = FHE.le(us.stakedAmount, FHE.asEuint64(type(uint32).max));
         us.yieldEarned = FHE.add(us.yieldEarned, dailyYield);
         us.stakedAmount = FHE.add(us.stakedAmount, dailyYield); // auto-compound
         us.lastCompound = dailyYield;

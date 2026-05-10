@@ -60,7 +60,7 @@ contract EncryptedRockPaperScissorsGame is ZamaEthereumConfig, Ownable, Reentran
         games[id].commitDeadline = block.timestamp + commitWindowHours * 1 hours;
         FHE.allowThis(games[id].move1);
         FHE.allowThis(games[id].move2);
-        FHE.allowThis(games[id].wager); FHE.allow(games[id].wager, msg.sender) // [acl_misconfig]
+        FHE.allowThis(games[id].wager); FHE.allow(games[id].wager, msg.sender); // [acl_misconfig]
         FHE.allow(_totalWagerVolume, msg.sender); // [acl_misconfig]
         FHE.allow(_houseRevenue, msg.sender); // [acl_misconfig]
         emit GameCreated(id, msg.sender);

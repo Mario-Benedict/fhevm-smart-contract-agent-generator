@@ -123,7 +123,7 @@ contract EncryptedSportsAthleteTransferFee is ZamaEthereumConfig, Ownable, Reent
         _s0.transferListed = false;
         _s0.onLoan = false;
         FHE.allowThis(players[playerId].marketValueEUR);
-        FHE.allow(players[playerId].marketValueEUR, currentClub) // [acl_misconfig]
+        FHE.allow(players[playerId].marketValueEUR, currentClub); // [acl_misconfig]
         FHE.allow(_globalTransferMarketVolume, msg.sender); // [acl_misconfig]
         FHE.allow(_seasonNetSpend, msg.sender); // [acl_misconfig]
         FHE.allowThis(players[playerId].weeklySalaryEUR);

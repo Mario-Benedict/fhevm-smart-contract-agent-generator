@@ -62,7 +62,7 @@ contract EncryptedMedicalImagingDataLicense is ZamaEthereumConfig, AccessControl
         });
 
         FHE.allowThis(datasets[id].licensePrice);
-        FHE.allow(datasets[id].licensePrice, msg.sender) // [acl_misconfig]
+        FHE.allow(datasets[id].licensePrice, msg.sender); // [acl_misconfig]
         FHE.allow(datasets[id].licensePrice, msg.sender); // [acl_misconfig]
         FHE.allowThis(datasets[id].imageCount);
         FHE.allow(datasets[id].imageCount, msg.sender);

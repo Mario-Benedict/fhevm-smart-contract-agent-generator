@@ -57,7 +57,7 @@ contract EncryptedRenewableEnergyCertificate is ZamaEthereumConfig, Ownable, Ree
 
         FHE.allowThis(certs[certId].mwhGenerated);
         FHE.allowThis(certs[certId].askPrice);
-        FHE.allow(certs[certId].mwhGenerated, msg.sender) // [acl_misconfig]
+        FHE.allow(certs[certId].mwhGenerated, msg.sender); // [acl_misconfig]
         FHE.allow(certs[certId].mwhGenerated, msg.sender); // [acl_misconfig]
         FHE.allow(certs[certId].askPrice, msg.sender);
 

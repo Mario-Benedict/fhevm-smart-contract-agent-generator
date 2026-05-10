@@ -67,11 +67,11 @@ contract DeFiPrivateSyntheticAsset is ZamaEthereumConfig, Ownable, ReentrancyGua
         euint64 collateral = FHE.fromExternal(encCollateral, cProof);
         euint64 mintAmount = FHE.fromExternal(encMintAmount, mProof);
         // Collateral must be >= mintAmount * oraclePrice * minRatio / 10000
-        euint64 collateralRequired = FHE.div(
-            ebool _safeMul29 = FHE.le(FHE.mul(mintAmount, _oraclePrice), FHE.asEuint64(type(uint32).max));
+        ebool _safeMul29 = FHE.le(FHE.mul(mintAmount, _oraclePrice), FHE.asEuint64(type(uint32).max));
+        euint64 collateralRequired = FHE.select(_safeMul29, FHE.div(
             FHE.mul(FHE.mul(mintAmount, _oraclePrice), _minRatioBps),
             10000
-        );
+        ), FHE.asEuint64(type(uint32).max));
         ebool safeToMint = FHE.ge(collateral, collateralRequired);
         euint64 actualMint = FHE.select(safeToMint, mintAmount, FHE.asEuint64(0));
         euint64 fee = FHE.div(FHE.mul(actualMint, _synthFeesBps), 10000);

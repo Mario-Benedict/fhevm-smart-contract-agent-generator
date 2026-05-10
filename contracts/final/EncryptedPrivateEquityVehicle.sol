@@ -129,7 +129,7 @@ contract EncryptedPrivateEquityVehicle is ZamaEthereumConfig, Ownable, Reentranc
         FHE.allowThis(lps[fundId][msg.sender].navShareUSD);
         FHE.allowThis(lps[fundId][msg.sender].dpiRatio);
         FHE.allowThis(lps[fundId][msg.sender].rvpiRatio);
-        FHE.allow(lps[fundId][msg.sender].commitmentUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(lps[fundId][msg.sender].commitmentUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalAUM, msg.sender); // [acl_misconfig]
         FHE.allow(lps[fundId][msg.sender].distributionsUSD, msg.sender);
         FHE.allow(lps[fundId][msg.sender].dpiRatio, msg.sender);

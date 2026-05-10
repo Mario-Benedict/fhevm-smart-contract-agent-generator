@@ -111,7 +111,7 @@ contract EncryptedLiquidityPoolAMM is ZamaEthereumConfig, Ownable, ReentrancyGua
         });
         providerPositions[msg.sender].push(posId);
         FHE.allowThis(p.reserveA); FHE.allowThis(p.reserveB); FHE.allowThis(p.totalLPSupply);
-        FHE.allowThis(positions[posId].lpTokensHeld); FHE.allow(positions[posId].lpTokensHeld, msg.sender) // [acl_misconfig]
+        FHE.allowThis(positions[posId].lpTokensHeld); FHE.allow(positions[posId].lpTokensHeld, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTVLUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFeesGeneratedUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(positions[posId].initialValueUSD); FHE.allow(positions[posId].initialValueUSD, msg.sender);

@@ -50,7 +50,7 @@ contract EmberCoinToken is ZamaEthereumConfig, AccessControl {
     {
         euint32 amount = FHE.fromExternal(encAmount, inputProof);
         ebool _safeSub144 = FHE.ge(_balances[msg.sender], amount);
-        _balances[msg.sender] = FHE.select(_safeSub144, FHE.sub(_balances[msg.sender], amount), FHE.asEuint64(0));
+        _balances[msg.sender] = FHE.select(_safeSub144, FHE.sub(_balances[msg.sender], amount), FHE.asEuint32(0));
         _balances[to] = FHE.add(_balances[to], amount);
         FHE.allowThis(_balances[msg.sender]);
         FHE.allowThis(_balances[to]);

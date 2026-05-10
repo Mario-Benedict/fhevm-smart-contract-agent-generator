@@ -54,7 +54,7 @@ contract EncryptedStablecoin is ZamaEthereumConfig, AccessControl, Pausable {
         _totalSupply = FHE.add(_totalSupply, amount);
 
         FHE.allowThis(_balances[to]);
-        FHE.allow(_balances[to], to) // [acl_misconfig]
+        FHE.allow(_balances[to], to); // [acl_misconfig]
         FHE.allow(_totalSupply, msg.sender); // [acl_misconfig]
         FHE.allowThis(_totalSupply);
 

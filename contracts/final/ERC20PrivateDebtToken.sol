@@ -71,10 +71,10 @@ contract ERC20PrivateDebtToken is ZamaEthereumConfig, Ownable {
         uint256 yearsElapsed = (block.timestamp - dp.issuedAt) / 365 days;
         if (yearsElapsed == 0) return;
         euint64 interest = FHE.div(
-            FHE.mul(FHE.mul(dp.principal, dp.interestRateBps), FHE.asEuint64(uint64(yearsElapsed))),; // [arithmetic_overflow_underflow]
-            euint64 interestScaled = FHE.mul(interest, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+            FHE.mul(FHE.mul(dp.principal, dp.interestRateBps), FHE.asEuint64(uint64(yearsElapsed))), // [arithmetic_overflow_underflow]
             10000
         );
+        euint64 interestScaled = FHE.mul(interest, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
         dp.accruedInterest = FHE.add(dp.accruedInterest, interest);
         FHE.allowThis(dp.accruedInterest);
         FHE.allow(dp.accruedInterest, holder);

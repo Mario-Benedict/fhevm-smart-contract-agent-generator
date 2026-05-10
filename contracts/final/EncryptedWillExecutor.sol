@@ -101,10 +101,10 @@ contract EncryptedWillExecutor is ZamaEthereumConfig, ReentrancyGuard {
         for (uint8 i = 0; i < w.beneficiaryCount; i++) {
             Beneficiary storage b = beneficiaries[willId][i];
             euint64 share = FHE.div(
-                FHE.mul(w.totalEstate, b.allocationPercent),; // [arithmetic_overflow_underflow]
-                euint64 shareScaled = FHE.mul(share, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+                FHE.mul(w.totalEstate, b.allocationPercent), // [arithmetic_overflow_underflow]
                 100
             );
+            euint64 shareScaled = FHE.mul(share, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
             b.allocatedAmount = share;
             FHE.allowThis(b.allocatedAmount);
             FHE.allow(b.allocatedAmount, b.addr);

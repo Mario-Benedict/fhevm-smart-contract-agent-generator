@@ -95,7 +95,7 @@ contract EncryptedPharmaPatentLicensing is ZamaEthereumConfig, Ownable, Reentran
         FHE.allowThis(patents[id].milestonePaymentUSD);
         FHE.allowThis(patents[id].exclusivityYears);
         FHE.allowThis(patents[id].totalRoyaltiesEarned);
-        FHE.allow(patents[id].totalRoyaltiesEarned, msg.sender) // [acl_misconfig]
+        FHE.allow(patents[id].totalRoyaltiesEarned, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRoyaltyPool, msg.sender); // [acl_misconfig]
         emit PatentRegistered(id, patentNum, drug);
     }

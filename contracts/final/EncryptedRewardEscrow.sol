@@ -41,7 +41,7 @@ contract EncryptedRewardEscrow is ZamaEthereumConfig, Ownable {
             totalMilestones: milestones, milestonesCompleted: 0, claimed: FHE.asEuint64(0), active: true });
         _totalEscrowed = FHE.add(_totalEscrowed, total);
         FHE.allowThis(grants[id].totalAmount);
-        FHE.allow(grants[id].totalAmount, employee) // [acl_misconfig]
+        FHE.allow(grants[id].totalAmount, employee); // [acl_misconfig]
         FHE.allow(_totalEscrowed, msg.sender); // [acl_misconfig]
         FHE.allowThis(grants[id].vestingSchedule);
         FHE.allowThis(grants[id].claimed);

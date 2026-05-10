@@ -190,7 +190,7 @@ contract EncryptedNuclearWasteTracking is ZamaEthereumConfig, AccessControl, Ree
     }
 
     function grantRegulatorView(uint256 canisterId, address regulator) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        FHE.allow(canisters[canisterId].radioactivityBq, regulator) // [acl_misconfig]
+        FHE.allow(canisters[canisterId].radioactivityBq, regulator); // [acl_misconfig]
         FHE.allow(_totalNetworkRadioactivity, msg.sender); // [acl_misconfig]
         FHE.allow(canisters[canisterId].siteLatEncoded, regulator);
         FHE.allow(canisters[canisterId].siteLonEncoded, regulator);

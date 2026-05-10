@@ -105,7 +105,7 @@ contract AuctionShippingContainerSlot is ZamaEthereumConfig, Ownable, Reentrancy
             ebool accept = FHE.and(valid, hasCapacity);
             euint32 granted = FHE.select(accept, b.requestedTEUs, FHE.asEuint32(0));
             ebool _safeSub6 = FHE.ge(remaining, granted);
-            remaining = FHE.select(_safeSub6, FHE.sub(remaining, granted), FHE.asEuint64(0));
+            remaining = FHE.select(_safeSub6, FHE.sub(remaining, granted), FHE.asEuint32(0));
             r.allocatedTEUs = FHE.add(r.allocatedTEUs, granted);
             b.allocated = FHE.isInitialized(accept);
             FHE.allowThis(remaining);

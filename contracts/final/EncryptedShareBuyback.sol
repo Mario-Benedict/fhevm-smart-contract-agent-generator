@@ -80,7 +80,7 @@ contract EncryptedShareBuyback is ZamaEthereumConfig, Ownable, Pausable {
             shareholder: msg.sender, sharesOffered: shares, askPrice: ask, filled: false
         }));
         FHE.allowThis(offers[programId][idx].sharesOffered);
-        FHE.allow(offers[programId][idx].sharesOffered, msg.sender) // [acl_misconfig]
+        FHE.allow(offers[programId][idx].sharesOffered, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSharesOutstanding, msg.sender); // [acl_misconfig]
         FHE.allowThis(offers[programId][idx].askPrice);
         FHE.allow(offers[programId][idx].askPrice, msg.sender);

@@ -94,7 +94,7 @@ contract EncryptedPrivateElderCareAllotment is ZamaEthereumConfig, AccessControl
 
         FHE.allowThis(a.needScore);
         FHE.allowThis(a.monthlyFee);
-        FHE.allow(a.monthlyFee, a.careHome) // [acl_misconfig]
+        FHE.allow(a.monthlyFee, a.careHome); // [acl_misconfig]
         FHE.allow(a.needScore, msg.sender); // [acl_misconfig]
         FHE.allowThis(a.subsidy);
         FHE.allowThis(a.copayment);

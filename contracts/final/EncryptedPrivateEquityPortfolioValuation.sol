@@ -106,7 +106,7 @@ contract EncryptedPrivateEquityPortfolioValuation is ZamaEthereumConfig, Ownable
         euint64 unrealized = FHE.sub(fmv, cost);
         _totalUnrealizedGain = FHE.add(_totalUnrealizedGain, unrealized);
         FHE.allowThis(companies[companyId].investmentCostUSD);
-        FHE.allow(companies[companyId].investmentCostUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(companies[companyId].investmentCostUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFundNAV, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCostBasis, msg.sender); // [acl_misconfig]
         FHE.allowThis(companies[companyId].currentFMVUSD);

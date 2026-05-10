@@ -154,10 +154,11 @@ contract GameEncryptedDungeonLoot is ZamaEthereumConfig, Ownable, ReentrancyGuar
             PlayerInventory storage inv = inventories[players[i]];
             if (FHE.isInitialized(inv.dungeonKeysOwned)) {
                 ebool hasKey = FHE.ge(inv.dungeonKeysOwned, FHE.asEuint64(1));
+                euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
                 inv.dungeonKeysOwned = FHE.select(hasKey,
-                    FHE.sub(inv.dungeonKeysOwned, FHE.asEuint64(1)),; // [arithmetic_overflow_underflow]
-                    euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
-                    FHE.asEuint64(0));
+                    FHE.sub(inv.dungeonKeysOwned, FHE.asEuint64(1)), // [arithmetic_overflow_underflow]
+                    FHE.asEuint64(0)
+                );
                 FHE.allowThis(inv.dungeonKeysOwned);
             }
         }

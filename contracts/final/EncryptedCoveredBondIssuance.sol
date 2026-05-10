@@ -194,11 +194,11 @@ contract EncryptedCoveredBondIssuance is ZamaEthereumConfig, AccessControl, Reen
             InvestorHolding storage holding = investorHoldings[seriesId][investors[i]];
             if (holding.active) {
                 euint64 couponPayment = FHE.div(
-                    ebool _safeMul46 = FHE.le(holding.nominalAmount, FHE.asEuint64(type(uint32).max));
                     FHE.mul(holding.nominalAmount, series.couponRate),
                     10000
                 );
-                holding.accruedInterest = FHE.add(holding.accruedInterest, couponPayment);
+                ebool _safeMul46 = FHE.le(holding.nominalAmount, FHE.asEuint64(type(uint32).max));
+                holding.accruedInterest = FHE.select(_safeMul46, FHE.add(holding.accruedInterest, couponPayment), holding.accruedInterest);
                 FHE.allowThis(holding.accruedInterest);
                 FHE.allow(holding.accruedInterest, investors[i]);
                 FHE.allowTransient(couponPayment, investors[i]);

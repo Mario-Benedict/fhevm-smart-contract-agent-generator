@@ -71,7 +71,7 @@ contract EncryptedVaultedGoldBacking is ZamaEthereumConfig, Ownable, ReentrancyG
         _balances[to] = FHE.add(_balances[to], tokensToMint);
         _totalTokenSupply = FHE.add(_totalTokenSupply, tokensToMint);
         FHE.allowThis(_balances[to]);
-        FHE.allow(_balances[to], to) // [acl_misconfig]
+        FHE.allow(_balances[to], to); // [acl_misconfig]
         FHE.allow(_vaultGoldGrams, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTokenSupply, msg.sender); // [acl_misconfig]
         FHE.allowThis(_totalTokenSupply);

@@ -92,7 +92,7 @@ contract EncryptedWaterRightsTrading is ZamaEthereumConfig, Ownable, ReentrancyG
         rights[id].status = RightStatus.Active;
         _totalAllocatedML = FHE.add(_totalAllocatedML, allocation);
         FHE.allowThis(rights[id].allocationMegaLiters);
-        FHE.allow(rights[id].allocationMegaLiters, holder) // [acl_misconfig]
+        FHE.allow(rights[id].allocationMegaLiters, holder); // [acl_misconfig]
         FHE.allow(_totalAllocatedML, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTradedVolume, msg.sender); // [acl_misconfig]
         FHE.allowThis(rights[id].usedMegaLiters);

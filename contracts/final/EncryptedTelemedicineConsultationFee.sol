@@ -86,7 +86,7 @@ contract EncryptedTelemedicineConsultationFee is ZamaEthereumConfig, Ownable, Re
         doctors[msg.sender].totalEarnedUSD = FHE.asEuint64(0);
         doctors[msg.sender].consultationsCount = 0;
         doctors[msg.sender].active = true;
-        FHE.allowThis(doctors[msg.sender].standardFeeUSD); FHE.allow(doctors[msg.sender].standardFeeUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(doctors[msg.sender].standardFeeUSD); FHE.allow(doctors[msg.sender].standardFeeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPlatformRevenue, msg.sender); // [acl_misconfig]
         FHE.allow(_totalInsuranceReimbursed, msg.sender); // [acl_misconfig]
         FHE.allowThis(doctors[msg.sender].qualityScore); FHE.allow(doctors[msg.sender].qualityScore, msg.sender);

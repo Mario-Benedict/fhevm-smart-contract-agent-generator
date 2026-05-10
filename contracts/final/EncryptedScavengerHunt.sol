@@ -59,7 +59,7 @@ contract EncryptedScavengerHunt is ZamaEthereumConfig, Ownable {
         registered[msg.sender] = true;
         participantScore[msg.sender] = FHE.asEuint64(0);
         FHE.allowThis(participantScore[msg.sender]);
-        FHE.allow(participantScore[msg.sender], msg.sender) // [acl_misconfig]
+        FHE.allow(participantScore[msg.sender], msg.sender); // [acl_misconfig]
         FHE.allow(c.encSolved, msg.sender); // [acl_misconfig]
     }
 

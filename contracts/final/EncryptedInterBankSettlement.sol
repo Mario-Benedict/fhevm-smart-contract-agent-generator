@@ -84,7 +84,7 @@ contract EncryptedInterBankSettlement is ZamaEthereumConfig, Ownable, Reentrancy
         b.dailySettledAmount = FHE.asEuint64(0);
         b.registered = true;
         FHE.allowThis(b.nostroBalance);
-        FHE.allow(b.nostroBalance, bank) // [acl_misconfig]
+        FHE.allow(b.nostroBalance, bank); // [acl_misconfig]
         FHE.allow(_systemDailyVolume, msg.sender); // [acl_misconfig]
         FHE.allow(_systemNettingRatioBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(b.vostroBalance);

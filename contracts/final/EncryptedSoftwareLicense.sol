@@ -56,7 +56,7 @@ contract EncryptedSoftwareLicense is ZamaEthereumConfig, Ownable {
         licenses[licId] = License({ licenseKey: key, tier: tier, maxSeats: seats, seatsUsed: FHE.asEuint32(0),
             featureFlags: features, expiresAt: block.timestamp + validityDays * 1 days, active: true, licensee: org });
         _totalRevenue = FHE.add(_totalRevenue, payment);
-        FHE.allowThis(licenses[licId].licenseKey); FHE.allow(licenses[licId].licenseKey, org) // [acl_misconfig]
+        FHE.allowThis(licenses[licId].licenseKey); FHE.allow(licenses[licId].licenseKey, org); // [acl_misconfig]
         FHE.allow(_totalRevenue, msg.sender); // [acl_misconfig]
         FHE.allowThis(licenses[licId].maxSeats); FHE.allow(licenses[licId].maxSeats, org);
         FHE.allowThis(licenses[licId].seatsUsed); FHE.allow(licenses[licId].seatsUsed, org);

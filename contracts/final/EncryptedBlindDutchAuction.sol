@@ -108,7 +108,7 @@ contract EncryptedBlindDutchAuction is ZamaEthereumConfig, Ownable, ReentrancyGu
         ebool aboveReserve = FHE.ge(price, auctions[auctionId].reservePriceUSD);
         euint64 effectivePrice = FHE.select(aboveReserve, price, auctions[auctionId].reservePriceUSD);
         ebool _safeMul36 = FHE.le(effectivePrice, FHE.asEuint64(type(uint32).max));
-        euint64 total = FHE.mul(effectivePrice, units);
+        euint64 total = FHE.select(_safeMul36, FHE.mul(effectivePrice, units), FHE.asEuint64(type(uint64).max));
 
         bids[auctionId][msg.sender] = Bid({
             bidder: msg.sender,
@@ -141,9 +141,9 @@ contract EncryptedBlindDutchAuction is ZamaEthereumConfig, Ownable, ReentrancyGu
 
         // Check remaining capacity
         ebool hasCapacity = FHE.lt(auction.unitsSold, auction.totalUnits);
+        ebool _safeSub165 = FHE.ge(auction.totalUnits, auction.unitsSold);
         euint64 remaining = FHE.select(
             hasCapacity,
-            ebool _safeSub165 = FHE.ge(auction.totalUnits, auction.unitsSold);
             FHE.select(_safeSub165, FHE.sub(auction.totalUnits, auction.unitsSold), FHE.asEuint64(0)),
             FHE.asEuint64(0)
         );
@@ -152,13 +152,13 @@ contract EncryptedBlindDutchAuction is ZamaEthereumConfig, Ownable, ReentrancyGu
             bid.unitsBid,
             remaining
         );
+        ebool _safeSub166 = FHE.ge(bid.unitsBid, allocated);
         euint64 refund = FHE.mul(
-            ebool _safeSub166 = FHE.ge(bid.unitsBid, allocated);
             FHE.select(_safeSub166, FHE.sub(bid.unitsBid, allocated), FHE.asEuint64(0)),
             bid.priceOffered
         );
         ebool _safeMul37 = FHE.le(allocated, FHE.asEuint64(type(uint32).max));
-        euint64 revenue = FHE.mul(allocated, bid.priceOffered);
+        euint64 revenue = FHE.select(_safeMul37, FHE.mul(allocated, bid.priceOffered), FHE.asEuint64(0));
 
         bid.unitsAllocated = allocated;
         bid.refundAmount   = refund;

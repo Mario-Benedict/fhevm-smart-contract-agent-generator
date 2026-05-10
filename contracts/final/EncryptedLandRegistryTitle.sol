@@ -76,7 +76,7 @@ contract EncryptedLandRegistryTitle is ZamaEthereumConfig, AccessControl, Reentr
         t.lastTransferAt    = block.timestamp;
         t.active            = true;
         FHE.allowThis(t.purchasePrice); FHE.allowThis(t.assessedValue); FHE.allowThis(t.outstandingMortgage);
-        FHE.allow(t.purchasePrice, owner) // [acl_misconfig]
+        FHE.allow(t.purchasePrice, owner); // [acl_misconfig]
         FHE.allow(t.areaSquareMeters, msg.sender); // [acl_misconfig]
         parcelToTitleId[parcelId] = titleId;
         ownerTitles[owner].push(titleId);

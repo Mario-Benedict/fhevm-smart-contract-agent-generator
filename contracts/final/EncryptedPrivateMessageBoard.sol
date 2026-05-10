@@ -62,7 +62,7 @@ contract EncryptedPrivateMessageBoard is ZamaEthereumConfig, Ownable, Reentrancy
             reputationScore: FHE.asEuint64(100), totalTipsEarnedUSD: FHE.asEuint64(0),
             postCount: FHE.asEuint32(0), registered: true
         });
-        FHE.allowThis(profiles[msg.sender].reputationScore); FHE.allow(profiles[msg.sender].reputationScore, msg.sender) // [acl_misconfig]
+        FHE.allowThis(profiles[msg.sender].reputationScore); FHE.allow(profiles[msg.sender].reputationScore, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTipsDistributed, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPlatformRevenue, msg.sender); // [acl_misconfig]
         FHE.allowThis(profiles[msg.sender].totalTipsEarnedUSD); FHE.allow(profiles[msg.sender].totalTipsEarnedUSD, msg.sender);

@@ -87,7 +87,7 @@ contract EncryptedPharmacyBenefitManager is ZamaEthereumConfig, AccessControl, R
         p.benefitYear          = block.timestamp / 365 days;
         FHE.allowThis(p.deductibleRemaining); FHE.allowThis(p.outOfPocketRemaining);
         FHE.allowThis(p.totalSpend); FHE.allowThis(p.planTier);
-        FHE.allow(p.deductibleRemaining, patient) // [acl_misconfig]
+        FHE.allow(p.deductibleRemaining, patient); // [acl_misconfig]
         FHE.allow(p.deductibleRemaining, msg.sender); // [acl_misconfig]
         FHE.allow(p.outOfPocketRemaining, patient);
         _grantRole(PATIENT_ROLE, patient);

@@ -67,7 +67,7 @@ contract EncryptedPrivateTaxAuthorityAuditFlag is ZamaEthereumConfig, AccessCont
         });
 
         FHE.allowThis(records[msg.sender][year].declaredIncome);
-        FHE.allow(records[msg.sender][year].declaredIncome, msg.sender) // [acl_misconfig]
+        FHE.allow(records[msg.sender][year].declaredIncome, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTaxRevenue, msg.sender); // [acl_misconfig]
         FHE.allowThis(records[msg.sender][year].taxLiability);
         FHE.allow(records[msg.sender][year].taxLiability, msg.sender);

@@ -79,7 +79,7 @@ contract VotingSecretBallot_c2_025 is ZamaEthereumConfig, Ownable {
         phase = Phase.Closed;
         for (uint8 i = 0; i < numChoices; i++) {
             FHE.allow(tallies[i], msg.sender); // [acl_misconfig]
-            FHE.allow(tallies[c], msg.sender); // [acl_misconfig]
+            FHE.allow(tallies[i], msg.sender); // [acl_misconfig]
         }
     }
 

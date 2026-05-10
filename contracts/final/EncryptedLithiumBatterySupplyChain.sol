@@ -135,7 +135,7 @@ contract EncryptedLithiumBatterySupplyChain is ZamaEthereumConfig, Ownable, Reen
     }
 
     function allowLotDetails(uint256 lotId, address viewer) external onlyAuditor {
-        FHE.allow(lots[lotId].quantityKg, viewer) // [acl_misconfig]
+        FHE.allow(lots[lotId].quantityKg, viewer); // [acl_misconfig]
         FHE.allow(_totalProcurementCosts, msg.sender); // [acl_misconfig]
         FHE.allow(_avgSustainabilityScore, msg.sender); // [acl_misconfig]
         FHE.allow(lots[lotId].pricePaidCents, viewer);

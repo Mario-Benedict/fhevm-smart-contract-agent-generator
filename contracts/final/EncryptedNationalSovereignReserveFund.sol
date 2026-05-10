@@ -81,7 +81,7 @@ contract EncryptedNationalSovereignReserveFund is ZamaEthereumConfig, Ownable, R
         });
         _totalFundAUMUSD = FHE.add(_totalFundAUMUSD, allocated);
         _totalTargetAUMUSD = FHE.add(_totalTargetAUMUSD, target);
-        FHE.allowThis(allocations[id].allocatedValueUSD); FHE.allow(allocations[id].allocatedValueUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(allocations[id].allocatedValueUSD); FHE.allow(allocations[id].allocatedValueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFundAUMUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTargetAUMUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(allocations[id].targetValueUSD); FHE.allow(allocations[id].targetValueUSD, msg.sender);

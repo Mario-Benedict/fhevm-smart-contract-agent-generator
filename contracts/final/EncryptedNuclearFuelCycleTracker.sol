@@ -104,7 +104,7 @@ contract EncryptedNuclearFuelCycleTracker is ZamaEthereumConfig, Ownable, Reentr
 
         _totalUraniumKgTracked = FHE.add(_totalUraniumKgTracked, mass);
 
-        FHE.allowThis(lot.enrichmentBps); FHE.allow(lot.enrichmentBps, msg.sender) // [acl_misconfig]
+        FHE.allowThis(lot.enrichmentBps); FHE.allow(lot.enrichmentBps, msg.sender); // [acl_misconfig]
         FHE.allow(_totalUraniumKgTracked, msg.sender); // [acl_misconfig]
         FHE.allow(_totalHighLevelWasteKg, msg.sender); // [acl_misconfig]
         FHE.allowThis(lot.massKgU); FHE.allow(lot.massKgU, msg.sender);

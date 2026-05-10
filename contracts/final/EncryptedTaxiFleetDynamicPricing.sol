@@ -88,7 +88,7 @@ contract EncryptedTaxiFleetDynamicPricing is ZamaEthereumConfig, Ownable, Reentr
             active: true
         });
         FHE.allowThis(drivers[msg.sender].totalEarningsUSD);
-        FHE.allow(drivers[msg.sender].totalEarningsUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(drivers[msg.sender].totalEarningsUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalGMV, msg.sender); // [acl_misconfig]
         FHE.allow(_totalDriverPayout, msg.sender); // [acl_misconfig]
         FHE.allowThis(drivers[msg.sender].weeklyEarningsUSD);

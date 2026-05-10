@@ -81,7 +81,7 @@ contract EncryptedNFTRoyaltyDistribution is ZamaEthereumConfig, Ownable, Reentra
         FHE.allowThis(collections[id].platformFeeBps);
         FHE.allowThis(collections[id].totalRoyaltiesEarned);
         FHE.allowThis(collections[id].totalVolumeUSD);
-        FHE.allow(collections[id].creatorRoyaltyBps, msg.sender) // [acl_misconfig]
+        FHE.allow(collections[id].creatorRoyaltyBps, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPlatformRevenue, msg.sender); // [acl_misconfig]
         FHE.allow(collections[id].totalRoyaltiesEarned, msg.sender);
         emit CollectionRegistered(id, name, msg.sender);

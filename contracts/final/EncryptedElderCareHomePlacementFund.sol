@@ -131,10 +131,11 @@ contract EncryptedElderCareHomePlacementFund is ZamaEthereumConfig, Ownable, Ree
         euint64 ltciBenefit = FHE.fromExternal(encLTCIBenefit, ltciProof);
 
         ebool privateGreater = FHE.ge(privateRate, medicaidRate);
+        ebool _safeSub216 = FHE.ge(privateRate, medicaidRate);
         euint64 supplement = FHE.select(privateGreater,
-            ebool _safeSub216 = FHE.ge(privateRate, medicaidRate);
             FHE.select(_safeSub216, FHE.sub(privateRate, medicaidRate), FHE.asEuint64(0)),
-            FHE.asEuint64(0));
+            FHE.asEuint64(0)
+        );
 
         Resident storage _s0 = residents[residentToken];
         _s0.residentToken = residentToken;
@@ -193,13 +194,15 @@ contract EncryptedElderCareHomePlacementFund is ZamaEthereumConfig, Ownable, Ree
                 FHE.select(FHE.ge(monthlyRate, FHE.add(r.longTermCareInsuranceBenefit, r.monthlyFamilyContribution)),
                     FHE.add(r.longTermCareInsuranceBenefit, r.monthlyFamilyContribution),
                     monthlyRate));
+            ebool _safeSub217 = FHE.ge(r.currentAssets, oop);
             r.currentAssets = FHE.select(FHE.ge(r.currentAssets, oop),
-                ebool _safeSub217 = FHE.ge(r.currentAssets, oop);
                 FHE.select(_safeSub217, FHE.sub(r.currentAssets, oop), FHE.asEuint64(0)),
                 FHE.asEuint64(0));
             // Check if spend-down threshold reached
             ebool spendDownComplete = FHE.le(r.currentAssets, r.spendDownTarget);
             // If so: could trigger Medicaid conversion (owner/social worker handles)
+            spendDownComplete = FHE.select(spendDownComplete, FHE.asEbool(true), spendDownComplete);
+        
             FHE.allowThis(r.currentAssets);
             FHE.allow(r.currentAssets, msg.sender);
         }
@@ -229,8 +232,8 @@ contract EncryptedElderCareHomePlacementFund is ZamaEthereumConfig, Ownable, Ree
         r.payorType = PayorType.MEDICAID;
 
         // Estate recovery lien = assets remaining above Medicaid threshold
+    ebool _safeSub218 = FHE.ge(r.currentAssets, r.spendDownTarget);
         euint64 liableAssets = FHE.select(FHE.ge(r.currentAssets, r.spendDownTarget),
-            ebool _safeSub218 = FHE.ge(r.currentAssets, r.spendDownTarget);
             FHE.select(_safeSub218, FHE.sub(r.currentAssets, r.spendDownTarget), FHE.asEuint64(0)),
             FHE.asEuint64(0));
         r.medicaidLienAmount = liableAssets;

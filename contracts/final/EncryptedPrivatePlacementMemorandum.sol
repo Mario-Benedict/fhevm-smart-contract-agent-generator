@@ -99,7 +99,7 @@ contract EncryptedPrivatePlacementMemorandum is ZamaEthereumConfig, Ownable, Ree
         offerings[id].discountRateBps = discount;
         offerings[id].closingDate = block.timestamp + closingDays * 1 days;
         offerings[id].status = OfferingStatus.Open;
-        FHE.allowThis(offerings[id].offeringSizeUSD); FHE.allow(offerings[id].offeringSizeUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(offerings[id].offeringSizeUSD); FHE.allow(offerings[id].offeringSizeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCapitalRaised, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSubscriptions, msg.sender); // [acl_misconfig]
         FHE.allowThis(offerings[id].minimumInvestmentUSD);

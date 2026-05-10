@@ -130,7 +130,7 @@ contract EncryptedUrbanDataMonetization is ZamaEthereumConfig, Ownable, Reentran
         FHE.allowThis(licenses[licId].paidAmountUSD);
         FHE.allowThis(licenses[licId].accessQuota);
         FHE.allowThis(licenses[licId].usedQuota);
-        FHE.allow(licenses[licId].accessQuota, licensee) // [acl_misconfig]
+        FHE.allow(licenses[licId].accessQuota, licensee); // [acl_misconfig]
         FHE.allow(_totalCityDataRevenue, msg.sender); // [acl_misconfig]
         FHE.allow(_privacyComplianceScore, msg.sender); // [acl_misconfig]
         FHE.allow(licenses[licId].usedQuota, licensee);

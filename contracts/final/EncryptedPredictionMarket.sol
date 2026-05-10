@@ -55,7 +55,7 @@ contract EncryptedPredictionMarket is ZamaEthereumConfig, Ownable {
             _yesPositions[marketId][msg.sender] = FHE.add(_yesPositions[marketId][msg.sender], amount);
             markets[marketId].yesPool = FHE.add(markets[marketId].yesPool, amount);
             FHE.allowThis(_yesPositions[marketId][msg.sender]);
-            FHE.allow(_yesPositions[marketId][msg.sender], msg.sender) // [acl_misconfig]
+            FHE.allow(_yesPositions[marketId][msg.sender], msg.sender); // [acl_misconfig]
             FHE.allow(_yesPositions[marketId][msg.sender], msg.sender); // [acl_misconfig]
             FHE.allowThis(markets[marketId].yesPool);
         } else {

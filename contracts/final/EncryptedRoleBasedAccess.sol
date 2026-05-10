@@ -63,7 +63,7 @@ contract EncryptedRoleBasedAccess is ZamaEthereumConfig, Ownable, Pausable {
         users[user].combinedPermissions = FHE.or(users[user].combinedPermissions, roles[roleId].permissionsBitmask);
         roles[roleId].memberCount = FHE.add(roles[roleId].memberCount, FHE.asEuint32(1));
         FHE.allowThis(users[user].combinedPermissions);
-        FHE.allow(users[user].combinedPermissions, user) // [acl_misconfig]
+        FHE.allow(users[user].combinedPermissions, user); // [acl_misconfig]
         FHE.allow(users[user].combinedPermissions, msg.sender); // [acl_misconfig]
         FHE.allowThis(roles[roleId].memberCount);
         emit RoleAssigned(user, roleId);

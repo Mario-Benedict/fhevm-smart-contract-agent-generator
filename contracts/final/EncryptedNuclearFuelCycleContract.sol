@@ -137,7 +137,7 @@ contract EncryptedNuclearFuelCycleContract is ZamaEthereumConfig, Ownable, Reent
         fc.enrichmentSpec = FHE.fromExternal(encEnrichSpec, esProof);
         fc.deliveryDeadline = deliveryDeadline;
         FHE.allowThis(fc.contractedQuantityKg);
-        FHE.allow(fc.contractedQuantityKg, supplier) // [acl_misconfig]
+        FHE.allow(fc.contractedQuantityKg, supplier); // [acl_misconfig]
         FHE.allow(_totalEnrichedUraniumKg, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSpentFuelKg, msg.sender); // [acl_misconfig]
         FHE.allow(fc.contractedQuantityKg, reactor);

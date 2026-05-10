@@ -243,8 +243,8 @@ contract EncryptedCyberInsurancePolicyUnderwriting is ZamaEthereumConfig, Ownabl
         euint64 prCost = FHE.fromExternal(encPRCost, prcProof);
 
         // Net claim after retention
+        ebool _safeSub204 = FHE.ge(claimedAmount, pol.retentionAmount);
         euint64 netClaim = FHE.select(FHE.ge(claimedAmount, pol.retentionAmount),
-            ebool _safeSub204 = FHE.ge(claimedAmount, pol.retentionAmount);
             FHE.select(_safeSub204, FHE.sub(claimedAmount, pol.retentionAmount), FHE.asEuint64(0)),
             FHE.asEuint64(0));
 
@@ -292,7 +292,7 @@ contract EncryptedCyberInsurancePolicyUnderwriting is ZamaEthereumConfig, Ownabl
             FHE.select(FHE.ge(_insuranceFundBalance, clm.paidAmount),
                 clm.paidAmount, _insuranceFundBalance));
         ebool _safeMul52 = FHE.le(_totalClaimsPaid, FHE.asEuint64(type(uint64).max / 10000));
-        _lossRatio = FHE.mul(_totalClaimsPaid, FHE.asEuint64(10000)); // simplified: div by premiums omitted
+        _lossRatio = FHE.select(_safeMul52, FHE.mul(_totalClaimsPaid, FHE.asEuint64(10000)), _lossRatio); // simplified: div by premiums omitted
         FHE.allowThis(clm.paidAmount);
         FHE.allow(clm.paidAmount, clm.insured);
         FHE.allowThis(_totalClaimsPaid);

@@ -49,7 +49,7 @@ contract EncryptedLiquidationEngine is ZamaEthereumConfig, Ownable {
         _totalCollateral = FHE.add(_totalCollateral, collateral);
         _totalDebt = FHE.add(_totalDebt, debt);
         FHE.allowThis(positions[msg.sender].collateralUSD);
-        FHE.allow(positions[msg.sender].collateralUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(positions[msg.sender].collateralUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_liquidationHealthFactor, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCollateral, msg.sender); // [acl_misconfig]
         FHE.allowThis(positions[msg.sender].debtUSD);

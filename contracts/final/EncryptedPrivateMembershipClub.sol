@@ -82,7 +82,7 @@ contract EncryptedPrivateMembershipClub is ZamaEthereumConfig, Ownable, Reentran
         members[id].subscriptionExpiry = block.timestamp + subscriptionMonths * 30 days;
         members[id].active = true;
         _totalRevenueUSD = FHE.add(_totalRevenueUSD, fee);
-        FHE.allowThis(members[id].subscriptionFeeUSD); FHE.allow(members[id].subscriptionFeeUSD, wallet) // [acl_misconfig]
+        FHE.allowThis(members[id].subscriptionFeeUSD); FHE.allow(members[id].subscriptionFeeUSD, wallet); // [acl_misconfig]
         FHE.allow(_totalRevenueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPointsIssued, msg.sender); // [acl_misconfig]
         FHE.allowThis(members[id].rewardPoints); FHE.allow(members[id].rewardPoints, wallet);

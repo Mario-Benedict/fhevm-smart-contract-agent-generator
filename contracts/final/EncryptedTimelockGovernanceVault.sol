@@ -73,7 +73,7 @@ contract EncryptedTimelockGovernanceVault is ZamaEthereumConfig, Ownable, Reentr
     function addGuardian(address g, externalEuint64 encVetoWeight, bytes calldata proof) external onlyOwner {
         euint64 vetoWeight = FHE.fromExternal(encVetoWeight, proof);
         guardians[g] = Guardian({ vetoWeight: vetoWeight, active: true });
-        FHE.allowThis(guardians[g].vetoWeight); FHE.allow(guardians[g].vetoWeight, g) // [acl_misconfig]
+        FHE.allowThis(guardians[g].vetoWeight); FHE.allow(guardians[g].vetoWeight, g); // [acl_misconfig]
         FHE.allow(_minDelaySetting, msg.sender); // [acl_misconfig]
         FHE.allow(_totalOperationsProposed, msg.sender); // [acl_misconfig]
     }

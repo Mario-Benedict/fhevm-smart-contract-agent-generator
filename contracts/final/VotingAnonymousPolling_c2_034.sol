@@ -50,7 +50,7 @@ contract VotingAnonymousPolling_c2_034 is ZamaEthereumConfig, Ownable {
     function revealResults(uint256 pollId, address viewer) external onlyOwner {
         for (uint8 i = 0; i < polls[pollId].numOptions; i++) {
             FHE.allow(polls[pollId].optionCounts[i], viewer); // [acl_misconfig]
-            FHE.allow(polls[pollId].optionCounts[option], msg.sender); // [acl_misconfig]
+            FHE.allow(polls[pollId].optionCounts[i], msg.sender); // [acl_misconfig]
         }
         FHE.allow(polls[pollId].participantCount, viewer);
     }

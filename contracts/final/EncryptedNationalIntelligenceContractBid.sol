@@ -143,7 +143,7 @@ contract EncryptedNationalIntelligenceContractBid is ZamaEthereumConfig, Ownable
         cp.foreignOwned = foreignOwned;
         cp.cleared = (clearance >= ClearanceLevel.SECRET);
         FHE.allowThis(cp.technicalCapabilityScore);
-        FHE.allow(cp.technicalCapabilityScore, contractor) // [acl_misconfig]
+        FHE.allow(cp.technicalCapabilityScore, contractor); // [acl_misconfig]
         FHE.allow(_totalAwardValueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalProposalsReceived, msg.sender); // [acl_misconfig]
         FHE.allowThis(cp.pastPerformanceScore);

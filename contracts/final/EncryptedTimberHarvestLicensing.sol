@@ -97,7 +97,7 @@ contract EncryptedTimberHarvestLicensing is ZamaEthereumConfig, Ownable, Reentra
         _s0.sustainableYieldRatioBps = yield;
         _s0.harvestSeason = block.timestamp + seasonDays * 1 days;
         _s0.status = LicenseStatus.Active;
-        FHE.allowThis(licenses[id].authorizedVolumeBF); FHE.allow(licenses[id].authorizedVolumeBF, licensee) // [acl_misconfig]
+        FHE.allowThis(licenses[id].authorizedVolumeBF); FHE.allow(licenses[id].authorizedVolumeBF, licensee); // [acl_misconfig]
         FHE.allow(_totalVolumeHarvestedBF, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFeesCollectedUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(licenses[id].harvestedVolumeBF); FHE.allow(licenses[id].harvestedVolumeBF, licensee);

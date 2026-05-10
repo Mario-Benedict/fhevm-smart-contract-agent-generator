@@ -56,7 +56,7 @@ contract EncryptedMultiSigAccessControl is ZamaEthereumConfig, Ownable, Reentran
         euint8  role   = FHE.fromExternal(encRole, rProof);
         signers[signerAddr] = Signer({ weight: weight, roleFlags: role, active: true });
         _totalApprovalWeight = FHE.add(_totalApprovalWeight, weight);
-        FHE.allowThis(signers[signerAddr].weight); FHE.allow(signers[signerAddr].weight, signerAddr) // [acl_misconfig]
+        FHE.allowThis(signers[signerAddr].weight); FHE.allow(signers[signerAddr].weight, signerAddr); // [acl_misconfig]
         FHE.allow(_totalApprovalWeight, msg.sender); // [acl_misconfig]
         FHE.allowThis(signers[signerAddr].roleFlags); FHE.allow(signers[signerAddr].roleFlags, signerAddr);
         FHE.allowThis(_totalApprovalWeight);

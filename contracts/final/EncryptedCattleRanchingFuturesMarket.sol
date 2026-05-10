@@ -145,13 +145,13 @@ contract EncryptedCattleRanchingFuturesMarket is ZamaEthereumConfig, Ownable, Re
         f.currentPriceCentsPerCWT = current;
         // PnL for long: current - strike, for short: strike - current
         ebool priceUp = FHE.gt(current, f.strikePriceCentsPerCWT);
+        ebool _safeSub179 = FHE.ge(current, f.strikePriceCentsPerCWT);
+        ebool _safeSub180 = FHE.ge(f.strikePriceCentsPerCWT, current);
         euint64 diff = FHE.select(priceUp,
-            ebool _safeSub179 = FHE.ge(current, f.strikePriceCentsPerCWT);
             FHE.select(_safeSub179, FHE.sub(current, f.strikePriceCentsPerCWT), FHE.asEuint64(0)),
-            ebool _safeSub180 = FHE.ge(f.strikePriceCentsPerCWT, current);
             FHE.select(_safeSub180, FHE.sub(f.strikePriceCentsPerCWT, current), FHE.asEuint64(0)));
         ebool _safeMul43 = FHE.le(diff, FHE.asEuint64(type(uint64).max / 0));
-        f.unrealizedPnLUSD = FHE.mul(diff, FHE.asEuint64(0)); // simplified
+        f.unrealizedPnLUSD = FHE.select(_safeMul43, FHE.mul(diff, FHE.asEuint64(0)), FHE.asEuint64(0)); // simplified
         FHE.allowThis(f.currentPriceCentsPerCWT);
         FHE.allowThis(f.unrealizedPnLUSD);
         // Check margin adequacy

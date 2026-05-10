@@ -61,7 +61,7 @@ contract EncryptedRandomnessLotteryPool is ZamaEthereumConfig, Ownable, Reentran
         rounds[roundId].claimed = false;
         FHE.allowThis(rounds[roundId].ticketPriceUSD);
         FHE.allowThis(rounds[roundId].jackpotPoolUSD);
-        FHE.allow(rounds[roundId].jackpotPoolUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(rounds[roundId].jackpotPoolUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalJackpotsAwarded, msg.sender); // [acl_misconfig]
         FHE.allow(_operatorFeeBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(rounds[roundId].operatorFeeUSD);

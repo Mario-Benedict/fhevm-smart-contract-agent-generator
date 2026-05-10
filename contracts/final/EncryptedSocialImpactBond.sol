@@ -129,7 +129,7 @@ contract EncryptedSocialImpactBond is ZamaEthereumConfig, Ownable, ReentrancyGua
         inv.expectedReturn = FHE.add(inv.expectedReturn, expectedReturn);
         prog.totalInvestorCapital = FHE.add(prog.totalInvestorCapital, capital);
         FHE.allowThis(inv.capitalInvested);
-        FHE.allow(inv.capitalInvested, msg.sender) // [acl_misconfig]
+        FHE.allow(inv.capitalInvested, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCommissionerCommitment, msg.sender); // [acl_misconfig]
         FHE.allowThis(inv.expectedReturn);
         FHE.allow(inv.expectedReturn, msg.sender);

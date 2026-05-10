@@ -106,7 +106,7 @@ contract EncryptedLuxuryWatchAuthentication is ZamaEthereumConfig, Ownable, Reen
         watches[id].status = AuthStatus.Unverified;
         _totalRegisteredValue = FHE.add(_totalRegisteredValue, retail);
         FHE.allowThis(watches[id].serialHash);
-        FHE.allow(watches[id].serialHash, msg.sender) // [acl_misconfig]
+        FHE.allow(watches[id].serialHash, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRegisteredValue, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSalesVolume, msg.sender); // [acl_misconfig]
         FHE.allowThis(watches[id].originalRetailUSD);

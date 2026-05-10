@@ -97,7 +97,7 @@ contract EncryptedPharmaceuticalTender is ZamaEthereumConfig, Ownable {
             submitted: true, disqualified: !FHE.isInitialized(withinBudget)
         });
         FHE.allowThis(bids[tenderId][msg.sender].unitPriceUSD);
-        FHE.allow(bids[tenderId][msg.sender].unitPriceUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(bids[tenderId][msg.sender].unitPriceUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalProcurementVolume, msg.sender); // [acl_misconfig]
         FHE.allowThis(bids[tenderId][msg.sender].supplyCapacityUnits);
         FHE.allowThis(bids[tenderId][msg.sender].qualityScore);

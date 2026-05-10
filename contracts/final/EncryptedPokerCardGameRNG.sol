@@ -69,7 +69,7 @@ contract EncryptedPokerCardGameRNG is ZamaEthereumConfig, Ownable, ReentrancyGua
         }
         playerBankroll[msg.sender] = FHE.add(playerBankroll[msg.sender], amount);
         FHE.allowThis(playerBankroll[msg.sender]);
-        FHE.allow(playerBankroll[msg.sender], msg.sender) // [acl_misconfig]
+        FHE.allow(playerBankroll[msg.sender], msg.sender); // [acl_misconfig]
         FHE.allow(_totalRakeCollected, msg.sender); // [acl_misconfig]
         FHE.allow(_rakeFeeBps, msg.sender); // [acl_misconfig]
     }

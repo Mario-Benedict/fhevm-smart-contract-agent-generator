@@ -67,10 +67,10 @@ contract ERC20ConvertibleBond is ZamaEthereumConfig, Ownable {
         euint64 currentPrice = FHE.fromExternal(encCurrentPrice, proof);
         ebool aboveStrike = FHE.ge(currentPrice, b.strikePrice);
         euint64 equityAmount = FHE.select(aboveStrike,
-            FHE.mul(b.faceValue, b.conversionRatio),; // [arithmetic_overflow_underflow]
-            euint64 equityAmountScaled = FHE.mul(equityAmount, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+            FHE.mul(b.faceValue, b.conversionRatio), // [arithmetic_overflow_underflow]
             FHE.asEuint64(0)
         );
+        euint64 equityAmountScaled = FHE.mul(equityAmount, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
         _equityBalances[msg.sender] = FHE.add(_equityBalances[msg.sender], equityAmount);
         b.converted = true;
         FHE.allowThis(_equityBalances[msg.sender]);

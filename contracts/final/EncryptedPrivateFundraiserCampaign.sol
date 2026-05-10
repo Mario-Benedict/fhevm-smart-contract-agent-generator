@@ -79,7 +79,7 @@ contract EncryptedPrivateFundraiserCampaign is ZamaEthereumConfig, Ownable, Reen
         _s0.milestone2Released = FHE.asEuint64(0);
         _s0.status = CampaignStatus.Active;
         _s0.deadline = block.timestamp + durationDays * 1 days;
-        FHE.allowThis(campaigns[id].goalAmountUSD); FHE.allow(campaigns[id].goalAmountUSD, beneficiary) // [acl_misconfig]
+        FHE.allowThis(campaigns[id].goalAmountUSD); FHE.allow(campaigns[id].goalAmountUSD, beneficiary); // [acl_misconfig]
         FHE.allow(_totalFundsRaisedUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFundsReleasedUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(campaigns[id].raisedAmountUSD); FHE.allow(campaigns[id].raisedAmountUSD, beneficiary);

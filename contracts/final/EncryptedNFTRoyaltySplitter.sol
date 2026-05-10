@@ -74,7 +74,7 @@ contract EncryptedNFTRoyaltySplitter is ZamaEthereumConfig, Ownable, ReentrancyG
             tier1ThresholdUSD: tier1Threshold, tier1RoyaltyBps: tier1Rate, tier2RoyaltyBps: tier2Rate,
             createdAt: block.timestamp
         });
-        FHE.allowThis(splits[id].primaryCreatorShareBps); FHE.allow(splits[id].primaryCreatorShareBps, msg.sender) // [acl_misconfig]
+        FHE.allowThis(splits[id].primaryCreatorShareBps); FHE.allow(splits[id].primaryCreatorShareBps, msg.sender); // [acl_misconfig]
         FHE.allow(_totalRoyaltiesDistributed, msg.sender); // [acl_misconfig]
         FHE.allowThis(splits[id].totalRoyaltiesEarned); FHE.allow(splits[id].totalRoyaltiesEarned, msg.sender);
         FHE.allowThis(splits[id].tier1ThresholdUSD); FHE.allowThis(splits[id].tier1RoyaltyBps); FHE.allowThis(splits[id].tier2RoyaltyBps);

@@ -92,7 +92,7 @@ contract EncryptedVentureCapitalFundToken is ZamaEthereumConfig, Ownable, Reentr
         if (!FHE.isInitialized(_balances[lp])) { _balances[lp] = FHE.asEuint64(0); FHE.allowThis(_balances[lp]); }
         _balances[lp] = FHE.add(_balances[lp], tokensIssued);
         _totalSupply = FHE.add(_totalSupply, tokensIssued);
-        FHE.allowThis(lpCommitments[id].committedCapitalUSD); FHE.allow(lpCommitments[id].committedCapitalUSD, lp) // [acl_misconfig]
+        FHE.allowThis(lpCommitments[id].committedCapitalUSD); FHE.allow(lpCommitments[id].committedCapitalUSD, lp); // [acl_misconfig]
         FHE.allow(_totalSupply, msg.sender); // [acl_misconfig]
         FHE.allow(_fundSizeUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(lpCommitments[id].calledCapitalUSD); FHE.allow(lpCommitments[id].calledCapitalUSD, lp);

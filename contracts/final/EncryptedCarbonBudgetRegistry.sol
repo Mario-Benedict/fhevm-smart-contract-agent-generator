@@ -191,8 +191,8 @@ contract EncryptedCarbonBudgetRegistry is ZamaEthereumConfig, Ownable, Reentranc
         EntityAccount storage ea = entities[msg.sender];
         require(ea.registered, "Not registered");
         ebool hasSurplus = FHE.gt(ea.annualCap, ea.actualEmissions);
+        ebool _safeSub171 = FHE.ge(ea.annualCap, ea.actualEmissions);
         euint64 surplus = FHE.select(hasSurplus,
-            ebool _safeSub171 = FHE.ge(ea.annualCap, ea.actualEmissions);
             FHE.select(_safeSub171, FHE.sub(ea.annualCap, ea.actualEmissions), FHE.asEuint64(0)),
             FHE.asEuint64(0));
         ea.bankedCredits = FHE.add(ea.bankedCredits, surplus);

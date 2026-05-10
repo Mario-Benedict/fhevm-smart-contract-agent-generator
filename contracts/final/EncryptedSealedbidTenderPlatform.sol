@@ -107,7 +107,7 @@ contract EncryptedSealedbidTenderPlatform is ZamaEthereumConfig, Ownable, Reentr
             weightedTotalScore: techContrib, shortlisted: false
         });
         tenderBids[tenderId].push(bidId);
-        FHE.allowThis(bids[bidId].totalBidPriceUSD); FHE.allow(bids[bidId].totalBidPriceUSD, msg.sender) // [acl_misconfig]
+        FHE.allowThis(bids[bidId].totalBidPriceUSD); FHE.allow(bids[bidId].totalBidPriceUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalAwardedValueUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(bids[bidId].technicalScore); FHE.allow(bids[bidId].technicalScore, msg.sender);
         FHE.allowThis(bids[bidId].experienceScore); FHE.allow(bids[bidId].experienceScore, msg.sender);

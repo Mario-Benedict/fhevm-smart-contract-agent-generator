@@ -109,7 +109,7 @@ contract AuctionWaterRights is ZamaEthereumConfig, Ownable, ReentrancyGuard {
             ebool accept = FHE.and(valid, hasCapacity);
             euint32 granted = FHE.select(accept, b.requestedAcreFeet, FHE.asEuint32(0));
             ebool _safeSub8 = FHE.ge(available, granted);
-            available = FHE.select(_safeSub8, FHE.sub(available, granted), FHE.asEuint64(0));
+            available = FHE.select(_safeSub8, FHE.sub(available, granted), FHE.asEuint32(0));
             a.allocatedAcreFeet = FHE.add(a.allocatedAcreFeet, granted);
             b.allocated = FHE.isInitialized(accept);
             FHE.allowThis(available);

@@ -67,7 +67,7 @@ contract EncryptedInsiderTradingMonitor is ZamaEthereumConfig, Ownable {
             currentHoldingsUSD: FHE.asEuint64(0), registered: true, blackoutActive: false
         });
         FHE.allowThis(insiders[insider].maxPositionSizeUSD);
-        FHE.allow(insiders[insider].maxPositionSizeUSD, insider) // [acl_misconfig]
+        FHE.allow(insiders[insider].maxPositionSizeUSD, insider); // [acl_misconfig]
         FHE.allow(_totalSuspiciousValue, msg.sender); // [acl_misconfig]
         FHE.allowThis(insiders[insider].currentHoldingsUSD);
         FHE.allow(insiders[insider].currentHoldingsUSD, insider);

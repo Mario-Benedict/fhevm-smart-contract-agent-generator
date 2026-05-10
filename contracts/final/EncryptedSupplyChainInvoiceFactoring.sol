@@ -64,7 +64,7 @@ contract EncryptedSupplyChainTradeFinanceFactoring is ZamaEthereumConfig, Access
         supplierCreditScores[supplier] = FHE.fromExternal(encScore, proof);
         creditScoreInitialized[supplier] = true;
         FHE.allowThis(supplierCreditScores[supplier]);
-        FHE.allow(supplierCreditScores[supplier], supplier) // [acl_misconfig]
+        FHE.allow(supplierCreditScores[supplier], supplier); // [acl_misconfig]
         FHE.allow(_totalFactoredVolume, msg.sender); // [acl_misconfig]
         FHE.allow(_totalDefaultedAmount, msg.sender); // [acl_misconfig]
         FHE.allow(supplierCreditScores[supplier], msg.sender);

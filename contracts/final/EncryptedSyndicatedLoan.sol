@@ -50,7 +50,7 @@ contract EncryptedSyndicatedLoan is ZamaEthereumConfig, Ownable {
         currentRaised = FHE.add(currentRaised, contribution);
         
         FHE.allowThis(participantContributions[msg.sender]);
-        FHE.allow(participantContributions[msg.sender], msg.sender) // [acl_misconfig]
+        FHE.allow(participantContributions[msg.sender], msg.sender); // [acl_misconfig]
         FHE.allow(participantContributions[msg.sender], msg.sender); // [acl_misconfig]
         FHE.allowThis(currentRaised);
 

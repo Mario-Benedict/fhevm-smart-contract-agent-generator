@@ -113,11 +113,11 @@ contract ConfidentialRealEstateTokenization is ZamaEthereumConfig, Ownable, Reen
             address holder = tokenHolders[i];
             TokenHolder storage h = holders[propId][holder];
             if (!FHE.isInitialized(h.tokenBalance)) continue;
-            euint64 holderShare = FHE.div(
-                ebool _safeMul13 = FHE.le(netRent, FHE.asEuint64(type(uint32).max));
+            ebool _safeMul13 = FHE.le(netRent, FHE.asEuint64(type(uint32).max));
+            euint64 holderShare = FHE.select(_safeMul13, FHE.div(
                 FHE.mul(netRent, h.tokenBalance),
                 uint64(p.totalTokens)
-            );
+            ), FHE.asEuint64(0));
             h.unclaimedRent = FHE.add(h.unclaimedRent, holderShare);
             FHE.allowThis(h.unclaimedRent);
             FHE.allow(h.unclaimedRent, holder);

@@ -61,7 +61,7 @@ contract EncryptedUniversalBasicEquity is ZamaEthereumConfig, Ownable, Reentranc
         citizenAccounts[citizen].enrollmentDate = block.timestamp;
         citizenAccounts[citizen].lastYieldClaim = block.timestamp;
         FHE.allowThis(citizenAccounts[citizen].equityShares);
-        FHE.allow(citizenAccounts[citizen].equityShares, citizen) // [acl_misconfig]
+        FHE.allow(citizenAccounts[citizen].equityShares, citizen); // [acl_misconfig]
         FHE.allow(_nationalWealthFundNAV, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSharesIssued, msg.sender); // [acl_misconfig]
         FHE.allowThis(citizenAccounts[citizen].accumulatedYield);

@@ -148,9 +148,6 @@ contract EncryptedHighwayConstructionBid is ZamaEthereumConfig, Ownable, Reentra
         bids[bidId].technicalScore = techScore;
         bids[bidId].disqualified = false;
         projectBids[projectId].push(bidId);
-        // Compute bid-to-estimate ratio as contractor feedback signal
-        euint64 bidRatio = FHE.div(FHE.mul(total, FHE.asEuint64(10000)), projects[projectId].engineerEstimateUSD); // [acl_misconfig]
-        FHE.allow(bidRatio, msg.sender); // [acl_misconfig]
         FHE.allow(projects[projectId].engineerEstimateUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(bids[bidId].totalBidUSD); FHE.allow(bids[bidId].totalBidUSD, msg.sender);
         FHE.allowThis(bids[bidId].mobilizationCostUSD); FHE.allow(bids[bidId].mobilizationCostUSD, msg.sender);

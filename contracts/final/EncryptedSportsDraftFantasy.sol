@@ -110,7 +110,7 @@ contract EncryptedSportsDraftFantasy is ZamaEthereumConfig, Ownable, ReentrancyG
         FHE.allowThis(teams[teamId].weeklyScore);
         FHE.allowThis(teams[teamId].seasonScore);
         FHE.allowThis(teams[teamId].waiversPriority);
-        FHE.allow(teams[teamId].totalSalaryUsed, msg.sender) // [acl_misconfig]
+        FHE.allow(teams[teamId].totalSalaryUsed, msg.sender); // [acl_misconfig]
         FHE.allow(_salaryCap, msg.sender); // [acl_misconfig]
         FHE.allow(teams[teamId].weeklyScore, msg.sender);
         FHE.allow(teams[teamId].seasonScore, msg.sender);

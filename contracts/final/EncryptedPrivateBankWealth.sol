@@ -80,7 +80,7 @@ contract EncryptedPrivateBankWealth is ZamaEthereumConfig, Ownable, ReentrancyGu
         clientToMandate[client] = mandateId;
         _totalAUM = FHE.add(_totalAUM, aum);
         FHE.allowThis(mandates[mandateId].aumUSD);
-        FHE.allow(mandates[mandateId].aumUSD, client) // [acl_misconfig]
+        FHE.allow(mandates[mandateId].aumUSD, client); // [acl_misconfig]
         FHE.allow(_totalAUM, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFeesEarned, msg.sender); // [acl_misconfig]
         FHE.allowThis(mandates[mandateId].annualFeeUSD);

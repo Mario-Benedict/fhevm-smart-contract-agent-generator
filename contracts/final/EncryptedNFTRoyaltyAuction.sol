@@ -67,7 +67,7 @@ contract EncryptedNFTRoyaltyAuction is ZamaEthereumConfig, Ownable {
         auctions[auctionId].settled = false;
         auctions[auctionId].active = true;
         FHE.allowThis(auctions[auctionId].reservePrice);
-        FHE.allow(auctions[auctionId].reservePrice, msg.sender) // [acl_misconfig]
+        FHE.allow(auctions[auctionId].reservePrice, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPlatformFees, msg.sender); // [acl_misconfig]
         FHE.allow(_platformFeeBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(auctions[auctionId].highestBid);

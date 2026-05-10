@@ -52,7 +52,7 @@ contract EncryptedKYCRegistry is ZamaEthereumConfig, Ownable {
             expiryDate: block.timestamp + validityDays * 1 days, active: true, verifier: msg.sender
         });
         FHE.allowThis(records[subject].complianceScore);
-        FHE.allow(records[subject].complianceScore, subject) // [acl_misconfig]
+        FHE.allow(records[subject].complianceScore, subject); // [acl_misconfig]
         FHE.allow(_minimumScoreForEnhanced, msg.sender); // [acl_misconfig]
         FHE.allowThis(records[subject].countryCode);
         FHE.allow(records[subject].countryCode, subject);

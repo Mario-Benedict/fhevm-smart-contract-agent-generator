@@ -62,7 +62,7 @@ contract EncryptedChessRating is ZamaEthereumConfig, Ownable {
             ebool loserCanLose = FHE.ge(players[loser].eloRating, FHE.asEuint16(k));
             euint16 deduct = FHE.select(loserCanLose, FHE.asEuint16(k), players[loser].eloRating);
             ebool _safeSub185 = FHE.ge(players[loser].eloRating, deduct);
-            players[loser].eloRating = FHE.select(_safeSub185, FHE.sub(players[loser].eloRating, deduct), FHE.asEuint64(0));
+            players[loser].eloRating = FHE.select(_safeSub185, FHE.sub(players[loser].eloRating, deduct), FHE.asEuint16(0));
             players[loser].losses = FHE.add(players[loser].losses, FHE.asEuint32(1));
             FHE.allowThis(players[loser].losses);
         } else {

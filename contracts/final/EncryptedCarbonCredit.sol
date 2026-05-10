@@ -77,7 +77,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));
 
         ebool _safeSub172 = FHE.ge(_credits[msg.sender], actual);
-        _credits[msg.sender] = FHE.select(_safeSub172, FHE.sub(_credits[msg.sender], actual), FHE.asEuint64(0));
+        _credits[msg.sender] = FHE.select(_safeSub172, FHE.sub(_credits[msg.sender], actual), FHE.asEuint32(0));
         _retiredCredits[msg.sender] = FHE.add(_retiredCredits[msg.sender], actual);
         _totalRetired = FHE.add(_totalRetired, actual);
 
@@ -103,7 +103,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         ebool sufficient = FHE.ge(_credits[msg.sender], amount);
         euint32 actual = FHE.select(sufficient, amount, FHE.asEuint32(0));
         ebool _safeSub174 = FHE.ge(_credits[msg.sender], actual);
-        _credits[msg.sender] = FHE.select(_safeSub174, FHE.sub(_credits[msg.sender], actual), FHE.asEuint64(0));
+        _credits[msg.sender] = FHE.select(_safeSub174, FHE.sub(_credits[msg.sender], actual), FHE.asEuint32(0));
         _credits[to] = FHE.add(_credits[to], actual);
         FHE.allowThis(_credits[msg.sender]);
         FHE.allow(_credits[msg.sender], msg.sender);

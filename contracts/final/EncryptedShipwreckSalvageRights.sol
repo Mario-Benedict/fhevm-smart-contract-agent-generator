@@ -121,7 +121,7 @@ contract EncryptedShipwreckSalvageRights is ZamaEthereumConfig, Ownable, Reentra
         w.highestBidder = FHE.isInitialized(isHigher) ? msg.sender : w.highestBidder;
         wreckBids[wreckId].push(bidId);
         FHE.allowThis(bids[bidId].bidAmountUSD);
-        FHE.allow(bids[bidId].bidAmountUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(bids[bidId].bidAmountUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalSalvageValue, msg.sender); // [acl_misconfig]
         FHE.allowThis(bids[bidId].proposedBudgetUSD);
         FHE.allow(bids[bidId].proposedBudgetUSD, msg.sender);

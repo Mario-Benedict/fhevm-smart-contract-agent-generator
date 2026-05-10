@@ -127,10 +127,10 @@ contract EncryptedEsportsTournamentStaking is ZamaEthereumConfig, Ownable, Reent
 
         // Loser rating decreases (ensure no underflow)
         ebool canDecrease = FHE.ge(profiles[loser].skillRating, loserDelta);
+        ebool _safeSub221 = FHE.ge(profiles[loser].skillRating, loserDelta);
         profiles[loser].skillRating = FHE.select(
             canDecrease,
-            ebool _safeSub221 = FHE.ge(profiles[loser].skillRating, loserDelta);
-            FHE.select(_safeSub221, FHE.sub(profiles[loser].skillRating, loserDelta), FHE.asEuint64(0)),
+            FHE.select(_safeSub221, FHE.sub(profiles[loser].skillRating, loserDelta), FHE.asEuint32(0)),
             FHE.asEuint32(1)
         );
         FHE.allowThis(profiles[loser].skillRating);

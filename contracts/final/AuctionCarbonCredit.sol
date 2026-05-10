@@ -103,7 +103,7 @@ contract AuctionCarbonCredit is ZamaEthereumConfig, Ownable, ReentrancyGuard {
             ebool valid = FHE.and(priceOk, hasCapacity);
             euint32 granted = FHE.select(valid, b.requestedTonnes, FHE.asEuint32(0));
             ebool _safeSub4 = FHE.ge(remaining, granted);
-            remaining = FHE.select(_safeSub4, FHE.sub(remaining, granted), FHE.asEuint64(0));
+            remaining = FHE.select(_safeSub4, FHE.sub(remaining, granted), FHE.asEuint32(0));
             p.soldTonnes = FHE.add(p.soldTonnes, granted);
             b.allocatedTonnes = granted;
             FHE.allowThis(remaining);

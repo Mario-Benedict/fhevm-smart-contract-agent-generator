@@ -96,7 +96,7 @@ contract EncryptedSportsTransferFeeEscrow is ZamaEthereumConfig, Ownable, Reentr
         transfers[id].agreementDate = block.timestamp;
         transfers[id].status = TransferStatus.Negotiating;
         FHE.allowThis(transfers[id].baseTransferFeeUSD);
-        FHE.allow(transfers[id].baseTransferFeeUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(transfers[id].baseTransferFeeUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTransferMarketUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalAddOnsPaidUSD, msg.sender); // [acl_misconfig]
         FHE.allow(transfers[id].baseTransferFeeUSD, buyingClub);

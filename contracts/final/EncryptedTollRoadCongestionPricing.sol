@@ -100,7 +100,7 @@ contract EncryptedTollRoadCongestionPricing is ZamaEthereumConfig, Ownable, Reen
             accountBalance[msg.sender] = FHE.add(accountBalance[msg.sender], amount);
         }
         FHE.allowThis(accountBalance[msg.sender]);
-        FHE.allow(accountBalance[msg.sender], msg.sender) // [acl_misconfig]
+        FHE.allow(accountBalance[msg.sender], msg.sender); // [acl_misconfig]
         FHE.allow(_totalNetworkRevenue, msg.sender); // [acl_misconfig]
         FHE.allow(_totalVehiclesPassed, msg.sender); // [acl_misconfig]
     }

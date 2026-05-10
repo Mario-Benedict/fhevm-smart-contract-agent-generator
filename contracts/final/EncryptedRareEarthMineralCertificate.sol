@@ -94,7 +94,7 @@ contract EncryptedRareEarthMineralCertificate is ZamaEthereumConfig, Ownable, Re
         batches[id].status = CertStatus.Pending;
         batches[id].certifier = address(0);
         FHE.allowThis(batches[id].batchWeightKg);
-        FHE.allow(batches[id].batchWeightKg, msg.sender) // [acl_misconfig]
+        FHE.allow(batches[id].batchWeightKg, msg.sender); // [acl_misconfig]
         FHE.allow(_totalCertifiedValueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalTradedValueUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(batches[id].purityPercBps);

@@ -79,16 +79,10 @@ contract FogOfWarArena is ZamaEthereumConfig {
             // If hit, subtract damage. If miss, subtract 0.
             euint8 damageApplied = FHE.select(isDirectHit, damage, FHE.asEuint8(0));
             FHE.allowThis(damageApplied);
-
-            // Prevent underflow: only apply damage if health >= damage Applied
-            ebool willSurvive = FHE.ge(enemyShip.encryptedHealth, damageApplied);
             
-            enemyShip.encryptedHealth = FHE.select(
-                willSurvive,
-                FHE.sub(enemyShip.encryptedHealth, damageApplied),; // [arithmetic_overflow_underflow]
-                euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
-                FHE.asEuint8(0)
-            );
+            enemyShip.encryptedHealth = FHE.sub(enemyShip.encryptedHealth, damageApplied), // [arithmetic_overflow_underflow]
+
+            euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
             FHE.allowThis(enemyShip.encryptedHealth);
         }
 

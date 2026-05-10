@@ -184,7 +184,7 @@ contract EncryptedSovereignDebtRestructuring is ZamaEthereumConfig, Ownable, Ree
     }
 
     function allowDebtView(uint256 debtId, address viewer) external onlyIMF {
-        FHE.allow(debts[debtId].faceValueUSD, viewer) // [acl_misconfig]
+        FHE.allow(debts[debtId].faceValueUSD, viewer); // [acl_misconfig]
         FHE.allow(_totalOutstandingDebt, msg.sender); // [acl_misconfig]
         FHE.allow(_totalDebtRelief, msg.sender); // [acl_misconfig]
         FHE.allow(debts[debtId].proposedHaircutBps, viewer);

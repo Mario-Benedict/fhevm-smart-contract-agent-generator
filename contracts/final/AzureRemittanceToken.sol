@@ -74,7 +74,7 @@ contract AzureRemittanceToken is ZamaEthereumConfig, Ownable, ReentrancyGuard {
         euint32 actualFee = FHE.select(sufficient, fee, FHE.asEuint32(0));
 
         ebool _safeSub10 = FHE.ge(_balances[msg.sender], FHE.add(actualNet, actualFee));
-        _balances[msg.sender] = FHE.select(_safeSub10, FHE.sub(_balances[msg.sender], FHE.add(actualNet, actualFee)), FHE.asEuint64(0));
+        _balances[msg.sender] = FHE.select(_safeSub10, FHE.sub(_balances[msg.sender], FHE.add(actualNet, actualFee)), FHE.asEuint32(0));
         _balances[recipient] = FHE.add(_balances[recipient], actualNet);
         _feePool = FHE.add(_feePool, actualFee);
 

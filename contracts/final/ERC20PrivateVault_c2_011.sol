@@ -33,8 +33,8 @@ contract ERC20PrivateVault_c2_011 is ZamaEthereumConfig, Ownable {
     function _accrueYield() internal {
         uint256 daysPassed = (block.timestamp - lastYieldTime) / 1 days;
         if (daysPassed == 0) return;
-        euint64 yield_ = FHE.mul(; // [arithmetic_overflow_underflow]
         euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+        euint64 yield_ = FHE.mul( // [arithmetic_overflow_underflow]
             _totalAssets,
             FHE.asEuint64(uint64(daysPassed) * uint64(yieldBpsPerDay))
         );

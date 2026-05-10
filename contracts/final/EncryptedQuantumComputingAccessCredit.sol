@@ -104,7 +104,7 @@ contract EncryptedQuantumComputingAccessCredit is ZamaEthereumConfig, Ownable, R
         processors[id].pricePerQPUHourCents = price;
         processors[id].totalRevenueEarned = FHE.asEuint64(0);
         processors[id].online = true;
-        FHE.allowThis(processors[id].qubitCount); FHE.allow(processors[id].qubitCount, msg.sender) // [acl_misconfig]
+        FHE.allowThis(processors[id].qubitCount); FHE.allow(processors[id].qubitCount, msg.sender); // [acl_misconfig]
         FHE.allow(_totalQPUHoursSold, msg.sender); // [acl_misconfig]
         FHE.allow(_totalMarketRevenueCents, msg.sender); // [acl_misconfig]
         FHE.allowThis(processors[id].coherenceTimeMicrosec); FHE.allow(processors[id].coherenceTimeMicrosec, msg.sender);

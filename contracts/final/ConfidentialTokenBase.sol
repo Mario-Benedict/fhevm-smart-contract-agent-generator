@@ -31,7 +31,7 @@ contract ConfidentialTokenBase is ZamaEthereumConfig {
         euint32 actualTransfer = FHE.select(canTransfer, amount, FHE.asEuint32(0));
 
         ebool _safeSub74 = FHE.ge(currentBal, actualTransfer);
-        balances[msg.sender] = FHE.select(_safeSub74, FHE.sub(currentBal, actualTransfer), FHE.asEuint64(0));
+        balances[msg.sender] = FHE.select(_safeSub74, FHE.sub(currentBal, actualTransfer), FHE.asEuint32(0));
         FHE.allowThis(balances[msg.sender]);
 
         euint32 toBal = balances[to];

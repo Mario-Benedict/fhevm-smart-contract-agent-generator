@@ -168,13 +168,13 @@ contract EncryptedCryptoDerivativesExchange is ZamaEthereumConfig, Ownable, Reen
         // PnL = (markPrice - entryPrice) * size / entryPrice for LONG
         euint64 pnl;
         ebool profitableClose = FHE.ge(mkt.markPriceUSD, pos.entryPrice);
+        ebool _safeSub199 = FHE.ge(mkt.markPriceUSD, pos.entryPrice);
+        ebool _safeSub200 = FHE.ge(pos.entryPrice, mkt.markPriceUSD);
         euint64 priceDiff = FHE.select(profitableClose,
-            ebool _safeSub199 = FHE.ge(mkt.markPriceUSD, pos.entryPrice);
             FHE.select(_safeSub199, FHE.sub(mkt.markPriceUSD, pos.entryPrice), FHE.asEuint64(0)),
-            ebool _safeSub200 = FHE.ge(pos.entryPrice, mkt.markPriceUSD);
             FHE.select(_safeSub200, FHE.sub(pos.entryPrice, mkt.markPriceUSD), FHE.asEuint64(0)));
         ebool _safeMul47 = FHE.le(priceDiff, FHE.asEuint64(type(uint32).max));
-        pnl = FHE.mul(priceDiff, pos.sizeUSD); // simplified: entryPrice divisor omitted
+        pnl = FHE.select(_safeMul47, FHE.mul(priceDiff, pos.sizeUSD), FHE.asEuint64(0)); // simplified: entryPrice divisor omitted
         if (pos.direction == Direction.LONG) {
             euint64 returnAmt = FHE.select(profitableClose,
                 FHE.add(pos.margin, pnl), FHE.sub(pos.margin, FHE.select(FHE.le(pnl, pos.margin), pnl, pos.margin)));

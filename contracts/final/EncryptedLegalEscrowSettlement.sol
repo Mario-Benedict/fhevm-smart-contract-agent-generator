@@ -90,7 +90,7 @@ contract EncryptedLegalEscrowSettlement is ZamaEthereumConfig, Ownable, Reentran
         }
         _clientEscrowBalance[msg.sender] = FHE.add(_clientEscrowBalance[msg.sender], escrowed);
         FHE.allowThis(disputes[id].claimedAmountUSD);
-        FHE.allow(disputes[id].claimedAmountUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(disputes[id].claimedAmountUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalEscrowHeld, msg.sender); // [acl_misconfig]
         FHE.allow(disputes[id].claimedAmountUSD, respondent);
         FHE.allowThis(disputes[id].escrowedAmountUSD);

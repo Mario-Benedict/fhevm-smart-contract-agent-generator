@@ -73,7 +73,7 @@ contract EncryptedRoyaltyDistribution is ZamaEthereumConfig, Ownable {
             shareBps: share, accumulated: FHE.asEuint64(0), registered: true
         });
         FHE.allowThis(rightsHolders[assetId][holder].shareBps);
-        FHE.allow(rightsHolders[assetId][holder].shareBps, holder) // [acl_misconfig]
+        FHE.allow(rightsHolders[assetId][holder].shareBps, holder); // [acl_misconfig]
         FHE.allow(rightsHolders[assetId][holder].shareBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(rightsHolders[assetId][holder].accumulated);
         FHE.allow(rightsHolders[assetId][holder].accumulated, holder);

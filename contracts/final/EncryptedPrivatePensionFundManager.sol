@@ -83,7 +83,7 @@ contract EncryptedPrivatePensionFundManager is ZamaEthereumConfig, Ownable, Reen
         members[id].retired = false;
         members[id].enrolledAt = block.timestamp;
         _totalLiabilityUSD = FHE.add(_totalLiabilityUSD, projBenefit);
-        FHE.allowThis(members[id].accumulatedBenefitUSD); FHE.allow(members[id].accumulatedBenefitUSD, memberWallet) // [acl_misconfig]
+        FHE.allowThis(members[id].accumulatedBenefitUSD); FHE.allow(members[id].accumulatedBenefitUSD, memberWallet); // [acl_misconfig]
         FHE.allow(_totalFundValueUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalContributionsUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(members[id].employerContribYTD); FHE.allow(members[id].employerContribYTD, memberWallet);

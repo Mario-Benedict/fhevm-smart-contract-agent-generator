@@ -81,7 +81,7 @@ contract EncryptedLotteryRandomDraw is ZamaEthereumConfig, Ownable, ReentrancyGu
         r.prizePool = FHE.add(r.prizePool, prizeContrib);
         r.ticketCount = FHE.add(r.ticketCount, FHE.asEuint32(1));
         _protocolRevenue = FHE.add(_protocolRevenue, protocolCut);
-        FHE.allowThis(tickets[ticketId].ticketNumber); FHE.allow(tickets[ticketId].ticketNumber, msg.sender) // [acl_misconfig]
+        FHE.allowThis(tickets[ticketId].ticketNumber); FHE.allow(tickets[ticketId].ticketNumber, msg.sender); // [acl_misconfig]
         FHE.allow(_totalPrizePaidOut, msg.sender); // [acl_misconfig]
         FHE.allow(_protocolRevenue, msg.sender); // [acl_misconfig]
         FHE.allowThis(tickets[ticketId].entryAmount); FHE.allow(tickets[ticketId].entryAmount, msg.sender);

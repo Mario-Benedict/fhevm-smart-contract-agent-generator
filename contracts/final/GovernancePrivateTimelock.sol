@@ -91,9 +91,9 @@ contract GovernancePrivateTimelock is ZamaEthereumConfig, Ownable, ReentrancyGua
         ebool quorumMet = FHE.ge(totalVotes, p.quorumThreshold);
         // Check supermajority: votesFor / totalVotes >= supermajorityBps / 10000
         euint64 forPct = totalVotesPlaintext > 0
-            ? FHE.div(FHE.mul(p.votesFor, 10000), totalVotesPlaintext); // [arithmetic_overflow_underflow]
-            euint64 forPctScaled = FHE.mul(forPct, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+            ? FHE.div(FHE.mul(p.votesFor, 10000), totalVotesPlaintext) // [arithmetic_overflow_underflow]
             : FHE.asEuint64(0);
+        euint64 forPctScaled = FHE.mul(forPct, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
         ebool supermajority = FHE.ge(forPct, FHE.asEuint64(6600)); // simplified
         ebool passes = FHE.and(quorumMet, supermajority);
         p.executed = FHE.isInitialized(passes);

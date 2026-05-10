@@ -89,11 +89,11 @@ contract DeFiPrivateCreditFacility is ZamaEthereumConfig, Ownable, ReentrancyGua
         require(cl.active, "No credit line");
         uint256 daysSince = (block.timestamp - cl.lastAccrual) / 1 days;
         if (daysSince == 0) return;
-        euint64 interest = FHE.div(
-            ebool _safeMul26 = FHE.le(FHE.mul(cl.utilized, cl.interestRateBps), FHE.asEuint64(type(uint32).max));
+        ebool _safeMul26 = FHE.le(FHE.mul(cl.utilized, cl.interestRateBps), FHE.asEuint64(type(uint32).max));
+        euint64 interest = FHE.select(_safeMul26, FHE.div(
             FHE.mul(FHE.mul(cl.utilized, cl.interestRateBps), FHE.asEuint64(uint64(daysSince))),
             3650000 // daily rate approximation
-        );
+        ), FHE.asEuint64(uint64(type(uint32).max)));
         cl.accruedInterest = FHE.add(cl.accruedInterest, interest);
         cl.lastAccrual = block.timestamp;
         FHE.allowThis(cl.accruedInterest);

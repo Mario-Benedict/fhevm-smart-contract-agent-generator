@@ -89,7 +89,7 @@ contract EncryptedPrivateEquitySecondary is ZamaEthereumConfig, Ownable, Reentra
         listings[id].listedAt = block.timestamp;
         listings[id].buyer = address(0);
         FHE.allowThis(listings[id].navUSD);
-        FHE.allow(listings[id].navUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(listings[id].navUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalVolumeTraded, msg.sender); // [acl_misconfig]
         FHE.allow(_brokerFeeBps, msg.sender); // [acl_misconfig]
         FHE.allowThis(listings[id].askPriceUSD);

@@ -72,7 +72,7 @@ contract EncryptedRacetrackBettingPool is ZamaEthereumConfig, Ownable, Reentranc
         // Update individual bet
         r.bets[msg.sender][horse] = FHE.add(r.bets[msg.sender][horse], amount);
         FHE.allowThis(r.bets[msg.sender][horse]);
-        FHE.allow(r.bets[msg.sender][horse], msg.sender) // [acl_misconfig]
+        FHE.allow(r.bets[msg.sender][horse], msg.sender); // [acl_misconfig]
         FHE.allow(r.horsePool[horse], msg.sender); // [acl_misconfig]
 
         // Update total pool

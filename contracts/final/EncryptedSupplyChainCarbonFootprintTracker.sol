@@ -87,7 +87,7 @@ contract EncryptedSupplyChainCarbonFootprintTracker is ZamaEthereumConfig, Ownab
         _s0.netZeroStatus = NetZeroStatus.NotStarted;
         _s0.reportingYear = reportingYear;
         _s0.verified = false;
-        FHE.allowThis(suppliers[id].scope1tCO2e); FHE.allow(suppliers[id].scope1tCO2e, supplier) // [acl_misconfig]
+        FHE.allowThis(suppliers[id].scope1tCO2e); FHE.allow(suppliers[id].scope1tCO2e, supplier); // [acl_misconfig]
         FHE.allow(_totalScope1tCO2e, msg.sender); // [acl_misconfig]
         FHE.allow(_totalScope2tCO2e, msg.sender); // [acl_misconfig]
         FHE.allowThis(suppliers[id].scope2tCO2e); FHE.allow(suppliers[id].scope2tCO2e, supplier);

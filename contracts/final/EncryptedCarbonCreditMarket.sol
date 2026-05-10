@@ -110,9 +110,9 @@ contract EncryptedCarbonCreditMarket is ZamaEthereumConfig, Ownable {
         ebool hasSupply = FHE.le(tonnes, p.creditsAvailable);
         euint32 actual = FHE.select(hasSupply, tonnes, p.creditsAvailable);
         ebool _safeSub175 = FHE.ge(p.creditsAvailable, actual);
-        p.creditsAvailable = FHE.select(_safeSub175, FHE.sub(p.creditsAvailable, actual), FHE.asEuint64(0));
+        p.creditsAvailable = FHE.select(_safeSub175, FHE.sub(p.creditsAvailable, actual), FHE.asEuint32(0));
         ebool _safeMul40 = FHE.le(p.pricePerTonneMicroUSD, FHE.asEuint64(type(uint32).max));
-        euint64 cost = FHE.mul(p.pricePerTonneMicroUSD, FHE.asEuint64(uint64(0))); // actual as euint64
+        euint64 cost = FHE.select(_safeMul40, FHE.mul(p.pricePerTonneMicroUSD, FHE.asEuint64(uint64(0))), FHE.asEuint64(0)); // actual as euint64
         _totalMarketVolume = FHE.add(_totalMarketVolume, cost);
         if (!FHE.isInitialized(buyers[msg.sender].totalSpent)) {
             buyers[msg.sender].totalSpent = FHE.asEuint64(0);

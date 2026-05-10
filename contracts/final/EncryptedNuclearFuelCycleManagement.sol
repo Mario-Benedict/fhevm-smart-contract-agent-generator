@@ -124,7 +124,7 @@ contract EncryptedNuclearFuelCycleManagement is ZamaEthereumConfig, Ownable, Ree
         FHE.allowThis(assemblies[asmId].enrichmentPct);
         FHE.allowThis(assemblies[asmId].burnupMWdPerTU);
         FHE.allowThis(assemblies[asmId].acquisitionCostUSD);
-        FHE.allow(assemblies[asmId].acquisitionCostUSD, msg.sender) // [acl_misconfig]
+        FHE.allow(assemblies[asmId].acquisitionCostUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalFuelInvestmentUSD, msg.sender); // [acl_misconfig]
         FHE.allow(_totalDisposalReserveUSD, msg.sender); // [acl_misconfig]
         FHE.allowThis(assemblies[asmId].disposalCostReserveUSD);
