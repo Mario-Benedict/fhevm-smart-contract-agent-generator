@@ -1,0 +1,7182 @@
+﻿{
+  "meta": {
+    "total": 1022,
+    "done": 1022,
+    "pending": 0,
+    "error": 0,
+    "retry": 0,
+    "last_updated": "2026-05-10T18:00:20Z"
+  },
+  "contracts": {
+    "AcademicDegreeRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 1
+    },
+    "AcademicGrantReview.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 2
+    },
+    "AcademicPeerReview.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 3
+    },
+    "AccessControlDelegated_b6_010.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 4
+    },
+    "AccessControlGeofenced_b6_009.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 5
+    },
+    "AccessControlMultiTenant_b6_006.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 6
+    },
+    "AccessControlNFTGated_b6_008.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "NFT",
+      "index": 7
+    },
+    "AccessControlRBAC_b6_004.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 8
+    },
+    "AccessControlSubscription_b6_007.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 9
+    },
+    "AccessControlTimeGated_b6_005.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 10
+    },
+    "AccessControlWhitelist_b3_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 11
+    },
+    "AgriculturePrivateCommodityHedge.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 12
+    },
+    "AMLKYCRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 13
+    },
+    "AnonymousDAOVoting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 14
+    },
+    "AnonymousPeerReview_b12_003.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 15
+    },
+    "AnonymousWhistleblowerBounty.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 16
+    },
+    "AntiMoneyLaunderingFlag.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 17
+    },
+    "ArtworkBlindAuction.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "NFT",
+      "index": 18
+    },
+    "ArtworkProvenance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "NFT",
+      "index": 19
+    },
+    "AuctionArtNFTFractional.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "NFT",
+      "index": 20
+    },
+    "AuctionCarbonCredit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 21
+    },
+    "AuctionElectricityCapacity.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 22
+    },
+    "AuctionFrequencySpectrum.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 23
+    },
+    "AuctionGovernmentGrantBid.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 24
+    },
+    "AuctionLandLease.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 25
+    },
+    "AuctionLogisticsRoute.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 26
+    },
+    "AuctionMediaBroadcastRights.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 27
+    },
+    "AuctionMunicipalBond.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 28
+    },
+    "AuctionPharmaceuticalLicense.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 29
+    },
+    "AuctionPrivateEquityStake.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 30
+    },
+    "AuctionRealEstateDistressed.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 31
+    },
+    "AuctionResearchContract.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 32
+    },
+    "AuctionShippingContainerSlot.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 33
+    },
+    "AuctionTimeLock_b2_002.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 34
+    },
+    "AuctionWaterRights.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 35
+    },
+    "AzureRemittanceToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 36
+    },
+    "AzureSkyToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 37
+    },
+    "BlindAuction.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 38
+    },
+    "BlindAuctionMulti_b3_005.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 39
+    },
+    "BlindBingoGame.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 40
+    },
+    "BlindDutchAuction_b13_004.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 41
+    },
+    "BlindEscrow_b7_003.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 42
+    },
+    "BlindKPIBonus_b8_002.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 43
+    },
+    "BlindMatchmakingDating.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 44
+    },
+    "BlindPeerReviewSystem.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 45
+    },
+    "BlindPokerHand.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 46
+    },
+    "BlindRockPaperScissors_b9_002.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 47
+    },
+    "BlindSealedTender.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 48
+    },
+    "BlindSpeedDatingMatch.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 49
+    },
+    "BlindTaxCollection_b6_003.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 50
+    },
+    "BlindVickreyAuction_b11_005.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 51
+    },
+    "BoardOfDirectorsElection.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 52
+    },
+    "CarbonCreditAuction.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 53
+    },
+    "CarbonTradingExchange.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 54
+    },
+    "ClimateResearchFundVote.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 55
+    },
+    "ClinicalDrugTrialBlind.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Healthcare",
+      "index": 56
+    },
+    "CloakedCompounder.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 57
+    },
+    "CommunityGardenPlotVote.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 58
+    },
+    "ConfidentialBounty_b7_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 59
+    },
+    "ConfidentialBountyBoard.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 60
+    },
+    "ConfidentialCallOption_b9_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 61
+    },
+    "ConfidentialCarbonTaxRebateDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 62
+    },
+    "ConfidentialClinicalTrial.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Healthcare",
+      "index": 63
+    },
+    "ConfidentialCreditDelegation.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 64
+    },
+    "ConfidentialCrossChainBridgeToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 65
+    },
+    "ConfidentialCrossMarginLending.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 66
+    },
+    "ConfidentialCryptocurrencyExchangeOrderBook.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 67
+    },
+    "ConfidentialDAOTreasury_b8_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 68
+    },
+    "ConfidentialDocumentVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 69
+    },
+    "ConfidentialElectionCommissionVoting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 70
+    },
+    "ConfidentialEmployeeBonusSystem.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 71
+    },
+    "ConfidentialERC20StableCoin.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 72
+    },
+    "ConfidentialEscrow_b12_004.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 73
+    },
+    "ConfidentialExecutiveSalaryBand.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 74
+    },
+    "ConfidentialFeeOnTransferToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 75
+    },
+    "ConfidentialGridEnergyTrade.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 76
+    },
+    "ConfidentialInsurancePremiumToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 77
+    },
+    "ConfidentialInvoiceFactoring.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 78
+    },
+    "ConfidentialKYCRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 79
+    },
+    "ConfidentialLimitOrder_b6_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 80
+    },
+    "ConfidentialLotteryJackpot.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 81
+    },
+    "ConfidentialLoyaltyPoints_b11_009.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 82
+    },
+    "ConfidentialMarginPosition.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 83
+    },
+    "ConfidentialMatchmaking.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 84
+    },
+    "ConfidentialMicroLendingPlatform.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 85
+    },
+    "ConfidentialMilitaryPensionFundManager.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 86
+    },
+    "ConfidentialNexusGovernanceToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 87
+    },
+    "ConfidentialOilGasPipelineRevenueShare.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 88
+    },
+    "ConfidentialOmegaStablecoin.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 89
+    },
+    "ConfidentialOptionPricing_b13_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 90
+    },
+    "ConfidentialOrganDonorRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 91
+    },
+    "ConfidentialPayroll_b4_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 92
+    },
+    "ConfidentialPayrollVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 93
+    },
+    "ConfidentialPeerToPeerInsurancePool.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 94
+    },
+    "ConfidentialPolarisRewardToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 95
+    },
+    "ConfidentialRealEstateTokenization.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 96
+    },
+    "ConfidentialReInsurancePool.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 97
+    },
+    "ConfidentialReinsuranceTreaty.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 98
+    },
+    "ConfidentialScholarTokenWithMeritGating.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 99
+    },
+    "ConfidentialStakingYieldOptimizer.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Staking",
+      "index": 100
+    },
+    "ConfidentialSupplyChain.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "SupplyChain",
+      "index": 101
+    },
+    "ConfidentialSupplyChainBidding.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 102
+    },
+    "ConfidentialSupplyChainFinanceToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 103
+    },
+    "ConfidentialSyntheticIndexToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 104
+    },
+    "ConfidentialTokenBase.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 105
+    },
+    "ConfidentialTokenizedRealEstateInvestmentTrust.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 106
+    },
+    "ConfidentialTokenStreamer.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 107
+    },
+    "ConfidentialTradeFinanceLetterOfCredit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 108
+    },
+    "ConfidentialVentureFund.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 110
+    },
+    "ConfidentialVestingTreasuryToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 111
+    },
+    "ConfidentialYieldToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 112
+    },
+    "CorporateBoardElection.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 113
+    },
+    "CorporateExpenseShield.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 114
+    },
+    "CorporateVestingShield.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 115
+    },
+    "CorporateVestingVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 116
+    },
+    "CovertDCA.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 117
+    },
+    "CrimsonPeakToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 118
+    },
+    "CrimsonTreasuryToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 119
+    },
+    "CryptoLotteryDraw.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 120
+    },
+    "CybersecurityPrivateBugBounty.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 121
+    },
+    "DAOParameterVote.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 122
+    },
+    "DaoTreasuryRisk_b11_010.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 123
+    },
+    "DarkOracleArb.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 124
+    },
+    "DarkOTCDesk.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 125
+    },
+    "DarkpoolAMM_b10_001.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 126
+    },
+    "DarkPoolBondingCurve.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 127
+    },
+    "DarkPoolLaunchpad.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 128
+    },
+    "DarkpoolOrderBook.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 129
+    },
+    "DecentralizedAnonymousFreelance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 130
+    },
+    "DecentralizedPassport.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 131
+    },
+    "DeFiConfidentialBridge.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 132
+    },
+    "DeFiConfidentialFuturesClearing.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 133
+    },
+    "DeFiConfidentialLiquidityPool.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 134
+    },
+    "DeFiConfidentialStablecoinPeg.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 135
+    },
+    "DeFiDarkPoolSwap.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 136
+    },
+    "DeFiEncryptedGaugeController.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 137
+    },
+    "DeFiEncryptedInsurancePremium.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 138
+    },
+    "DeFiEncryptedOptionsMarketMaker.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 139
+    },
+    "DeFiEncryptedPerpetualFuturesProtocol.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 140
+    },
+    "DeFiEncryptedRebalancer.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 141
+    },
+    "DeFiEncryptedStructuredProduct.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 142
+    },
+    "DeFiPrivateCreditFacility.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 143
+    },
+    "DeFiPrivateOptionsVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 144
+    },
+    "DeFiPrivateRevenueSplit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 145
+    },
+    "DeFiPrivateStructuredProduct.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 146
+    },
+    "DeFiPrivateSyntheticAsset.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 147
+    },
+    "DeFiPrivateVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 148
+    },
+    "DeFiPrivateYieldAggregator.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Staking",
+      "index": 149
+    },
+    "EducationPrivateCredential.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 150
+    },
+    "EmberCoinToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 151
+    },
+    "EmploymentCredentialNFT.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "NFT",
+      "index": 152
+    },
+    "EncryptedAcademicDegree.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 153
+    },
+    "EncryptedAccessControlRBACWithTimelock.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 154
+    },
+    "EncryptedAgriculturalInputSubsidy.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 155
+    },
+    "EncryptedAgricultureCropInsurance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 156
+    },
+    "EncryptedAIModelMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 157
+    },
+    "EncryptedAircraftEngineLeasePortfolio.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 158
+    },
+    "EncryptedAircraftEngineLeaseTracker.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "SupplyChain",
+      "index": 159
+    },
+    "EncryptedAircraftLeaseFinancing.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 160
+    },
+    "EncryptedAircraftLeasePortfolio.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 161
+    },
+    "EncryptedAircraftMaintenanceBid.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 162
+    },
+    "EncryptedAirdropDistributor.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 163
+    },
+    "EncryptedAlgorithmicStablecoin.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 164
+    },
+    "EncryptedAnonymousCrisisSupportFund.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 165
+    },
+    "EncryptedAnonymousWhistleblowerRewardScheme.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Staking",
+      "index": 166
+    },
+    "EncryptedAthleteSponsorshipToken.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 167
+    },
+    "EncryptedAutomotiveLeaseResidualValueGuarantee.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 168
+    },
+    "EncryptedBalanceERC20WithVesting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "ERC20",
+      "index": 169
+    },
+    "EncryptedBiogasPlantEnergyCertificate.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 170
+    },
+    "EncryptedBiomedicalDataMarket.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Healthcare",
+      "index": 171
+    },
+    "EncryptedBiometricAccessControl.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 172
+    },
+    "EncryptedBiometricAccessVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 173
+    },
+    "EncryptedBlackjackCardGame.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 174
+    },
+    "EncryptedBlindBidAuctionHouse.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 175
+    },
+    "EncryptedBlindDutchAuction.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 176
+    },
+    "EncryptedBlindSpeedDatingGame.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 177
+    },
+    "EncryptedBuildingAccessControl.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 178
+    },
+    "EncryptedCarbonBorderAdjustmentMechanism.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 179
+    },
+    "EncryptedCarbonBudgetRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 180
+    },
+    "EncryptedCarbonCaptureCredit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 181
+    },
+    "EncryptedCarbonCredit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 182
+    },
+    "EncryptedCarbonCreditForwardContract.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 183
+    },
+    "EncryptedCarbonCreditMarket.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 184
+    },
+    "EncryptedCarbonEmissionsTrading.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 185
+    },
+    "EncryptedCarbonSequestrationVerification.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 186
+    },
+    "EncryptedCarbonTaxObligationRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 187
+    },
+    "EncryptedCattleRanchingFuturesMarket.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 188
+    },
+    "EncryptedCentralBankDigitalCurrency.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 189
+    },
+    "EncryptedCentralBankReserveAudit.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 190
+    },
+    "EncryptedChessRating.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 191
+    },
+    "EncryptedChessWager.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 192
+    },
+    "EncryptedChildSupportEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 193
+    },
+    "EncryptedClinicalPharmacogenomics.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Healthcare",
+      "index": 194
+    },
+    "EncryptedClinicalTrialDataConsortium.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Healthcare",
+      "index": 195
+    },
+    "EncryptedCombatSportsWagerEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 196
+    },
+    "EncryptedCommoditySpotExchange.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 197
+    },
+    "EncryptedCommunityDevelopmentFinance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 198
+    },
+    "EncryptedCommunityTreasury.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 199
+    },
+    "EncryptedCommunityVotingDAO.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 200
+    },
+    "EncryptedCorporateBoardVoting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 201
+    },
+    "EncryptedCorporateMAndADueDiligence.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 202
+    },
+    "EncryptedCoveredBondIssuance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 203
+    },
+    "EncryptedCreditScore_b11_002.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 204
+    },
+    "EncryptedCreditScore_b4_002.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 205
+    },
+    "EncryptedCreditScoreOracle.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 206
+    },
+    "EncryptedCrossChainAtomicSwap.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 207
+    },
+    "EncryptedCrossChainForexSettlement.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 208
+    },
+    "EncryptedCrossChainLiquidityBridge.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 209
+    },
+    "EncryptedCrowdfundedInfrastructureBond.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 210
+    },
+    "EncryptedCrowdfundingLaunchpad.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 211
+    },
+    "EncryptedCrowdfundingVault.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 212
+    },
+    "EncryptedCryptocurrencyExchangeAML.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 213
+    },
+    "EncryptedCryptocurrencyOTCDealerBook.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 214
+    },
+    "EncryptedCryptoDerivativesExchange.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 215
+    },
+    "EncryptedCryptoExchangeMarginEngine.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 216
+    },
+    "EncryptedCyberInsurancePolicyUnderwriting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 217
+    },
+    "EncryptedCyberInsuranceRiskPool.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 218
+    },
+    "EncryptedCyberInsuranceUnderwriting.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 219
+    },
+    "EncryptedCybersecurityBugBounty.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 220
+    },
+    "EncryptedDebtRestructuringNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 221
+    },
+    "EncryptedDecentralizedAnonymousSurvey.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 222
+    },
+    "EncryptedDecentralizedCreditBureau.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 223
+    },
+    "EncryptedDecentralizedIdentityRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Identity",
+      "index": 224
+    },
+    "EncryptedDecentralizedScienceFundingDAO.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Governance",
+      "index": 225
+    },
+    "EncryptedDeFiCrossChainBridgeCompliance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "DeFi",
+      "index": 226
+    },
+    "EncryptedDiceRollingGame.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 227
+    },
+    "EncryptedDigitalMediaRightsMarket.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 228
+    },
+    "EncryptedDistrictHeatingNetworkBid.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 229
+    },
+    "EncryptedDrugCounterfeitDetection.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 230
+    },
+    "EncryptedDrugPricingNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 231
+    },
+    "EncryptedDrugSafetyPhaseIITrial.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 232
+    },
+    "EncryptedDutchAuction_b9_003.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Auction",
+      "index": 233
+    },
+    "EncryptedElderCareHomePlacementFund.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 234
+    },
+    "EncryptedElectionBallotSystem.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 235
+    },
+    "EncryptedElectionVoterRegistrar.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Voting",
+      "index": 236
+    },
+    "EncryptedElectricityGridBalancing.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 237
+    },
+    "EncryptedEmploymentRecord.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 238
+    },
+    "EncryptedEscrowService.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Payments",
+      "index": 239
+    },
+    "EncryptedEsportsOrganizationContract.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 240
+    },
+    "EncryptedEsportsTournamentStaking.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Staking",
+      "index": 241
+    },
+    "EncryptedEsportsWager.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Gaming",
+      "index": 242
+    },
+    "EncryptedEVChargingMarket.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 243
+    },
+    "EncryptedFactoringPlatformReceivables.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 244
+    },
+    "EncryptedFisheryQuotaTrading.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 245
+    },
+    "EncryptedFishingQuotaTrading.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 246
+    },
+    "EncryptedFlightDelayInsurance copy.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 247
+    },
+    "EncryptedFlightDelayInsurance.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Insurance",
+      "index": 248
+    },
+    "EncryptedFoodBankAllocationSystem.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 249
+    },
+    "EncryptedFoodFranchiseeRoyaltyCalculation.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Other",
+      "index": 250
+    },
+    "EncryptedFoodSafetyAudit.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 251
+    },
+    "EncryptedFoodSupplyChainTraceability.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 252
+    },
+    "EncryptedFractionalRealEstateInvestment.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 253
+    },
+    "EncryptedFranchiseRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 254
+    },
+    "EncryptedGeneticLineageNFTRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "NFT",
+      "index": 255
+    },
+    "EncryptedGovernanceTimelockProposal.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 256
+    },
+    "EncryptedHealthInsuranceClaims.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 257
+    },
+    "EncryptedHealthInsurancePool.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 258
+    },
+    "EncryptedHedgeFundPortfolioManager.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 259
+    },
+    "EncryptedHighSpeedRailCapacityBidding.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 260
+    },
+    "EncryptedHighwayConstructionBid.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 261
+    },
+    "EncryptedHospitalBillingAdjudicator.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 262
+    },
+    "EncryptedHospitalityRevenueManagement.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 263
+    },
+    "EncryptedInfrastructurePPP.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 264
+    },
+    "EncryptedInsiderTradingComplianceSystem.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 265
+    },
+    "EncryptedInsiderTradingMonitor.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 266
+    },
+    "EncryptedInsurance_b5_005.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 267
+    },
+    "EncryptedInsuranceClaim.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 268
+    },
+    "EncryptedInterBankSettlement.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 269
+    },
+    "EncryptedInterestRateSwap.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 270
+    },
+    "EncryptedInternationalStudentScholarshipBidding.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 271
+    },
+    "EncryptedKYCRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Identity",
+      "index": 272
+    },
+    "EncryptedLaborUnionWageNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 273
+    },
+    "EncryptedLandRegistryTitle.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Identity",
+      "index": 274
+    },
+    "EncryptedLegalEscrowSettlement.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Payments",
+      "index": 275
+    },
+    "EncryptedLiquidationEngine.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 276
+    },
+    "EncryptedLiquidityPool.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 277
+    },
+    "EncryptedLiquidityPoolAMM.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 278
+    },
+    "EncryptedLithiumBatterySupplyChain.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 279
+    },
+    "EncryptedLotteryRandomDraw.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Gaming",
+      "index": 280
+    },
+    "EncryptedLuxuryWatchAuthentication.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 281
+    },
+    "EncryptedMarineInsuranceCargoHull.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 282
+    },
+    "EncryptedMediaRatingAgency.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 283
+    },
+    "EncryptedMedicalDeviceLifecycleCompliance.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Healthcare",
+      "index": 284
+    },
+    "EncryptedMedicalImagingDataLicense.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Healthcare",
+      "index": 285
+    },
+    "EncryptedMedicalRecords_b10_003.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Healthcare",
+      "index": 286
+    },
+    "EncryptedMicrofinanceCooperative.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 287
+    },
+    "EncryptedMilitarySupplyChain.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 288
+    },
+    "EncryptedMiningPoolRewards.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Staking",
+      "index": 289
+    },
+    "EncryptedMortgageOrigination.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 290
+    },
+    "EncryptedMortgagePoolSecuritization.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 291
+    },
+    "EncryptedMultiSigAccessControl.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Governance",
+      "index": 292
+    },
+    "EncryptedMunicipalBondIssuance.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 293
+    },
+    "EncryptedMutualInsFund.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 294
+    },
+    "EncryptedMutualInsurance.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 295
+    },
+    "EncryptedNationalIntelligenceContractBid.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 296
+    },
+    "EncryptedNationalSovereignReserveFund.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 297
+    },
+    "EncryptedNaturalGasPipelineCapacity.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 298
+    },
+    "EncryptedNFTRoyaltyAuction.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "NFT",
+      "index": 299
+    },
+    "EncryptedNFTRoyaltyDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "NFT",
+      "index": 300
+    },
+    "EncryptedNFTRoyaltySplitter.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "NFT",
+      "index": 301
+    },
+    "EncryptedNuclearFuelCycleContract.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 302
+    },
+    "EncryptedNuclearFuelCycleManagement.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 303
+    },
+    "EncryptedNuclearFuelCycleTracker.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 304
+    },
+    "EncryptedNuclearWasteManagement.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 305
+    },
+    "EncryptedNuclearWasteTracking.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 306
+    },
+    "EncryptedNumberMatch.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 307
+    },
+    "EncryptedP2PBetting.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Gaming",
+      "index": 308
+    },
+    "EncryptedParametricFloodInsurance.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Insurance",
+      "index": 309
+    },
+    "EncryptedPayroll_b11_003.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Payments",
+      "index": 310
+    },
+    "EncryptedPayrollToken.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "ERC20",
+      "index": 311
+    },
+    "EncryptedPeerReviewJournal.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 312
+    },
+    "EncryptedPharmaceuticalTender.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 313
+    },
+    "EncryptedPharmacyBenefitManager.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 314
+    },
+    "EncryptedPharmaPatentLicensing.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 315
+    },
+    "EncryptedPokerCardGameRNG.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Gaming",
+      "index": 316
+    },
+    "EncryptedPredictionMarket.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 317
+    },
+    "EncryptedPredictionMarketDecentralized.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 318
+    },
+    "EncryptedPredictionMarketResolution.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 319
+    },
+    "EncryptedPrisonInmateRehabilitation.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 320
+    },
+    "EncryptedPrisonRehabilitation.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 321
+    },
+    "EncryptedPrivateBankingWealth.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 322
+    },
+    "EncryptedPrivateBankWealth.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 323
+    },
+    "EncryptedPrivateElderCareAllotment.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 324
+    },
+    "EncryptedPrivateEquityPortfolioValuation.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 325
+    },
+    "EncryptedPrivateEquitySecondary.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 326
+    },
+    "EncryptedPrivateEquityVehicle.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 327
+    },
+    "EncryptedPrivateFundraiserCampaign.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 328
+    },
+    "EncryptedPrivateMembershipClub.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 329
+    },
+    "EncryptedPrivateMessageBoard.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 330
+    },
+    "EncryptedPrivatePensionFundManager.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 331
+    },
+    "EncryptedPrivatePlacementMemorandum.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 332
+    },
+    "EncryptedPrivatePokerChip.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 333
+    },
+    "EncryptedPrivateSurveyResults.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 334
+    },
+    "EncryptedPrivateTaxAuthorityAuditFlag.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 335
+    },
+    "EncryptedQuadraticVotingProtocol.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 336
+    },
+    "EncryptedQuantumComputingAccessCredit.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 337
+    },
+    "EncryptedQuantumSafeCustodyVault.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 338
+    },
+    "EncryptedRacetrackBettingPool.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 339
+    },
+    "EncryptedRandomizedClinicalTrial.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Healthcare",
+      "index": 340
+    },
+    "EncryptedRandomnessLotteryPool.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 341
+    },
+    "EncryptedRareEarthMineralCertificate.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 342
+    },
+    "EncryptedRealEstate_b8_003.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 343
+    },
+    "EncryptedReferendumVoting.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 344
+    },
+    "EncryptedRenewableEnergyCertificate.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 345
+    },
+    "EncryptedRetailLoyaltyCashback.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 346
+    },
+    "EncryptedRetirementPensionAnnuity.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 347
+    },
+    "EncryptedRewardEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Staking",
+      "index": 348
+    },
+    "EncryptedRockPaperScissorsGame.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Gaming",
+      "index": 349
+    },
+    "EncryptedRoleBasedAccess.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Governance",
+      "index": 350
+    },
+    "EncryptedRoleManager_b13_003.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 351
+    },
+    "EncryptedRoyaltyDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 352
+    },
+    "EncryptedScavengerHunt.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 353
+    },
+    "EncryptedSealedbidTenderPlatform.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 354
+    },
+    "EncryptedShareBuyback.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 355
+    },
+    "EncryptedShipwreckSalvageRights.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 356
+    },
+    "EncryptedSoccerAthleteTransferMarket.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 357
+    },
+    "EncryptedSocialImpactBond.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 358
+    },
+    "EncryptedSocialWelfareDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 359
+    },
+    "EncryptedSoftwareLicense.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 360
+    },
+    "EncryptedSovereignCreditDefaultSwap.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 361
+    },
+    "EncryptedSovereignDebtAuction.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 362
+    },
+    "EncryptedSovereignDebtRestructuring.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 363
+    },
+    "EncryptedSovereignWealthFundESG.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 364
+    },
+    "EncryptedSpaceDebrisRemovalBounty.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 365
+    },
+    "EncryptedSpaceSatelliteDataMarket.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 366
+    },
+    "EncryptedSportsBettingExchange.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Gaming",
+      "index": 367
+    },
+    "EncryptedSportsDraftFantasy.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 368
+    },
+    "EncryptedSportsTransferFeeEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Payments",
+      "index": 369
+    },
+    "EncryptedSportsTransferMarket.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 370
+    },
+    "EncryptedStablecoin.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 371
+    },
+    "EncryptedStartupEquityPool.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "DeFi",
+      "index": 372
+    },
+    "EncryptedStudentLoanScheme.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 373
+    },
+    "EncryptedSubscriptions_b11_007.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Payments",
+      "index": 374
+    },
+    "EncryptedSupplyChain_b7_002.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 375
+    },
+    "EncryptedSupplyChainCarbonFootprintTracker.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "SupplyChain",
+      "index": 376
+    },
+    "EncryptedSupplyChainInvoiceFactoring.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Payments",
+      "index": 377
+    },
+    "EncryptedSupplyChainToken_b12_005.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "ERC20",
+      "index": 378
+    },
+    "EncryptedSyndicatedLoan.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 379
+    },
+    "EncryptedTaxiFleetDynamicPricing.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 380
+    },
+    "EncryptedTelemedicineConsultationFee.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 381
+    },
+    "EncryptedTimberHarvestLicensing.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 382
+    },
+    "EncryptedTimelockGovernanceVault.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 383
+    },
+    "EncryptedTokenStream.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "ERC20",
+      "index": 384
+    },
+    "EncryptedTollRoadCongestionPricing.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 385
+    },
+    "EncryptedTradeFinanceLetterOfCredit.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 386
+    },
+    "EncryptedTradeSecretAuction.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Auction",
+      "index": 387
+    },
+    "EncryptedTreasureHunt.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 388
+    },
+    "EncryptedUndergroundMiningRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 389
+    },
+    "EncryptedUniversalBasicEquity.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 390
+    },
+    "EncryptedUniversityEndowmentFund.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 391
+    },
+    "EncryptedUniversityResearchGrant.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 392
+    },
+    "EncryptedUrbanDataMonetization.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 393
+    },
+    "EncryptedVaultedGoldBacking.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 394
+    },
+    "EncryptedVentureCapitalFundToken.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "ERC20",
+      "index": 395
+    },
+    "EncryptedVentureDebtTermLoan.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Lending",
+      "index": 396
+    },
+    "EncryptedVoterRegistration.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 397
+    },
+    "EncryptedVoting.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Voting",
+      "index": 398
+    },
+    "EncryptedWaterRightsTrading.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 399
+    },
+    "EncryptedWealthTaxRegistration.sol": {
+      "status": "done",
+      "assigned_labels": "acl_misconfig",
+      "category": "Other",
+      "index": 400
+    },
+    "EncryptedWeatherDerivative.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 401
+    },
+    "EncryptedWhistleblowerBounty.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 402
+    },
+    "EncryptedWholeGenomeDataBroker.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 403
+    },
+    "EncryptedWildernessConservationCarbonCredit.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 404
+    },
+    "EncryptedWildlifeConservationBond.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 405
+    },
+    "EncryptedWillExecution.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 406
+    },
+    "EncryptedWillExecutor.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 407
+    },
+    "EncryptedYieldFarm.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 408
+    },
+    "EncryptedYieldFarming.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 409
+    },
+    "EncryptedYieldOptimizer.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 410
+    },
+    "EncryptedZeroKnowledgeAgeGating.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 411
+    },
+    "EncryptedZeroKnowledgePaymentChannel.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Payments",
+      "index": 412
+    },
+    "EnergyGridCapacityBid.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 413
+    },
+    "EnergyPrivateGridBalance.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 414
+    },
+    "EnterprisePrivateESGDisclosure.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 415
+    },
+    "EnterprisePrivateMergerArbitrage.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 416
+    },
+    "ERC20Airdrop_b1_014.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 417
+    },
+    "ERC20AntiWhale_c2_008.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 418
+    },
+    "ERC20Blacklist_b1_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 419
+    },
+    "ERC20BondingCurve_c2_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 420
+    },
+    "ERC20Burnable_b1_002.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 421
+    },
+    "ERC20Capped_b1_003.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 422
+    },
+    "ERC20CarbonCredit_c2_006.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 423
+    },
+    "ERC20CarbonNeutralToken.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 424
+    },
+    "ERC20ConditionalTransfer_c2_010.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 425
+    },
+    "ERC20ConfidentialVault.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 426
+    },
+    "ERC20ConvertibleBond.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 427
+    },
+    "ERC20CreditLine_c2_015.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 428
+    },
+    "ERC20DEXPrivate_c2_013.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 429
+    },
+    "ERC20Dividend_b1_012.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 430
+    },
+    "ERC20EncryptedEmployeeEquityPlan.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 431
+    },
+    "ERC20EncryptedEscrowToken_c2_019.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 432
+    },
+    "ERC20FeeOnTransfer_b1_009.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 433
+    },
+    "ERC20FractionalNFT_c2_005.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 434
+    },
+    "ERC20GatedAccess.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 435
+    },
+    "ERC20Governance_b1_017.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 436
+    },
+    "ERC20InsuranceFund_c2_016.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 437
+    },
+    "ERC20Lottery_b1_016.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 438
+    },
+    "ERC20LoyaltyPoints_c2_007.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 439
+    },
+    "ERC20Mintable_b1_007.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 440
+    },
+    "ERC20MultiReward_c2_009.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 441
+    },
+    "ERC20MultiSig_b1_013.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 442
+    },
+    "ERC20OZAccessControl_c2_002.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 443
+    },
+    "ERC20OZBurnable_c2_001.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 444
+    },
+    "ERC20Pausable_b1_001.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 445
+    },
+    "ERC20PrivacyPool_b1_020.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 446
+    },
+    "ERC20PrivateDebtToken.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 447
+    },
+    "ERC20PrivateDividendReinvestment.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 448
+    },
+    "ERC20PrivateGrantDAO_c2_018.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 449
+    },
+    "ERC20PrivateLoyaltyTiered.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 450
+    },
+    "ERC20PrivatePayAsYouEarn.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 451
+    },
+    "ERC20PrivatePayroll_c2_017.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 452
+    },
+    "ERC20PrivateRemittance.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 453
+    },
+    "ERC20PrivateRevenueShare.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 454
+    },
+    "ERC20PrivateStablecoinCBDC.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 455
+    },
+    "ERC20PrivateVault_c2_011.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 456
+    },
+    "ERC20Rebasing_b1_015.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 457
+    },
+    "ERC20Reward_b1_005.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 458
+    },
+    "ERC20ShadowFund.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 459
+    },
+    "ERC20SilentAirdrop_c2_012.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 460
+    },
+    "ERC20Snapshot_b1_008.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 461
+    },
+    "ERC20SovereignBond_c2_020.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 462
+    },
+    "ERC20Stablecoin_b1_011.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 463
+    },
+    "ERC20StreamPayment_c2_003.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 464
+    },
+    "ERC20TaxDistribution_c2_014.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 465
+    },
+    "ERC20TaxRoyalty_b1_019.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 466
+    },
+    "ERC20Timelock_b1_010.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 467
+    },
+    "ERC20Vesting_b1_006.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 468
+    },
+    "ERC20WrappedConfidential_b1_018.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 469
+    },
+    "ERC20ZeroKnowledgePayroll.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 470
+    },
+    "FantasyFootballPrivate.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 471
+    },
+    "FogOfWarArena.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 472
+    },
+    "FranchiseeRatingVote.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 473
+    },
+    "FrequencySpectrumBid.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 474
+    },
+    "FrostVaultToken.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 475
+    },
+    "GameBlindBattleship.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 476
+    },
+    "GameBlindDragonQuest.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 477
+    },
+    "GameBlindPokerCashTable.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 478
+    },
+    "GameBlindTreasureHunt.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 479
+    },
+    "GameConfidentialEscapeRoom.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 480
+    },
+    "GameConfidentialLottery.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 481
+    },
+    "GameEncryptedBattleRoyaleStaking.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 482
+    },
+    "GameEncryptedBattleRoyaleWager.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 483
+    },
+    "GameEncryptedChessRatingWager.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 484
+    },
+    "GameEncryptedDungeonLoot.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 485
+    },
+    "GameEncryptedFantasyLeague.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 486
+    },
+    "GameEncryptedHorseRacing.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 487
+    },
+    "GameEncryptedMMORPG.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 488
+    },
+    "GameEncryptedQuestReward.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 489
+    },
+    "GamePrivateCardCollection.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 490
+    },
+    "GamePrivateCasino.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 491
+    },
+    "GamePrivateChessWager.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 492
+    },
+    "GamePrivatePokerTournament.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 493
+    },
+    "GamePrivatePredictionMarket.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 494
+    },
+    "GamePrivateSportsBetting.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 495
+    },
+    "GamingBattleship_b5_009.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 496
+    },
+    "GamingBlackjack_b5_005.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 497
+    },
+    "GamingChessWager_b5_013.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 498
+    },
+    "GamingCoinFlip_b3_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 499
+    },
+    "GamingDice_b2_003.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 500
+    },
+    "GamingFantasySports_b5_015.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 501
+    },
+    "GamingHorseBetting_b5_010.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 502
+    },
+    "GamingNumberGuess_b5_012.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 503
+    },
+    "GamingPoker_b5_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 504
+    },
+    "GamingPredictionMarket_b5_014.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 505
+    },
+    "GamingRoulette_b5_008.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 506
+    },
+    "GamingRPGStats_b5_007.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 507
+    },
+    "GamingSlot_b5_006.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 508
+    },
+    "GamingTreasureHunt_b5_011.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Gaming",
+      "index": 509
+    },
+    "GovernanceEncryptedDelegation.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 510
+    },
+    "GovernanceEncryptedQuadraticVoting.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 511
+    },
+    "GovernancePrivateDAOTreasury.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 512
+    },
+    "GovernancePrivateTimelock.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 513
+    },
+    "GovernmentProcurementBid.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 514
+    },
+    "HealthcareEncryptedEHR.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Healthcare",
+      "index": 515
+    },
+    "HealthcareEncryptedVaccineRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Identity",
+      "index": 516
+    },
+    "HealthcarePrivateClinicalTrial.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Healthcare",
+      "index": 517
+    },
+    "HealthcarePrivateInsuranceClaim.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Insurance",
+      "index": 518
+    },
+    "HealthDataMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 519
+    },
+    "HiddenYieldFarming_b12_001.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Staking",
+      "index": 520
+    },
+    "HRPrivatePerformanceBonus.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 521
+    },
+    "IdentityKYC_b2_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Identity",
+      "index": 522
+    },
+    "InsurancePremiumAuction.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 523
+    },
+    "InsuranceRiskPoolBid.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Auction",
+      "index": 524
+    },
+    "IronwoodCurrencyToken.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "ERC20",
+      "index": 525
+    },
+    "JurySelectionSystem.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 526
+    },
+    "LegalPrivateEscrowDispute.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Payments",
+      "index": 527
+    },
+    "LendingCDPVault_b4_006.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 528
+    },
+    "LendingCollateral_b2_005.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 529
+    },
+    "LendingFlashLoan_b4_003.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 530
+    },
+    "LendingInsurance_b4_010.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 531
+    },
+    "LendingInterestBearing_b4_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 532
+    },
+    "LendingMultiAsset_b4_008.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 533
+    },
+    "LendingPeerToPeer_b4_012.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Lending",
+      "index": 534
+    },
+    "MaskedFeeRouter.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 535
+    },
+    "MediaPrivateRoyaltyDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 536
+    },
+    "MedicalRecordAccess.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Healthcare",
+      "index": 537
+    },
+    "MedicalTrialConsentVote.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 538
+    },
+    "MixedAnonymousTipping_b7_003.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 539
+    },
+    "MixedBlindTender_b7_006.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 540
+    },
+    "MixedConfidentialEscrow_b7_001.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Payments",
+      "index": 541
+    },
+    "MixedConfidentialSupplyChain_b7_007.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "SupplyChain",
+      "index": 542
+    },
+    "MixedConfidentialWill_b7_009.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 543
+    },
+    "MixedEncryptedMessaging_b7_005.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 544
+    },
+    "MixedPrivateCrowdfund_b7_008.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 545
+    },
+    "MixedPrivateOracle_b7_004.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 546
+    },
+    "MixedPrivateSalary_b7_002.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Payments",
+      "index": 547
+    },
+    "MixedPrivateSurvey_b7_010.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Other",
+      "index": 548
+    },
+    "MunicipalBudgetVote.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 549
+    },
+    "MunicipalBudgetVoting.sol": {
+      "status": "done",
+      "assigned_labels": "arithmetic_overflow_underflow",
+      "category": "Voting",
+      "index": 550
+    },
+    "MysticLootBox.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 551
+    },
+    "NeighborhoodZoningPoll.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Voting",
+      "index": 552
+    },
+    "NFTStakingRewards.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "NFT",
+      "index": 553
+    },
+    "NightOwlStablecoin.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 554
+    },
+    "NuclearFacilityClearance.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 555
+    },
+    "ObscuredCorporateVesting.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 556
+    },
+    "ObscureLiquidity.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "DeFi",
+      "index": 557
+    },
+    "OnChainRoulette.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 558
+    },
+    "OnyxInstitutionalToken.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "ERC20",
+      "index": 559
+    },
+    "OpaqueDividendDistributor.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 560
+    },
+    "OpaqueGovernor.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 561
+    },
+    "OTCDarkpool_b5_006.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "DeFi",
+      "index": 562
+    },
+    "PatentDisputeArbitration.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 563
+    },
+    "PatentRightsBidding.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 564
+    },
+    "PensionFundManager.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 565
+    },
+    "PhantomArb.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 566
+    },
+    "PhilanthropyPrivateDonationMatching.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 567
+    },
+    "PrivacyEncryptedCreditScore.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 568
+    },
+    "PrivacyEncryptedSalaryBenchmark.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Payments",
+      "index": 569
+    },
+    "PrivacyRealWorldKYC.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Identity",
+      "index": 570
+    },
+    "PrivacyUniversalBasicIncome.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 571
+    },
+    "PrivacyWhistleblowerProtection.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 572
+    },
+    "PrivateAgeVerification.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 573
+    },
+    "PrivateAgingPopulationPensionFund.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 574
+    },
+    "PrivateAgricultureCropFuturesExchange.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 575
+    },
+    "PrivateAgricultureIrrigationWaterRight.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 576
+    },
+    "PrivateAircraftLeasing.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 577
+    },
+    "PrivateAircraftMaintenanceBid.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 578
+    },
+    "PrivateAircraftMaintenanceEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Payments",
+      "index": 579
+    },
+    "PrivateAircraftTimeshareAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 580
+    },
+    "PrivateAirlineRewardProgram.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Staking",
+      "index": 581
+    },
+    "PrivateAirportLandingSlotAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 582
+    },
+    "PrivateAirTrafficSlotAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 583
+    },
+    "PrivateAntarcticResearchStationSupply.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "SupplyChain",
+      "index": 584
+    },
+    "PrivateAntiMoneyLaunderingCompliance.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 585
+    },
+    "PrivateAPIGateway.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 586
+    },
+    "PrivateAPIKeyManager.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 587
+    },
+    "PrivateAquacultureSalmonFarmBond.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 588
+    },
+    "PrivateArchaeologicalSiteAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 589
+    },
+    "PrivateArtGalleryConsignment.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 590
+    },
+    "PrivateArtificialIntelligenceModelAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 591
+    },
+    "PrivateArtificialIntelligenceModelLicensing.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 592
+    },
+    "PrivateArtificialIntelligenceModelMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 593
+    },
+    "PrivateArtistAdvanceContract.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 594
+    },
+    "PrivateAutoLoanOrigination.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 595
+    },
+    "PrivateAutomatedMarketMakerBondingCurve.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 596
+    },
+    "PrivateAviationCarbonOffsetExchange.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 597
+    },
+    "PrivateAviationFuelHedge.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 598
+    },
+    "PrivateAviationFuelHedgingProgram.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 599
+    },
+    "PrivateAviationInsuranceUnderwritingPool.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 600
+    },
+    "PrivateBankruptcyClaimsProcessor.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 601
+    },
+    "PrivateBankruptcyEstateDistribution.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 602
+    },
+    "PrivateBattleRoyale.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 603
+    },
+    "PrivateBiogasCaptureAndCertification.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Identity",
+      "index": 604
+    },
+    "PrivateBioMassEnergyFeedstockContract.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 605
+    },
+    "PrivateBiopharmaClinicalDataBrokerage.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Healthcare",
+      "index": 606
+    },
+    "PrivateCannabisLicenseBidding.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 607
+    },
+    "PrivateCarbonCreditForwardDelivery.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 608
+    },
+    "PrivateCarbonCreditForwardSettlement.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 609
+    },
+    "PrivateCarbonCreditRegistryAndTrading.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 610
+    },
+    "PrivateCarbonFootprintTracker.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "SupplyChain",
+      "index": 611
+    },
+    "PrivateCarbonForwardMarket.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 612
+    },
+    "PrivateCarbonOffsetAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 613
+    },
+    "PrivateCarbonTrading_b11_004.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 614
+    },
+    "PrivateCarLeasePortfolio.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 615
+    },
+    "PrivateCatastropheBondIssuance.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 616
+    },
+    "PrivateCatastropheRiskModelingPool.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 617
+    },
+    "PrivateCemeteryMemorialPerpetualCare.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 618
+    },
+    "PrivateCharityEndowment.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 619
+    },
+    "PrivateCinemaBoxOfficeRevenueSharing.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 620
+    },
+    "PrivateClinicalTrialDataSharing.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Healthcare",
+      "index": 621
+    },
+    "PrivateColdStorageWarehouseCapacityLease.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 622
+    },
+    "PrivateCollaborativeResearchGrant.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 623
+    },
+    "PrivateCollateralizedLendingVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 624
+    },
+    "PrivateCollateralLending.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 625
+    },
+    "PrivateCollateralVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 626
+    },
+    "PrivateCommercialRealEstateLoan.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 627
+    },
+    "PrivateCommodityForwardContract.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 628
+    },
+    "PrivateCommodityFutures.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 629
+    },
+    "PrivateConstructionContractBid.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 630
+    },
+    "PrivateCottonTextileMillProcurement.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 631
+    },
+    "PrivateCreditDefaultSwapRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 632
+    },
+    "PrivateCreditDefaultSwapVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 633
+    },
+    "PrivateCreditRatingAgency.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 634
+    },
+    "PrivateCreditScoring.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 635
+    },
+    "PrivateCropInsuranceProtocol.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 636
+    },
+    "PrivateCropYieldInsurancePool.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Staking",
+      "index": 637
+    },
+    "PrivateCrossChainBridgeFeeOptimizer.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 638
+    },
+    "PrivateCrossChainBridgeLiquidity.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "DeFi",
+      "index": 639
+    },
+    "PrivateCrossCorrelationCreditFacility.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 640
+    },
+    "PrivateCrowdfundedSolarFarmCooperative.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 641
+    },
+    "PrivateCryptocurrencyExchangeKYC.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Identity",
+      "index": 642
+    },
+    "PrivateCryptoExchangeMarginBook.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 643
+    },
+    "PrivateCryptoHedgeFundNAV.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 644
+    },
+    "PrivateCryptoVentureCapitalSyndicate.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 645
+    },
+    "PrivateCyberInsuranceUnderwriting.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 646
+    },
+    "PrivateCyberRansomNegotiationEscrow.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Payments",
+      "index": 647
+    },
+    "PrivateDebtCollectionAgency.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 648
+    },
+    "PrivateDebtCollectionAgencyToken.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "ERC20",
+      "index": 649
+    },
+    "PrivateDebtMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 650
+    },
+    "PrivateDebtSecuritizationSPV.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 651
+    },
+    "PrivateDecentralizedExchangeOrderBook.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "DeFi",
+      "index": 652
+    },
+    "PrivateDecentralizedIdentityKYCVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Identity",
+      "index": 653
+    },
+    "PrivateDeepSeaCableCapacityLease.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 654
+    },
+    "PrivateDeepSeaMiningRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 655
+    },
+    "PrivateDefenseContractBidding.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 656
+    },
+    "PrivateDefenseContractorBidding.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 657
+    },
+    "PrivateDeFiFlashLoanAudit.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 658
+    },
+    "PrivateDeFiYieldFarming.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Staking",
+      "index": 659
+    },
+    "PrivateDerivativesSettlement.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 660
+    },
+    "PrivateDiamondGradingRegistry.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Identity",
+      "index": 661
+    },
+    "PrivateDigitalAssetInheritance.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 662
+    },
+    "PrivateDigitalTwinAssetValuation.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 663
+    },
+    "PrivateDisasterReliefFundManager.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 664
+    },
+    "PrivateDistillerySpiritsAging.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 665
+    },
+    "PrivateDividendDistribution_b13_002.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 666
+    },
+    "PrivateDividendReinvestment.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 667
+    },
+    "PrivateDocumentVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 668
+    },
+    "PrivateDroneDeliveryRouteAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 669
+    },
+    "PrivateDrugTrialPhaseManagement.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 670
+    },
+    "PrivateDungeonRPG.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 671
+    },
+    "PrivateDutchAuctionDecreasingPrice.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 672
+    },
+    "PrivateElderCareAssetProtection.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 673
+    },
+    "PrivateElectionCommission.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Voting",
+      "index": 674
+    },
+    "PrivateElectoralFinanceTracker.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "SupplyChain",
+      "index": 675
+    },
+    "PrivateElectricGridBatteryStorageAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 676
+    },
+    "PrivateElectricGridDemandResponse.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 677
+    },
+    "PrivateElectricVehicleChargingRevenueShare.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 678
+    },
+    "PrivateElectricVehicleFleetLease.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 679
+    },
+    "PrivateElectronicHealthRecordAccessControl.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Healthcare",
+      "index": 680
+    },
+    "PrivateEnergyGridTokenizedCapacity.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "ERC20",
+      "index": 681
+    },
+    "PrivateEquineRacehorseSyndicateBid.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 682
+    },
+    "PrivateEquipmentRentalPlatform.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 683
+    },
+    "PrivateEquityCrowdfundingRound.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 684
+    },
+    "PrivateERC20Dividends.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "ERC20",
+      "index": 685
+    },
+    "PrivateEscrowToken.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "ERC20",
+      "index": 686
+    },
+    "PrivateEsportsPlayerTransferMarket.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 687
+    },
+    "PrivateEventTicketAuction.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Auction",
+      "index": 688
+    },
+    "PrivateFashionBrandLicensing.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 689
+    },
+    "PrivateFertilityClinicDonorMatching.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 690
+    },
+    "PrivateFlashLoanArbitrage.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Lending",
+      "index": 691
+    },
+    "PrivateFlightInsurance_b11_008.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 692
+    },
+    "PrivateFloodInsuranceRiskPool.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Insurance",
+      "index": 693
+    },
+    "PrivateFoodBeverageFranchiseRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 694
+    },
+    "PrivateFoodSafetyTraceability.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 695
+    },
+    "PrivateFoodSafetyTraceabilitySystem.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 696
+    },
+    "PrivateForestCarbonSequestration.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 697
+    },
+    "PrivateForestCarbonSequestrationVault.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 698
+    },
+    "PrivateFoundationGrantAllocation.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 699
+    },
+    "PrivateFractionalArtOwnership.sol": {
+      "status": "done",
+      "assigned_labels": "callback_replay",
+      "category": "Other",
+      "index": 700
+    },
+    "PrivateFreelancerEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Payments",
+      "index": 701
+    },
+    "PrivateGamingGuildTreasuryDAO.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Gaming",
+      "index": 702
+    },
+    "PrivateGamingGuildTreasuryManagement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Gaming",
+      "index": 703
+    },
+    "PrivateGeneticDataConsortium.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 704
+    },
+    "PrivateGeneticDataMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 705
+    },
+    "PrivateGeneticDataVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 706
+    },
+    "PrivateGenomicsDataVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 707
+    },
+    "PrivateGeofencedAccess.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Governance",
+      "index": 708
+    },
+    "PrivateGeothermalEnergyRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 709
+    },
+    "PrivateGeothermalEnergyRoyaltyV2.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 710
+    },
+    "PrivateGigEconomyEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Payments",
+      "index": 711
+    },
+    "PrivateGovernanceMultiSigTimelock.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Voting",
+      "index": 712
+    },
+    "PrivateHealthDataMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 713
+    },
+    "PrivateHedgeFundLimitedPartnership.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 714
+    },
+    "PrivateHedgeFundLiquidityStressTest.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "DeFi",
+      "index": 715
+    },
+    "PrivateHedgeFundNAV.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 716
+    },
+    "PrivateHedgeFundShares.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 717
+    },
+    "PrivateHedgeFundSideLetterTerms.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 718
+    },
+    "PrivateHedgeFundStrategyVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 719
+    },
+    "PrivateHighFrequencyTradingCollateral.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Lending",
+      "index": 720
+    },
+    "PrivateHighFrequencyTradingColocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 721
+    },
+    "PrivateHighNetWorthEstatePlanning.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 722
+    },
+    "PrivateHighValueArtAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 723
+    },
+    "PrivateHospitalBedAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 724
+    },
+    "PrivateHospitalCapitalEquipmentLease.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 725
+    },
+    "PrivateHospitalProcurementTender.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 726
+    },
+    "PrivateHotelRevenueManagement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 727
+    },
+    "PrivateHydrogenFuelCellSupplyChain.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "SupplyChain",
+      "index": 728
+    },
+    "PrivateImmigrationSkillsVerification.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 729
+    },
+    "PrivateInstitutionalCustodianVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 730
+    },
+    "PrivateInsuranceSubrogationPool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Insurance",
+      "index": 731
+    },
+    "PrivateIntellectualPropertyLicenseRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Identity",
+      "index": 732
+    },
+    "PrivateIntellectualPropertyMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 733
+    },
+    "PrivateInternationalRemittance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 734
+    },
+    "PrivateInternationalStudentLoanPool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Lending",
+      "index": 735
+    },
+    "PrivateIoTDataMarketplaceSubscription.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 736
+    },
+    "PrivateIoTDeviceRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Identity",
+      "index": 737
+    },
+    "PrivateIslamicFinanceMurabaha.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 738
+    },
+    "PrivateJewelryDiamondAMLTracker.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "SupplyChain",
+      "index": 739
+    },
+    "PrivateLaborUnionWageNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 740
+    },
+    "PrivateLabourUnionNegotiationVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 741
+    },
+    "PrivateLegalSettlementEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Payments",
+      "index": 742
+    },
+    "PrivateLiquidityMining.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "DeFi",
+      "index": 743
+    },
+    "PrivateLithiumIonBatteryRecycling.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 744
+    },
+    "PrivateLivestockAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 745
+    },
+    "PrivateLivestockGeneticsMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 746
+    },
+    "PrivateLuxuryRealEstateTokenization.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "ERC20",
+      "index": 747
+    },
+    "PrivateLuxuryYachtCharterMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 748
+    },
+    "PrivateMarginTrading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 749
+    },
+    "PrivateMeatPackingSupplyChain.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "SupplyChain",
+      "index": 750
+    },
+    "PrivateMedicalDevicePostMarketSurveillance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Healthcare",
+      "index": 751
+    },
+    "PrivateMedicalInsuranceUnderwriting.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Insurance",
+      "index": 752
+    },
+    "PrivateMedicalLicense.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Healthcare",
+      "index": 753
+    },
+    "PrivateMembershipClub.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 754
+    },
+    "PrivateMergerAcquisitionEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Payments",
+      "index": 755
+    },
+    "PrivateMergerArbitragePool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "DeFi",
+      "index": 756
+    },
+    "PrivateMergerArbitrageVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 757
+    },
+    "PrivateMicrofinanceLoanOrigination.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Lending",
+      "index": 758
+    },
+    "PrivateMicrofinanceSavingsGroup.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 759
+    },
+    "PrivateMicrofinanceVillageBank.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 760
+    },
+    "PrivateMicroLending.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Lending",
+      "index": 761
+    },
+    "PrivateMilitaryProcurementContract.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 762
+    },
+    "PrivateMiningPoolReward.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Staking",
+      "index": 763
+    },
+    "PrivateMiningRoyaltySplitPool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "DeFi",
+      "index": 764
+    },
+    "PrivateMiningRoyaltyStream.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 765
+    },
+    "PrivateMiningRoyaltyStreamToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "ERC20",
+      "index": 766
+    },
+    "PrivateMiningRoyaltyStreamTokenization.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "ERC20",
+      "index": 767
+    },
+    "PrivateMobilePhoneSpectrumAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 768
+    },
+    "PrivateMortgagePortfolioInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Insurance",
+      "index": 769
+    },
+    "PrivateMunicipalBondIssuance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 770
+    },
+    "PrivateMunicipalWaterUtilityTariff.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 771
+    },
+    "PrivateMutualFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 772
+    },
+    "PrivateMutualFundNAVReporting.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 773
+    },
+    "PrivateNaturalDisasterCatastropheBond.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 774
+    },
+    "PrivateNaturalDisasterParametricInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Insurance",
+      "index": 775
+    },
+    "PrivateNaturalGasStorageCapacityBid.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 776
+    },
+    "PrivateNeonatalICUBedAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 777
+    },
+    "PrivateNeonatalIntensiveCareAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 778
+    },
+    "PrivateNFTBlindAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "NFT",
+      "index": 779
+    },
+    "PrivateNFTFractionalizationVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "NFT",
+      "index": 780
+    },
+    "PrivateNFTIntellectualPropertyVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "NFT",
+      "index": 781
+    },
+    "PrivateNuclearFuelCycleTrading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 782
+    },
+    "PrivateNuclearPlantSafetyMonitor.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 783
+    },
+    "PrivateNuclearPowerPlantFuelContract.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 784
+    },
+    "PrivateNutritionTracker.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "SupplyChain",
+      "index": 785
+    },
+    "PrivateOceanFreightRateDerivative.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 786
+    },
+    "PrivateOceanShippingContainerDerivative.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 787
+    },
+    "PrivateOceanShippingFreightExchange.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 788
+    },
+    "PrivateOffshoreOilFieldProductionSharing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 789
+    },
+    "PrivateOilGasPipelineCapacity.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 790
+    },
+    "PrivateOilGasRoyalty.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 791
+    },
+    "PrivateOlympicSponsorshipAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Auction",
+      "index": 792
+    },
+    "PrivateOncologyTreatmentRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Identity",
+      "index": 793
+    },
+    "PrivateOnlinePharmacyPrescriptionFill.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 794
+    },
+    "PrivateOptionsClearingFHE.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 795
+    },
+    "PrivateOrganTransplantCompatibilityRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Identity",
+      "index": 796
+    },
+    "PrivatePatientInsuranceClaim.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Insurance",
+      "index": 797
+    },
+    "PrivatePeerToPeerLending.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Lending",
+      "index": 798
+    },
+    "PrivatePensionFund copy.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 799
+    },
+    "PrivatePensionFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow"
+      ],
+      "category": "Other",
+      "index": 800
+    },
+    "PrivatePensionFundAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 801
+    },
+    "PrivatePharmaceuticalDrugTrialDataMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 802
+    },
+    "PrivatePharmacyBenefitManagerRebate.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 803
+    },
+    "PrivatePharmaPatentLicensing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 804
+    },
+    "PrivatePharmaSupplyChainAuthentication.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 805
+    },
+    "PrivatePharmaSupplyChainAuthenticity.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 806
+    },
+    "PrivatePharmaSupplyChainColdChain.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 807
+    },
+    "PrivatePortfolioRebalancer.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 808
+    },
+    "PrivatePredictionMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 809
+    },
+    "PrivatePrisonRehabilitationFunding.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 810
+    },
+    "PrivatePrivacyPreservingCreditBureau.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Lending",
+      "index": 811
+    },
+    "PrivatePrivateEquitySecondaryMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 812
+    },
+    "PrivatePrivateLabelCosmeticsManufacturing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 813
+    },
+    "PrivateProblemGamblingTherapyFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 814
+    },
+    "PrivateProwrestlingBetPool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 815
+    },
+    "PrivatePublicTenderBid.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 816
+    },
+    "PrivateQuantumSafeDigitalIdentity.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Identity",
+      "index": 817
+    },
+    "PrivateRacingLeague.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 818
+    },
+    "PrivateRailFreightCapacityBidding.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 819
+    },
+    "PrivateRealEstateConstructionEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 820
+    },
+    "PrivateRealEstateDebtFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 821
+    },
+    "PrivateRealEstateInvestmentTrust.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 822
+    },
+    "PrivateRealEstateREIT.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 823
+    },
+    "PrivateRealEstateTokenizedFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 824
+    },
+    "PrivateRebaseToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 825
+    },
+    "PrivateReinsuranceCatastropheSwap.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 826
+    },
+    "PrivateReinsuranceTreatyNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 827
+    },
+    "PrivateRenewableEnergyCertificateMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 828
+    },
+    "PrivateRockPaperScissors_b12_002.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 829
+    },
+    "PrivateRoyaltyDistributor.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 830
+    },
+    "PrivateSalaryNegotiation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 831
+    },
+    "PrivateSalaryPayroll.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 832
+    },
+    "PrivateSalaryPayrollSystem.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 833
+    },
+    "PrivateSatelliteDataMarketplace.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 834
+    },
+    "PrivateSatelliteImageryCommercialLicense.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 835
+    },
+    "PrivateSatelliteOrbitSlotAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 836
+    },
+    "PrivateScholarshipAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 837
+    },
+    "PrivateScholarshipEndowmentDistribution.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 838
+    },
+    "PrivateSecondaryMarketEquityTrading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 839
+    },
+    "PrivateSecondhandLuxuryAuthentication.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 840
+    },
+    "PrivateSemiconductorIPLicensing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 841
+    },
+    "PrivateShipBunkerFuelHedging.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 842
+    },
+    "PrivateShipCargoBillOfLading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 843
+    },
+    "PrivateShipCharterPartyAgreement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 844
+    },
+    "PrivateShippingContainerMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 845
+    },
+    "PrivateSmartCityParkingAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 846
+    },
+    "PrivateSocialImpactMeasurementBond.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 847
+    },
+    "PrivateSovereignBondAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 848
+    },
+    "PrivateSovereignDebtRestructuring.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 849
+    },
+    "PrivateSovereignWealthFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 850
+    },
+    "PrivateSovereignWealthFundAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 851
+    },
+    "PrivateSovereignWealthFundPortfolio.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 852
+    },
+    "PrivateSpaceDebrisInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 853
+    },
+    "PrivateSpaceDebrisMitigationBond.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 854
+    },
+    "PrivateSpaceMiningSyndicate.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 855
+    },
+    "PrivateSpaceResourceExtractionRights.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 856
+    },
+    "PrivateSpectrumAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 857
+    },
+    "PrivateSportsArbitrageEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 858
+    },
+    "PrivateSportsTeamValuationBond.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 859
+    },
+    "PrivateStablecoinMinter.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 860
+    },
+    "PrivateStakingRewardDistributor.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 861
+    },
+    "PrivateSubscription_b4_003.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 862
+    },
+    "PrivateSupplyChainFinance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 863
+    },
+    "PrivateSupplyChainFinanceFactoring.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 864
+    },
+    "PrivateSupplyChainFinanceInvoiceDiscount.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 865
+    },
+    "PrivateTaxComplianceID.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 866
+    },
+    "PrivateTelcoDataPlanMarket.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 867
+    },
+    "PrivateTelecommunicationsInfrastructureSharing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 868
+    },
+    "PrivateTelecommunicationsNetworkSharingAgreement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 869
+    },
+    "PrivateTelecommunicationsSpectrumAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 870
+    },
+    "PrivateTelematicsAutoInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 871
+    },
+    "PrivateTelematicsBasedInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 872
+    },
+    "PrivateTicketingPlatform.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 873
+    },
+    "PrivateTimberForestCarbonProject.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 874
+    },
+    "PrivateTokenMixer.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 875
+    },
+    "PrivateTradeFinance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 876
+    },
+    "PrivateTradeSecretLicensing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 877
+    },
+    "PrivateTradeUnionCollectiveBargaining.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 878
+    },
+    "PrivateTreasuryCashManagement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Governance",
+      "index": 879
+    },
+    "PrivateTruffleHarvestAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 880
+    },
+    "PrivateTWAPTrigger.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 881
+    },
+    "PrivateUniversityAdmissions.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 882
+    },
+    "PrivateUniversityEndowmentAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 883
+    },
+    "PrivateUniversityTuitionFinancing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 884
+    },
+    "PrivateUrbanDataCenterLeasing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 885
+    },
+    "PrivateV3TickOrder.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 886
+    },
+    "PrivateVaccineDistributionAllocation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 887
+    },
+    "PrivateVehicleFleetInsurance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Insurance",
+      "index": 888
+    },
+    "PrivateVentureCapitalDealRoom.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 889
+    },
+    "PrivateVentureCapitalFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 890
+    },
+    "PrivateVentureCapitalPortfolio.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 891
+    },
+    "PrivateVentureCapitalSPV.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 892
+    },
+    "PrivateVentureDebtFacility.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 893
+    },
+    "PrivateVesting_b5_004.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 894
+    },
+    "PrivateWasteWaterTreatmentCapacityTrading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 895
+    },
+    "PrivateWaterRightsAllocationSystem.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 896
+    },
+    "PrivateWaterRightsTokenRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 897
+    },
+    "PrivateWaterRightsTradingPlatform.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 898
+    },
+    "PrivateWineEnCheursFutures.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 899
+    },
+    "PrivateWineHarvestYieldAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 900
+    },
+    "PrivateWordleGame.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Gaming",
+      "index": 901
+    },
+    "PrivateYieldFarmingPool.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 902
+    },
+    "RealEstateDeedRegistry.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Identity",
+      "index": 903
+    },
+    "RealEstatePrivateMortgage.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 904
+    },
+    "RealEstatePrivateRental.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 905
+    },
+    "RealEstateSilentBid.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 906
+    },
+    "ReverseAuctionProcurement_b6_002.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 907
+    },
+    "RoleBasedContentGating.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 908
+    },
+    "ScholarshipFundPrivate.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 909
+    },
+    "SealedBidSyndicate_b10_002.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 910
+    },
+    "SealedPowerPurchaseAgreement.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 911
+    },
+    "SecretContentPlatform.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 912
+    },
+    "SecretDiceLeague.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 913
+    },
+    "SecretNumberGame.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Gaming",
+      "index": 914
+    },
+    "SecretPokerTable.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 915
+    },
+    "SecuredTokenVesting_b13_005.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 916
+    },
+    "SecureMedicalResearchData.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Healthcare",
+      "index": 917
+    },
+    "ShadowOrderBook.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 918
+    },
+    "ShadowPayrollToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 919
+    },
+    "ShadowRouter.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 920
+    },
+    "ShadowSwapRelayer.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 921
+    },
+    "ShadowSyntheticAsset.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 922
+    },
+    "ShieldedCredentials.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Identity",
+      "index": 923
+    },
+    "ShieldedDutchAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 924
+    },
+    "ShieldedLiquidityFarm.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 925
+    },
+    "ShieldedLoyaltyToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 926
+    },
+    "ShieldedStablecoin.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 927
+    },
+    "ShieldedStopLoss.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 928
+    },
+    "ShieldedSubscriptionManager.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 929
+    },
+    "ShieldedV2Liquidity.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 930
+    },
+    "SilentYieldAggregator.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 931
+    },
+    "SilentYieldVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 932
+    },
+    "SilverLeafToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 933
+    },
+    "SovereignDebtAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 934
+    },
+    "SportingEventTicketAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 935
+    },
+    "SportsAthleteEndorsementBid.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 936
+    },
+    "StakingAutoCompound_b4_011.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 937
+    },
+    "StakingEncryptedLiquidityBootstrap.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 938
+    },
+    "StakingGaugeVote_b4_013.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 939
+    },
+    "StakingLiquidityMining_b4_005.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 940
+    },
+    "StakingLockedTerm_b4_007.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 941
+    },
+    "StakingPenalty_b4_009.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 942
+    },
+    "StakingYield_b3_002.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 943
+    },
+    "StealthLimitBook.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 944
+    },
+    "StealthP2PLending.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Lending",
+      "index": 945
+    },
+    "SupplierReputationMatrix.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Identity",
+      "index": 946
+    },
+    "SupplyChainConfidentialTradeFinance.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 947
+    },
+    "SupplyChainEncryptedAudit.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 948
+    },
+    "SupplyChainPrivateInventory.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 949
+    },
+    "SupplyChainPrivateLogisticsPayment.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 950
+    },
+    "SupplyChainQC_b11_001.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "SupplyChain",
+      "index": 951
+    },
+    "SupplyChainSourceVote.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 952
+    },
+    "TaxComplianceAttestation.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 953
+    },
+    "TelecomPrivateBandwidthTrading.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 954
+    },
+    "ThresholdKeyVault.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 955
+    },
+    "ThresholdMilestoneFund.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 956
+    },
+    "TidalWaveToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 957
+    },
+    "TimberHarvestRightsBid.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 958
+    },
+    "TimesharePropertyAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 959
+    },
+    "TradeFinancePrivate.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "DeFi",
+      "index": 960
+    },
+    "TrustlessAuditLogging.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 961
+    },
+    "UnionBargainingVote.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 962
+    },
+    "UnionStrikeVote.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 963
+    },
+    "ValidatorPrivateStake.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Staking",
+      "index": 964
+    },
+    "VeiledOptionsClearing.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 965
+    },
+    "VeiledSwapEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 966
+    },
+    "VermeilLoyaltyPoints.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 967
+    },
+    "VotingAcademicTenure.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 968
+    },
+    "VotingAnonymous_b2_011.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 969
+    },
+    "VotingAnonymousPolling_c2_034.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 970
+    },
+    "VotingBoard_b2_012.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 971
+    },
+    "VotingBudget_b2_013.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 972
+    },
+    "VotingChurchCouncil.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 973
+    },
+    "VotingCitizenInitiative_c2_032.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 974
+    },
+    "VotingClimatePolicy.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 975
+    },
+    "VotingCommitteePriority_c2_033.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 976
+    },
+    "VotingCommunityLandTrust.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 977
+    },
+    "VotingConfidentialCongressional.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 978
+    },
+    "VotingConviction_b2_017.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 979
+    },
+    "VotingCooperativeDividend.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 980
+    },
+    "VotingCorporateBuyout.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 981
+    },
+    "VotingCouncilElection_c2_026.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 982
+    },
+    "VotingCumulative_b2_014.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 983
+    },
+    "VotingDAO_b2_009.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 984
+    },
+    "VotingDelegation_b3_003.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 985
+    },
+    "VotingElectoralCollege.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 986
+    },
+    "VotingEmergency_b2_016.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 987
+    },
+    "VotingEncryptedBoardDirectorElection.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 988
+    },
+    "VotingFutarchyMarket_c2_029.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 989
+    },
+    "VotingHOABudget.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 990
+    },
+    "VotingJudicialNomination.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 991
+    },
+    "VotingLaborUnionStrike.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 992
+    },
+    "VotingLiquidDemocracy_c2_023.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 993
+    },
+    "VotingMedicalEthics.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 994
+    },
+    "VotingMilitaryPromotion.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 995
+    },
+    "VotingMultiChoice_b2_007.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 996
+    },
+    "VotingMultiSigDAO_c2_024.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 997
+    },
+    "VotingNominationPool_c2_030.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 998
+    },
+    "VotingNonProfitBoard.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 999
+    },
+    "VotingOnChainGov_c2_021.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1000
+    },
+    "VotingPatentCommittee.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1001
+    },
+    "VotingPrivateShareholder.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1002
+    },
+    "VotingQuadratic_b2_006.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1003
+    },
+    "VotingRanked_b2_008.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1004
+    },
+    "VotingReferendum_c2_027.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1005
+    },
+    "VotingResearchFundPriority.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1006
+    },
+    "VotingSchulze_c2_022.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1007
+    },
+    "VotingSecretBallot_c2_025.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1008
+    },
+    "VotingSignalRating_b2_015.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1009
+    },
+    "VotingStakeholderMeeting_c2_028.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1010
+    },
+    "VotingTokenStaking_c2_035.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 1011
+    },
+    "VotingTokenWeighted_b2_010.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 1012
+    },
+    "VotingUtilityPoll_c2_031.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1013
+    },
+    "VotingWeighted_b2_001.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1014
+    },
+    "WeightedConfidentialVoting_b11_006.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Voting",
+      "index": 1015
+    },
+    "WhisperBountyEscrow.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Payments",
+      "index": 1016
+    },
+    "WhisperIncentives.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Other",
+      "index": 1017
+    },
+    "WhistleblowerDAO.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Governance",
+      "index": 1018
+    },
+    "WineryBarrelAuction.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Auction",
+      "index": 1019
+    },
+    "ZeroKnowledgeCreditDesk.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Lending",
+      "index": 1020
+    },
+    "ZeroKnowledgeCreditLending.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "Lending",
+      "index": 1021
+    },
+    "ZeroKnowledgeDividendToken.sol": {
+      "status": "done",
+      "assigned_labels": [
+        "acl_misconfig",
+        "arithmetic_overflow_underflow",
+        "callback_replay"
+      ],
+      "category": "ERC20",
+      "index": 1022
+    },
+    "ConfidentialTradeFinanceLCExtended.sol": {
+      "status": "done",
+      "assigned_labels": "safe",
+      "category": "Lending",
+      "index": 109
+    }
+  }
+}

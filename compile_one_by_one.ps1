@@ -4,10 +4,10 @@
 npx hardhat clean
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$generatedDir = Join-Path $projectRoot "contracts\generated"
+$generatedDir = Join-Path $projectRoot "contracts\final"
 $tempDir = Join-Path $projectRoot "contracts\_temp_single"
 
-# Collect all .sol files recursively under generated (skip _temp_single)
+# Collect all .sol files recursively under final (skip _temp_single)
 $allFiles = Get-ChildItem -Path $generatedDir -Filter "*.sol" -Recurse -File |
     Where-Object { $_.FullName -notlike "*_temp_single*" } |
     Sort-Object FullName
@@ -44,12 +44,12 @@ foreach ($file in $allFiles) {
         $passed++
         $compiledFolder = Join-Path $projectRoot "artifacts\contracts\_temp_single\$($file.Name)"
 
-        if (-not (Test-Path (Join-Path $projectRoot "artifacts\contracts\generated"))) {
-            New-Item -ItemType Directory -Path (Join-Path $projectRoot "artifacts\contracts\generated") -Force | Out-Null
+        if (-not (Test-Path (Join-Path $projectRoot "artifacts\contracts\final"))) {
+            New-Item -ItemType Directory -Path (Join-Path $projectRoot "artifacts\contracts\final") -Force | Out-Null
         }
 
         if (Test-Path $compiledFolder) {
-            $destinationPath = Join-Path $projectRoot "artifacts\contracts\generated\$($file.Name)"
+            $destinationPath = Join-Path $projectRoot "artifacts\contracts\final\$($file.Name)"
             Move-Item -Path $compiledFolder -Destination $destinationPath -Force
         }
         Write-Host "ok    $($file.Name)"

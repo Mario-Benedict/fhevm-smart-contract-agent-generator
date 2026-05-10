@@ -6,8 +6,8 @@ const BATCH = process.env.BATCH ?? "batch_01";
 const config: HardhatUserConfig = {
   paths: {
     sources: BATCH === "_temp_single"
-      ? `./contracts/_compile_all`
-      : `./contracts/generated/${BATCH}`,
+      ? `./contracts/_temp_single`
+      : `./contracts/final/${BATCH}`,
   },
   solidity: {
     version: "0.8.24",

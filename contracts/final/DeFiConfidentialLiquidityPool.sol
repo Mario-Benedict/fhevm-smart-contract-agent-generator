@@ -1,0 +1,135 @@
+// SPDX-License-Identifier: BSD-3-Clause-Clear
+pragma solidity ^0.8.24;
+
+import "@fhevm/solidity/lib/FHE.sol";
+import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+/// @title DeFiConfidentialLiquidityPool
+/// @notice LP pool where each LP's share is tracked in encrypted form.
+///         Swap fees accrue privately per LP. Price impact is calculated
+///         using encrypted reserves to prevent sandwich attacks.
+contract DeFiConfidentialLiquidityPool is ZamaEthereumConfig, Ownable, ReentrancyGuard {
+    struct LPPosition {
+        euint64 sharesBps;         // encrypted LP share in bps
+        euint64 feesEarned;        // encrypted accumulated fees
+        uint256 depositTime;
+    }
+
+    mapping(address => LPPosition) private lpPositions;
+    address[] public lps;
+    euint64 private _reserveA;
+    euint64 private _reserveB;
+    euint64 private _totalShares;
+    euint64 private _totalFeesA;
+    euint64 private _feeRateBps;
+    uint256 public swapCount;
+
+    event LiquidityAdded(address indexed lp);
+    event LiquidityRemoved(address indexed lp);
+    event Swap(address indexed trader, bool aToB);
+
+    constructor(
+        externalEuint64 encReserveA, bytes memory aProof,
+        externalEuint64 encReserveB, bytes memory bProof,
+        externalEuint64 encFeeRate, bytes memory fProof
+    ) Ownable(msg.sender) {
+        _reserveA = FHE.fromExternal(encReserveA, aProof);
+        _reserveB = FHE.fromExternal(encReserveB, bProof);
+        _feeRateBps = FHE.fromExternal(encFeeRate, fProof);
+        _totalShares = FHE.asEuint64(0);
+        _totalFeesA = FHE.asEuint64(0);
+        FHE.allowThis(_reserveA);
+        FHE.allowThis(_reserveB);
+        FHE.allowThis(_feeRateBps);
+        FHE.allowThis(_totalShares);
+        FHE.allowThis(_totalFeesA);
+    }
+
+    function addLiquidity(
+        externalEuint64 encAmountA, bytes calldata aProof,
+        externalEuint64 encAmountB, bytes calldata bProof
+    ) external nonReentrant {
+        euint64 amountA = FHE.fromExternal(encAmountA, aProof);
+        euint64 amountB = FHE.fromExternal(encAmountB, bProof);
+        // Simplified: shares = amountA (proportional to reserve A)
+        euint64 newShares = amountA;
+        _reserveA = FHE.add(_reserveA, amountA);
+        _reserveB = FHE.add(_reserveB, amountB);
+        _totalShares = FHE.add(_totalShares, newShares);
+        lpPositions[msg.sender].sharesBps = FHE.add(lpPositions[msg.sender].sharesBps, newShares);
+        lpPositions[msg.sender].feesEarned = FHE.asEuint64(0);
+        lpPositions[msg.sender].depositTime = block.timestamp;
+        FHE.allowThis(_reserveA);
+        FHE.allowThis(_reserveB);
+        FHE.allowThis(_totalShares);
+        FHE.allowThis(lpPositions[msg.sender].sharesBps);
+        FHE.allow(lpPositions[msg.sender].sharesBps, msg.sender);
+        FHE.allowThis(lpPositions[msg.sender].feesEarned);
+        FHE.allow(lpPositions[msg.sender].feesEarned, msg.sender);
+        lps.push(msg.sender);
+        emit LiquidityAdded(msg.sender);
+    }
+
+    function swap(
+        bool aToB,
+        externalEuint64 encAmountIn, bytes calldata proof,
+        uint64 reserveAPlaintext, uint64 reserveBPlaintext
+    ) external nonReentrant {
+        euint64 amountIn = FHE.fromExternal(encAmountIn, proof);
+        euint64 fee = FHE.div(FHE.mul(amountIn, _feeRateBps), 10000);
+        ebool _safeSub97 = FHE.ge(amountIn, fee);
+        euint64 amountAfterFee = FHE.select(_safeSub97, FHE.sub(amountIn, fee), FHE.asEuint64(0));
+        if (aToB) {
+            euint64 amountOut = reserveAPlaintext > 0 ? FHE.div(FHE.mul(amountAfterFee, _reserveB), reserveAPlaintext) : FHE.asEuint64(0);
+            _reserveA = FHE.add(_reserveA, amountIn);
+            ebool _safeSub98 = FHE.ge(_reserveB, amountOut);
+            _reserveB = FHE.select(_safeSub98, FHE.sub(_reserveB, amountOut), FHE.asEuint64(0));
+            _totalFeesA = FHE.add(_totalFeesA, fee);
+            FHE.allow(amountOut, msg.sender);
+        } else {
+            euint64 amountOut = reserveBPlaintext > 0 ? FHE.div(FHE.mul(amountAfterFee, _reserveA), reserveBPlaintext) : FHE.asEuint64(0);
+            _reserveB = FHE.add(_reserveB, amountIn);
+            ebool _safeSub99 = FHE.ge(_reserveA, amountOut);
+            _reserveA = FHE.select(_safeSub99, FHE.sub(_reserveA, amountOut), FHE.asEuint64(0));
+            FHE.allow(amountOut, msg.sender);
+        }
+        FHE.allowThis(_reserveA);
+        FHE.allowThis(_reserveB);
+        FHE.allowThis(_totalFeesA);
+        swapCount++;
+        emit Swap(msg.sender, aToB);
+    }
+
+    function removeLiquidity(externalEuint64 encShares, bytes calldata proof, uint64 totalSharesPlaintext) external nonReentrant {
+        euint64 shares = FHE.fromExternal(encShares, proof);
+        LPPosition storage lp = lpPositions[msg.sender];
+        ebool hasShares = FHE.le(shares, lp.sharesBps);
+        euint64 actual = FHE.select(hasShares, shares, FHE.asEuint64(0));
+        ebool _safeSub100 = FHE.ge(lp.sharesBps, actual);
+        lp.sharesBps = FHE.select(_safeSub100, FHE.sub(lp.sharesBps, actual), FHE.asEuint64(0));
+        ebool _safeSub101 = FHE.ge(_totalShares, actual);
+        _totalShares = FHE.select(_safeSub101, FHE.sub(_totalShares, actual), FHE.asEuint64(0));
+        euint64 returnedA = totalSharesPlaintext > 0 ? FHE.div(FHE.mul(actual, _reserveA), totalSharesPlaintext) : FHE.asEuint64(0);
+        euint64 returnedB = totalSharesPlaintext > 0 ? FHE.div(FHE.mul(actual, _reserveB), totalSharesPlaintext) : FHE.asEuint64(0);
+        ebool _safeSub102 = FHE.ge(_reserveA, returnedA);
+        _reserveA = FHE.select(_safeSub102, FHE.sub(_reserveA, returnedA), FHE.asEuint64(0));
+        ebool _safeSub103 = FHE.ge(_reserveB, returnedB);
+        _reserveB = FHE.select(_safeSub103, FHE.sub(_reserveB, returnedB), FHE.asEuint64(0));
+        FHE.allowThis(lp.sharesBps);
+        FHE.allow(lp.sharesBps, msg.sender);
+        FHE.allowThis(_totalShares);
+        FHE.allowThis(_reserveA);
+        FHE.allowThis(_reserveB);
+        FHE.allow(returnedA, msg.sender);
+        FHE.allow(returnedB, msg.sender);
+        emit LiquidityRemoved(msg.sender);
+    }
+
+    function allowPoolData(address viewer) external onlyOwner {
+        FHE.allow(_reserveA, viewer);
+        FHE.allow(_reserveB, viewer);
+        FHE.allow(_totalFeesA, viewer);
+    }
+}

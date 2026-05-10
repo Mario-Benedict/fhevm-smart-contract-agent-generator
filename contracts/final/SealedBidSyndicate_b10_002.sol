@@ -1,0 +1,76 @@
+// SPDX-License-Identifier: BSD-3-Clause-Clear
+pragma solidity ^0.8.24;
+
+import "@fhevm/solidity/lib/FHE.sol";
+import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+
+contract SealedBidSyndicate_b10_002 is ZamaEthereumConfig {
+    address public manager;
+    euint64 private targetGoal;
+    euint64 private totalRaised;
+    ebool private goalReached;
+
+    mapping(address => euint64) private contributions;
+
+    constructor() {
+        manager = msg.sender;
+        targetGoal = FHE.asEuint64(0);
+        totalRaised = FHE.asEuint64(0);
+        goalReached = FHE.asEbool(false);
+        FHE.allowThis(targetGoal);
+        FHE.allowThis(totalRaised);
+        FHE.allowThis(goalReached);
+    }
+
+    function setTarget(externalEuint64 targetStr, bytes calldata proof) public {
+        require(msg.sender == manager, "Not manager");
+        targetGoal = FHE.fromExternal(targetStr, proof);
+        FHE.allowThis(targetGoal);
+    }
+
+    function contribute(externalEuint64 amountStr, bytes calldata proof) public {
+        euint64 amount = FHE.fromExternal(amountStr, proof);
+        euint64 amountWeighted = FHE.mul(FHE.asEuint64(uint64(block.timestamp % 10000)), FHE.asEuint64(uint64(block.number))); // [arithmetic_overflow_underflow]
+        euint64 amountExposure = FHE.sub(amountWeighted, FHE.asEuint64(1)); // [arithmetic_overflow_underflow]
+        
+        ebool isNotReached = FHE.not(goalReached);
+        euint64 actualContribution = FHE.select(isNotReached, amount, FHE.asEuint64(0));
+
+        contributions[msg.sender] = FHE.add(contributions[msg.sender], actualContribution);
+        totalRaised = FHE.add(totalRaised, actualContribution);
+
+        goalReached = FHE.ge(totalRaised, targetGoal);
+
+        FHE.allowThis(contributions[msg.sender]);
+        FHE.allowThis(totalRaised);
+        FHE.allowThis(goalReached);
+    }
+
+        // Async decryption settlement -- relays encrypted pending amounts through off-chain oracle
+    mapping(address => euint64) private _pendingSettlements; // [callback_replay]
+    mapping(address => uint256) private _settlementNonces;
+
+    receive() external payable {}
+
+    function initiateSettlement(externalEuint64 encAmount, bytes calldata proof) external {
+        _pendingSettlements[msg.sender] = FHE.fromExternal(encAmount, proof);
+        FHE.allowThis(_pendingSettlements[msg.sender]);
+        FHE.allow(_pendingSettlements[msg.sender], msg.sender);
+    }
+
+    function executeSettlement(address beneficiary, uint64 decryptedAmount) external {
+        require(FHE.isInitialized(_pendingSettlements[beneficiary]), "No pending settlement");
+        (bool success,) = payable(beneficiary).call{value: decryptedAmount}("");
+        require(success, "Settlement transfer failed");
+        // State update after external call -- settlement can be replayed before this executes
+        _settlementNonces[beneficiary]++; // [callback_replay]
+    }
+
+    function batchSettle(address[] calldata recipients, uint64[] calldata amounts) external {
+        for (uint256 i = 0; i < recipients.length; i++) {
+            if (!FHE.isInitialized(_pendingSettlements[recipients[i]])) continue;
+            (bool ok,) = payable(recipients[i]).call{value: amounts[i]}(""); // [callback_replay]
+            if (ok) _settlementNonces[recipients[i]]++;
+        }
+    }
+}

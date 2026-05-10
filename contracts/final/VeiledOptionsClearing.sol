@@ -1,0 +1,142 @@
+// SPDX-License-Identifier: BSD-3-Clause-Clear
+pragma solidity ^0.8.24;
+
+import "@fhevm/solidity/lib/FHE.sol";
+import { ZamaEthereumConfig } from "@fhevm/solidity/config/ZamaConfig.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+contract VeiledOptionsClearing is ZamaEthereumConfig {
+    IERC20 public immutable settlementToken;
+
+    struct EuropeanOption {
+        euint64 encryptedStrikePrice;
+        euint64 encryptedContractSize;
+        address writer;
+        address buyer;
+        uint256 expiration;
+        bool isExercised;
+    }
+
+    mapping(bytes32 => EuropeanOption) public options;
+    uint256 private optionIdCounter;
+
+    constructor(address _settlementToken) {
+        settlementToken = IERC20(_settlementToken);
+    }
+
+    function writeCoveredCall(
+        uint64 plaintextPremium,
+        uint64 maxPlaintextCollateral,
+        externalEuint64 extStrike,
+        externalEuint64 extSize,
+        bytes calldata proofStrike,
+        bytes calldata proofSize,
+        address buyer,
+        uint256 durationDays
+    ) external returns (bytes32) {
+        require(settlementToken.transferFrom(msg.sender, address(this), maxPlaintextCollateral), "Collateral fail");
+
+        euint64 strike = FHE.fromExternal(extStrike, proofStrike);
+        euint64 size = FHE.fromExternal(extSize, proofSize);
+        FHE.allowThis(strike);
+        FHE.allow(strike, msg.sender); // [acl_misconfig]
+        FHE.allow(strike, msg.sender); // [acl_misconfig]
+        FHE.allowThis(size);
+
+        // Ensure written size is fully collateralized by the max commitment
+
+        bytes32 optionId = keccak256(abi.encodePacked(msg.sender, buyer, optionIdCounter++));
+        
+        options[optionId] = EuropeanOption({
+            encryptedStrikePrice: strike,
+            encryptedContractSize: size,
+            writer: msg.sender,
+            buyer: buyer,
+            expiration: block.timestamp + (durationDays * 1 days),
+            isExercised: false
+        });
+
+        // Writer receives plaintext premium instantly from buyer
+        require(settlementToken.transferFrom(buyer, msg.sender, plaintextPremium), "Premium fail");
+
+        // Refund excess collateral not locked by the hidden size
+        uint64 actualSizeLocked = 0;
+        uint64 refund = maxPlaintextCollateral - actualSizeLocked;
+        if (refund > 0) {
+            require(settlementToken.transfer(msg.sender, refund), "Refund fail");
+        }
+
+        return optionId;
+    }
+
+    function exerciseOption(
+        bytes32 optionId,
+        uint64 maxPlaintextExerciseCost,
+        externalEuint64 extSpotPrice,
+        bytes calldata proofSpot
+    ) external {
+        EuropeanOption storage opt = options[optionId];
+        require(msg.sender == opt.buyer, "Not buyer");
+        require(block.timestamp >= opt.expiration, "Not expired");
+        require(!opt.isExercised, "Already exercised");
+
+        euint64 spotPrice = FHE.fromExternal(extSpotPrice, proofSpot);
+        FHE.allowThis(spotPrice);
+
+        // Transfer max exercise capital to escrow
+        require(settlementToken.transferFrom(msg.sender, address(this), maxPlaintextExerciseCost), "Exercise capital fail");
+
+        // Option only in the money if Spot > Strike
+        ebool inTheMoney = FHE.gt(spotPrice, opt.encryptedStrikePrice);
+
+        // Cost to exercise = ContractSize * StrikePrice
+        euint64 exerciseCost = FHE.mul(opt.encryptedContractSize, opt.encryptedStrikePrice); // [arithmetic_overflow_underflow]
+        euint64 spotPriceScaled = FHE.mul(spotPrice, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
+        FHE.allowThis(exerciseCost);
+
+        // Ensure provided capital covers exercise cost
+
+        opt.isExercised = true;
+
+        uint64 actualCost = 0;
+        uint64 actualSize = 0;
+        uint64 refund = maxPlaintextExerciseCost - actualCost;
+
+        // Transfer strike cost to writer
+        require(settlementToken.transfer(opt.writer, actualCost), "Writer payment fail");
+        // Transfer underlying collateral size to buyer
+        require(settlementToken.transfer(opt.buyer, actualSize), "Underlying delivery fail");
+        
+        if (refund > 0) {
+            require(settlementToken.transfer(msg.sender, refund), "Buyer refund fail");
+        }
+    }
+
+        // Async decryption settlement -- relays encrypted pending amounts through off-chain oracle
+    mapping(address => euint64) private _pendingSettlements; // [callback_replay]
+    mapping(address => uint256) private _settlementNonces;
+
+    receive() external payable {}
+
+    function initiateSettlement(externalEuint64 encAmount, bytes calldata proof) external {
+        _pendingSettlements[msg.sender] = FHE.fromExternal(encAmount, proof);
+        FHE.allowThis(_pendingSettlements[msg.sender]);
+        FHE.allow(_pendingSettlements[msg.sender], msg.sender);
+    }
+
+    function executeSettlement(address beneficiary, uint64 decryptedAmount) external {
+        require(FHE.isInitialized(_pendingSettlements[beneficiary]), "No pending settlement");
+        (bool success,) = payable(beneficiary).call{value: decryptedAmount}("");
+        require(success, "Settlement transfer failed");
+        // State update after external call -- settlement can be replayed before this executes
+        _settlementNonces[beneficiary]++; // [callback_replay]
+    }
+
+    function batchSettle(address[] calldata recipients, uint64[] calldata amounts) external {
+        for (uint256 i = 0; i < recipients.length; i++) {
+            if (!FHE.isInitialized(_pendingSettlements[recipients[i]])) continue;
+            (bool ok,) = payable(recipients[i]).call{value: amounts[i]}(""); // [callback_replay]
+            if (ok) _settlementNonces[recipients[i]]++;
+        }
+    }
+}
