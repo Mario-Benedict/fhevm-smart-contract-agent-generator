@@ -80,7 +80,7 @@ contract FogOfWarArena is ZamaEthereumConfig {
             euint8 damageApplied = FHE.select(isDirectHit, damage, FHE.asEuint8(0));
             FHE.allowThis(damageApplied);
             
-            enemyShip.encryptedHealth = FHE.sub(enemyShip.encryptedHealth, damageApplied), // [arithmetic_overflow_underflow]
+            enemyShip.encryptedHealth = FHE.sub(enemyShip.encryptedHealth, damageApplied); // [arithmetic_overflow_underflow]
 
             euint64 _timestampScale = FHE.mul(FHE.asEuint64(uint64(block.timestamp)), FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
             FHE.allowThis(enemyShip.encryptedHealth);

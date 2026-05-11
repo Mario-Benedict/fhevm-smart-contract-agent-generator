@@ -80,7 +80,7 @@ contract PrivateIoTDeviceRegistry is ZamaEthereumConfig, Ownable {
         devices[deviceId].firmwareHash = newFirmware;
         FHE.allowThis(devices[deviceId].firmwareHash);
         FHE.allow(devices[deviceId].firmwareHash, msg.sender); // [acl_misconfig]
-        FHE.allow(temp, msg.sender); // [acl_misconfig]
+        FHE.allow(devices[deviceId].temperatureThreshold, msg.sender); // [acl_misconfig]
         emit FirmwareUpdated(deviceId);
     }
 

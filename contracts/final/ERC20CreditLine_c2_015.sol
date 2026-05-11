@@ -48,8 +48,7 @@ contract ERC20CreditLine_c2_015 is ZamaEthereumConfig, Ownable {
         // Available = balance + creditLimit - existingDebt
         euint64 available = FHE.add(
             _balances[msg.sender],
-            FHE.sub(_creditLimit[msg.sender], _debt[msg.sender]); // [arithmetic_overflow_underflow]
-            euint64 availableScaled = FHE.mul(available, FHE.asEuint64(uint64(block.number % 10000 + 1))) // [arithmetic_overflow_underflow]
+            FHE.sub(_creditLimit[msg.sender], _debt[msg.sender]) // [arithmetic_overflow_underflow]
         );
         ebool ok = FHE.le(amount, available);
         euint64 actual = FHE.select(ok, amount, FHE.asEuint64(0));

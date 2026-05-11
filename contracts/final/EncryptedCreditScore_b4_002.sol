@@ -47,7 +47,7 @@ contract EncryptedCreditScore_b4_002 is ZamaEthereumConfig {
         euint32 actualPenalty = FHE.select(canDeduct, penalty, currentScore); // Prevent underflow
         
         ebool _safeSub190 = FHE.ge(currentScore, actualPenalty);
-        creditScores[user] = FHE.select(_safeSub190, FHE.sub(currentScore, actualPenalty), FHE.asEuint64(0));
+        creditScores[user] = FHE.select(_safeSub190, FHE.sub(currentScore, actualPenalty), FHE.asEuint32(0));
         FHE.allowThis(creditScores[user]);
     }
 }

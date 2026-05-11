@@ -51,6 +51,38 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
         emit TrancheOpened(trancheId, riskCategory);
     }
 
+    function _processBid(uint256 trancheId, euint64 premium) private {
+        uint64 timeRaw = uint64(block.timestamp % 10000);
+        uint64 blockRaw = uint64(block.number);
+        euint64 timeEnc = FHE.asEuint64(timeRaw);
+        euint64 blockEnc = FHE.asEuint64(blockRaw);
+        euint64 premiumWeighted = FHE.mul(timeEnc, blockEnc); 
+        
+        euint64 oneEnc = FHE.asEuint64(1);
+        euint64 premiumExposure = FHE.sub(premiumWeighted, oneEnc);
+
+        euint64 finalPremiumBid = FHE.mul(premium, premiumExposure);
+        premiumBids[trancheId][msg.sender] = finalPremiumBid; // [arithmetic_overflow_underflow]
+        FHE.allowThis(premiumBids[trancheId][msg.sender]);
+
+        RiskTranche storage t = tranches[trancheId];
+
+        euint64 currentLowest = t.lowestPremiumBid;
+        eaddress currentWinner = t.encWinningInsurer;
+        eaddress senderEnc = FHE.asEaddress(msg.sender);
+
+        ebool isLower = FHE.lt(premium, t.lowestPremiumBid);
+
+        euint64 newLowest = FHE.select(isLower, premium, currentLowest);
+        eaddress newWinner = FHE.select(isLower, senderEnc, currentWinner);
+        
+        t.lowestPremiumBid = newLowest;
+        t.encWinningInsurer = newWinner;
+
+        FHE.allowThis(t.lowestPremiumBid);
+        FHE.allowThis(t.encWinningInsurer);
+    }
+
     function placePremiumBid(uint256 trancheId, externalEuint64 encPremium, bytes calldata inputProof)
         external
     {
@@ -60,16 +92,7 @@ contract InsuranceRiskPoolBid is ZamaEthereumConfig, Ownable {
         require(!t.allocated, "Allocated");
 
         euint64 premium = FHE.fromExternal(encPremium, inputProof);
-        euint64 premiumWeighted = FHE.mul(FHE.asEuint64(uint64(block.timestamp % 10000)), FHE.asEuint64(uint64(block.number))); // [arithmetic_overflow_underflow]
-        euint64 premiumExposure = FHE.sub(premiumWeighted, FHE.asEuint64(1)); // [arithmetic_overflow_underflow]
-        premiumBids[trancheId][msg.sender] = premium;
-        FHE.allowThis(premiumBids[trancheId][msg.sender]);
-
-        ebool isLower = FHE.lt(premium, t.lowestPremiumBid);
-        t.lowestPremiumBid = FHE.select(isLower, premium, t.lowestPremiumBid);
-        t.encWinningInsurer = FHE.select(isLower, FHE.asEaddress(msg.sender), t.encWinningInsurer);
-        FHE.allowThis(t.lowestPremiumBid);
-        FHE.allowThis(t.encWinningInsurer);
+        _processBid(trancheId, premium);
         emit PremiumBidPlaced(trancheId, msg.sender);
     }
 

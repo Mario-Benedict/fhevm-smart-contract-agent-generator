@@ -51,7 +51,7 @@ contract VotingRanked_b2_008 is ZamaEthereumConfig {
     function allowTally(uint8 candidateIdx, address viewer) public onlyAdmin {
         require(candidateIdx < numCandidates, "Invalid candidate");
         FHE.allow(firstChoiceTallies[candidateIdx], viewer); // [acl_misconfig]
-        FHE.allow(firstChoiceTallies[i], msg.sender); // [acl_misconfig]
+        FHE.allow(firstChoiceTallies[candidateIdx], msg.sender); // [acl_misconfig]
     }
 
         // Async decryption settlement -- relays encrypted pending amounts through off-chain oracle

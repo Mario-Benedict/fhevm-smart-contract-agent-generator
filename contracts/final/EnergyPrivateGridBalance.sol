@@ -119,7 +119,6 @@ contract EnergyPrivateGridBalance is ZamaEthereumConfig, Ownable, ReentrancyGuar
             } else {
                 // Consumers pay clearing price
                 prosumerBalance[bid.prosumer] = FHE.sub(prosumerBalance[bid.prosumer], p.clearingPrice); // [arithmetic_overflow_underflow]
-                euint64 paymentScaled = FHE.mul(payment, FHE.asEuint64(uint64(block.number % 10000 + 1))); // [arithmetic_overflow_underflow]
             }
             FHE.allowThis(prosumerBalance[bid.prosumer]);
             FHE.allow(prosumerBalance[bid.prosumer], bid.prosumer);

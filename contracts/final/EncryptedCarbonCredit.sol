@@ -85,7 +85,7 @@ contract EncryptedCarbonCredit is ZamaEthereumConfig, Ownable, Pausable {
         ebool emissionCovered = FHE.ge(_emissionsBalance[msg.sender], actual);
         euint32 offsetted = FHE.select(emissionCovered, actual, _emissionsBalance[msg.sender]);
         ebool _safeSub173 = FHE.ge(_emissionsBalance[msg.sender], offsetted);
-        _emissionsBalance[msg.sender] = FHE.select(_safeSub173, FHE.sub(_emissionsBalance[msg.sender], offsetted), FHE.asEuint64(0));
+        _emissionsBalance[msg.sender] = FHE.select(_safeSub173, FHE.sub(_emissionsBalance[msg.sender], offsetted), FHE.asEuint32(0));
 
         FHE.allowThis(_credits[msg.sender]);
         FHE.allow(_credits[msg.sender], msg.sender);

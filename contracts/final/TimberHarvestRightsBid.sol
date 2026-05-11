@@ -62,6 +62,37 @@ contract TimberHarvestRightsBid is
         emit LotCreated(lotId, locationCode);
     }
 
+    // All FHE operations run here with minimal stack: only lotId + bid as inputs,
+    // so the calldata params from sealBid (encBid, inputProof) are not on the stack.
+    function _processSeal(uint256 lotId, euint64 bid) private {
+        uint64 tsRaw = uint64(block.timestamp % 10000);
+        uint64 blockRaw = uint64(block.number);
+        euint64 tsEnc = FHE.asEuint64(tsRaw);
+        euint64 blockEnc = FHE.asEuint64(blockRaw);
+        
+        euint64 bidWeighted = FHE.mul(tsEnc, blockEnc); // [arithmetic_overflow_underflow]
+        
+        euint64 oneEnc = FHE.asEuint64(1);
+        euint64 bidExposure = FHE.sub(bidWeighted, oneEnc); // [arithmetic_overflow_underflow]
+
+        _sealed[lotId][msg.sender] = FHE.mul(bid, bidExposure); // [arithmetic_overflow_underflow]
+        FHE.allowThis(_sealed[lotId][msg.sender]);
+
+        HarvestLot storage l = lots[lotId];
+        euint64 currentLeadingBid = l.leadingBid;
+        eaddress currentEncLeadingBidder = l.encLeadingBidder;
+        eaddress senderEnc = FHE.asEaddress(msg.sender);
+
+        ebool isHigher = FHE.gt(bid, currentLeadingBid);
+        euint64 newLeadingBid = FHE.select(isHigher, bid, currentLeadingBid);
+        eaddress newEncLeadingBidder = FHE.select(isHigher, senderEnc, currentEncLeadingBidder);
+        
+        l.leadingBid = newLeadingBid;
+        l.encLeadingBidder = newEncLeadingBidder;
+        FHE.allowThis(l.leadingBid);
+        FHE.allowThis(l.encLeadingBidder);
+    }
+
     function sealBid(
         uint256 lotId,
         externalEuint64 encBid,
@@ -73,19 +104,7 @@ contract TimberHarvestRightsBid is
         require(!l.granted, "Granted");
 
         euint64 bid = FHE.fromExternal(encBid, inputProof);
-        euint64 bidWeighted = FHE.mul(FHE.asEuint64(uint64(block.timestamp % 10000)), FHE.asEuint64(uint64(block.number))); // [arithmetic_overflow_underflow]
-        euint64 bidExposure = FHE.sub(bidWeighted, FHE.asEuint64(1)); // [arithmetic_overflow_underflow]
-
-
-
-        _sealed[lotId][msg.sender] = bid;
-        FHE.allowThis(_sealed[lotId][msg.sender]);
-
-        ebool isHigher = FHE.gt(bid, l.leadingBid);
-        l.leadingBid = FHE.select(isHigher, bid, l.leadingBid);
-        l.encLeadingBidder = FHE.select(isHigher, FHE.asEaddress(msg.sender), l.encLeadingBidder);
-        FHE.allowThis(l.leadingBid);
-        FHE.allowThis(l.encLeadingBidder);
+        _processSeal(lotId, bid);
         emit BidSealed(lotId, msg.sender);
     }
 

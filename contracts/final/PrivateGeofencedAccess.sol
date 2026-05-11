@@ -61,7 +61,7 @@ contract PrivateGeofencedAccess is ZamaEthereumConfig, Ownable {
         _userLon[msg.sender] = FHE.fromExternal(encLon, lonProof);
         FHE.allowThis(_userLat[msg.sender]);
         FHE.allow(_userLat[msg.sender], msg.sender); // [acl_misconfig]
-        FHE.allow(geofences[id].centerLat, msg.sender); // [acl_misconfig]
+        FHE.allow(geofences[0].centerLat, msg.sender); // [acl_misconfig]
         FHE.allowThis(_userLon[msg.sender]);
         FHE.allow(_userLon[msg.sender], msg.sender);
         emit LocationUpdated(msg.sender);

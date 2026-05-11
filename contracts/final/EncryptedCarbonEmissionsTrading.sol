@@ -152,7 +152,7 @@ contract EncryptedCarbonEmissionsTrading is ZamaEthereumConfig, Ownable, Reentra
         ebool _safeMul41 = FHE.le(price, FHE.asEuint64(type(uint32).max));
         euint64 totalValue = FHE.mul(price, FHE.asEuint64(uint64(0))); // simplified
         ebool _safeSub176 = FHE.ge(_allowanceBalance[msg.sender], actual);
-        _allowanceBalance[msg.sender] = FHE.select(_safeSub176, FHE.sub(_allowanceBalance[msg.sender], actual), FHE.asEuint64(0));
+        _allowanceBalance[msg.sender] = FHE.select(_safeSub176, FHE.sub(_allowanceBalance[msg.sender], actual), FHE.asEuint32(0));
         if (!FHE.isInitialized(_allowanceBalance[buyer])) {
             _allowanceBalance[buyer] = FHE.asEuint32(0);
             FHE.allowThis(_allowanceBalance[buyer]);

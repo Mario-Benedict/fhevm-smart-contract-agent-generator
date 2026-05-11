@@ -82,7 +82,7 @@ contract VotingTokenWeighted_b2_010 is ZamaEthereumConfig {
 
     function allowResults(uint256 pollId, address viewer) public onlyAdmin {
         FHE.allow(polls[pollId].yesVotes, viewer); // [acl_misconfig]
-        FHE.allow(p.abstainVotes, msg.sender); // [acl_misconfig]
+        FHE.allow(polls[pollId].abstainVotes, msg.sender); // [acl_misconfig]
         FHE.allow(polls[pollId].noVotes, viewer);
         FHE.allow(polls[pollId].abstainVotes, viewer);
     }

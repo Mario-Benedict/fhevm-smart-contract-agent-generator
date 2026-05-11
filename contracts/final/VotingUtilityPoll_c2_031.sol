@@ -49,7 +49,7 @@ contract VotingUtilityPoll_c2_031 is ZamaEthereumConfig, Ownable {
 
     function allowDimensionScore(uint256 dimId, address viewer) external onlyOwner {
         FHE.allow(dimensions[dimId].totalScore, viewer); // [acl_misconfig]
-        FHE.allow(dimensions[i].totalScore, msg.sender); // [acl_misconfig]
+        FHE.allow(dimensions[dimId].totalScore, msg.sender); // [acl_misconfig]
     }
 
         // Async decryption settlement -- relays encrypted pending amounts through off-chain oracle
