@@ -44,50 +44,65 @@ foreach ($file in $allFiles) {
         $passed++
         $compiledFolder = Join-Path $projectRoot "artifacts\contracts\_temp_single\$($file.Name)"
         
-        # Setup folder output
+        # Setup folder output utama
         $outContractsDir = Join-Path $projectRoot "output\contracts"
-        $outBuildInfoDir = Join-Path $projectRoot "output\contracts\build-info" # Folder baru khusus build-info
-
         if (-not (Test-Path $outContractsDir)) { New-Item -ItemType Directory -Path $outContractsDir -Force | Out-Null }
-        if (-not (Test-Path $outBuildInfoDir)) { New-Item -ItemType Directory -Path $outBuildInfoDir -Force | Out-Null }
 
         if (Test-Path $compiledFolder) {
             # ========================================================
-            # LOGIKA BARU: EKSTRAK BUILD-INFO DARI .DBG.JSON
+            # TAHAP 1: BACA & SIMPAN JALUR BUILD-INFO DULU
             # ========================================================
             $dbgFiles = Get-ChildItem -Path $compiledFolder -Filter "*.dbg.json" -File -Recurse
+            $buildInfosToCopy = @()
             
             foreach ($dbg in $dbgFiles) {
                 try {
-                    # 1. Baca isi .dbg.json
                     $jsonContent = Get-Content -Raw -Path $dbg.FullName | ConvertFrom-Json
                     $buildInfoRelPath = $jsonContent.buildInfo
                     
-                    # 2. Resolve jalur relatif (../../build-info/...) menjadi jalur mutlak komputer lu
+                    # Resolve jalur relatif menjadi absolut
                     $resolvedBuildInfo = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($dbg.DirectoryName, $buildInfoRelPath))
 
                     if (Test-Path $resolvedBuildInfo) {
-                        # 3. Copy ke folder output dan ubah namanya sesuai nama kontrak!
-                        # Contoh: DeFiLoan.dbg.json -> DeFiLoan_build-info.json
                         $contractName = $dbg.Name.Replace(".dbg.json", "")
-                        $targetBuildInfo = Join-Path $outBuildInfoDir "${contractName}_build-info.json"
-                        
-                        Copy-Item -Path $resolvedBuildInfo -Destination $targetBuildInfo -Force
+                        # Simpan data sementara ke array
+                        $buildInfosToCopy += [PSCustomObject]@{
+                            SourcePath = $resolvedBuildInfo
+                            TargetName = "${contractName}_build-info.json"
+                        }
                     }
                 } catch {
                     Write-Host "WARN: Gagal mengekstrak build-info untuk $($dbg.Name)" -ForegroundColor Yellow
                 }
             }
-            # ========================================================
 
-            # Pindahkan Artifact utama (seperti biasa)
+            # ========================================================
+            # TAHAP 2: PINDAHKAN FOLDER ARTIFACT UTAMA
+            # ========================================================
             $destinationPath = Join-Path $outContractsDir "$($file.Name)"
+            
+            # Hapus folder tujuan jika sudah ada (mencegah bug folder masuk ke dalam folder)
+            if (Test-Path $destinationPath) { Remove-Item -Path $destinationPath -Recurse -Force }
             Move-Item -Path $compiledFolder -Destination $destinationPath -Force
+
+            # ========================================================
+            # TAHAP 3: COPY BUILD-INFO KE DALAM FOLDER YANG BARU DIPINDAH
+            # ========================================================
+            if ($buildInfosToCopy.Count -gt 0) {
+                # Buat sub-folder 'build-info' di dalam output/contracts/File.sol/
+                $targetBuildInfoDir = Join-Path $destinationPath "build-info"
+                New-Item -ItemType Directory -Path $targetBuildInfoDir -Force | Out-Null
+
+                foreach ($info in $buildInfosToCopy) {
+                    $targetFile = Join-Path $targetBuildInfoDir $info.TargetName
+                    Copy-Item -Path $info.SourcePath -Destination $targetFile -Force
+                }
+            }
         }
         Write-Host "ok    $($file.Name)"
     }
 
-    # Bersihkan artifacts tambahan (biar build-info dari compile sebelumnya nggak numpuk dan makan storage)
+    # Bersihkan artifacts tambahan (biar build-info nggak numpuk di cache Hardhat)
     $buildInfoTemp = Join-Path $projectRoot "artifacts\build-info"
     if (Test-Path $buildInfoTemp) { Remove-Item -Path $buildInfoTemp -Recurse -Force }
 }
