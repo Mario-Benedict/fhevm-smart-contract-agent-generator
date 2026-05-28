@@ -1,4 +1,5 @@
 id,file,acl_misconfig,arithmetic_overflow_underflow,callback_replay
+0001,AcademicDegreeRegistry.sol,0,0,0
 0002,AcademicGrantReview.sol,0,0,0
 0003,AcademicPeerReview.sol,0,0,0
 0004,AccessControlDelegated_b6_010.sol,0,0,0
