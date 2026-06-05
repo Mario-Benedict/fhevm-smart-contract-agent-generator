@@ -10,7 +10,9 @@
       "Bash(powershell -Command ' *)",
       "Bash(dir \"C:\\\\Users\\\\mario\\\\Code\\\\Projects\\\\rm\\\\try-agent-generator\\\\contracts\")",
       "Bash(dir \"C:\\\\Users\\\\mario\\\\Code\\\\Projects\\\\rm\\\\try-agent-generator\\\\contracts\\\\generated\")",
-      "Bash(Select-Object -First 20)"
+      "Bash(Select-Object -First 20)",
+      "Bash(python -c \"import csv; r=list\\(csv.reader\\(open\\('C:/Users/mario/Code/Projects/rm/try-agent-generator/dataset/final_labels.csv'\\)\\)\\); print\\('Cols:', r[0]\\); print\\('Rows:', len\\(r\\)-1\\); print\\('Sample row:', r[1]\\)\")",
+      "Bash(python stratified_split.py --train 0.7 --val 0.15 --test 0.15 --output-dir splits/)"
     ]
   }
 }
