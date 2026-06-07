@@ -1,0 +1,9 @@
+combination,bitstring,count,percent,acl_misconfig,arithmetic_overflow_underflow,callback_replay
+acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=0,000,844,14.9964,0,0,0
+acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=0,100,763,13.5572,1,0,0
+acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=1,001,755,13.4151,0,0,1
+acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=0,010,745,13.2374,0,1,0
+acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=1,111,669,11.8870,1,1,1
+acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=1,101,658,11.6915,1,0,1
+acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=0,110,637,11.3184,1,1,0
+acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=1,011,557,9.8969,0,1,1

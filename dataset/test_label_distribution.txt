@@ -1,0 +1,34 @@
+Dataset opcode + label distribution
+========================================
+Input file        : C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\opcode_test.csv
+Input rows        : 204
+Opcode column     : opcode
+Label columns     : acl_misconfig, arithmetic_overflow_underflow, callback_replay
+Empty opcode rows : 0
+Opcode tokens     : min=1083, p05=2047, median=4000, mean=3898.66, p95=5372, max=6488
+
+Per-label positives
+----------------------------------------
+acl_misconfig: 84 (41.18%)
+arithmetic_overflow_underflow: 74 (36.27%)
+callback_replay: 74 (36.27%)
+
+Positive-label count per row
+----------------------------------------
+0 positive labels: 50 (24.51%)
+1 positive labels: 90 (44.12%)
+2 positive labels: 50 (24.51%)
+3 positive labels: 14 (6.86%)
+
+Label-combination distribution
+----------------------------------------
+000 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=0: 50 (24.51%)
+001 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=1: 30 (14.71%)
+010 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=0: 30 (14.71%)
+100 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=0: 30 (14.71%)
+101 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=1: 20 (9.80%)
+110 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=0: 20 (9.80%)
+111 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=1: 14 (6.86%)
+011 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=1: 10 (4.90%)
+
+Distribution CSV  : C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\test_label_distribution.csv

@@ -1,0 +1,2 @@
+evmdasm>=0.1.10
+pandas>=2.0.0
