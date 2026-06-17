@@ -9,10 +9,10 @@ The augmented dataset is expected to have this shape:
     metadata/<transform>/<augmented-file>.json
     contracts_output/<transform>/<augmented-file>.sol
 
-For each label row, the script tries to read bytecode from the metadata JSON.
-If the metadata has no usable bytecode, it compiles the corresponding Solidity
-source from contracts_output with Hardhat, reads the produced artifact JSON, and
-converts the bytecode into opcode sequence.
+For each label row, the script tries to read deployed/runtime bytecode from the
+metadata JSON. If the metadata has no usable deployed bytecode, it compiles the
+corresponding Solidity source from contracts_output with Hardhat, reads the
+produced artifact JSON, and converts the deployed bytecode into opcode sequence.
 
 Example:
   python dataset/append_augmented_opcode_train.py \
@@ -103,7 +103,10 @@ def parse_args() -> argparse.Namespace:
         "--prefer-bytecode",
         choices=("deployed", "creation"),
         default="deployed",
-        help="Prefer deployed/runtime bytecode or creation bytecode if both exist.",
+        help=(
+            "Bytecode kind to disassemble. Default uses deployed/runtime bytecode only "
+            "and does not fall back to creation bytecode."
+        ),
     )
     parser.add_argument(
         "--include-push-data",
@@ -246,15 +249,19 @@ def bytecode_from_metadata(metadata_path: Path, prefer_bytecode: str) -> Optiona
     except OSError:
         text = ""
 
-    key_order = (
-        ("deployed_bytecode", "deployed_bytecode", 300 if prefer_bytecode == "deployed" else 200),
-        ("deployedBytecode", "deployedBytecode", 300 if prefer_bytecode == "deployed" else 200),
-        ("runtimeBytecode", "runtimeBytecode", 300 if prefer_bytecode == "deployed" else 200),
-        ("runtime_bytecode", "runtime_bytecode", 300 if prefer_bytecode == "deployed" else 200),
-        ("bytecode", "bytecode", 200 if prefer_bytecode == "deployed" else 300),
-    )
+    key_order_by_kind = {
+        "deployed": (
+            ("deployed_bytecode", "deployed_bytecode", 300),
+            ("deployedBytecode", "deployedBytecode", 300),
+            ("runtimeBytecode", "runtimeBytecode", 300),
+            ("runtime_bytecode", "runtime_bytecode", 300),
+        ),
+        "creation": (
+            ("bytecode", "bytecode", 300),
+        ),
+    }
     choices: List[Tuple[str, str, int]] = []
-    for key, label, priority in key_order:
+    for key, label, priority in key_order_by_kind[prefer_bytecode]:
         pattern = rf'"{re.escape(key)}"\s*:\s*"(0x[0-9a-fA-F]*)"'
         for match in re.finditer(pattern, text):
             value = match.group(1)
@@ -384,12 +391,20 @@ def batch_compile_sources(
         detail = f"batch compile timed out after {compile_timeout} seconds"
         for filename in copied:
             failures[filename] = detail
+        if not keep_temp:
+            safe_remove_dir(compile_temp_dir, temp_parent)
+            safe_remove_dir(artifact_batch_root, artifacts_parent)
+            safe_remove_dir(ROOT / "cache", ROOT)
         return {}, failures
     if result.returncode != 0:
         output = "\n".join(part for part in (result.stdout, result.stderr) if part).strip()
         detail = f"batch compile failed: {output[:1200]}"
         for filename in copied:
             failures[filename] = detail
+        if not keep_temp:
+            safe_remove_dir(compile_temp_dir, temp_parent)
+            safe_remove_dir(artifact_batch_root, artifacts_parent)
+            safe_remove_dir(ROOT / "cache", ROOT)
         return {}, failures
 
     compiled: Dict[str, Tuple[str, str]] = {}
@@ -610,6 +625,39 @@ def main() -> int:
             compile_timeout=args.compile_timeout,
             keep_temp=args.keep_temp,
         )
+        batch_failed = {
+            filename: detail
+            for filename, detail in compile_failures.items()
+            if detail.startswith("batch compile failed:") or detail.startswith("batch compile timed out")
+        }
+        if batch_failed:
+            print(
+                f"Batch compile gagal untuk {len(batch_failed)} rows; retry compile satu-per-satu...",
+                flush=True,
+            )
+            for retry_idx, filename in enumerate(batch_failed, start=1):
+                source_path = find_existing_path(candidate_source_paths(contracts_output_dir, filename))
+                if not source_path:
+                    compile_failures[filename] = "source not found"
+                    continue
+
+                bytecode, detail = compile_source_and_get_bytecode(
+                    source_path=source_path,
+                    compile_temp_dir=compile_temp_dir,
+                    hardhat_command=args.hardhat_command,
+                    prefer_bytecode=args.prefer_bytecode,
+                    compile_timeout=args.compile_timeout,
+                    keep_temp=args.keep_temp,
+                )
+                if bytecode:
+                    compiled[filename] = (bytecode, detail)
+                    compile_failures.pop(filename, None)
+                else:
+                    compile_failures[filename] = detail
+
+                if retry_idx % 10 == 0:
+                    print(f"  Retried {retry_idx}/{len(batch_failed)} pending compiles...", flush=True)
+
         for idx, result in enumerate(results):
             if result.status != "missing_bytecode":
                 continue

@@ -1,34 +1,36 @@
 Dataset opcode + label distribution
 ========================================
 Input file        : C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\opcode_train_augmented.csv
-Input rows        : 5628
+Input rows        : 2317
 Opcode column     : opcode
 Label columns     : acl_misconfig, arithmetic_overflow_underflow, callback_replay
 Empty opcode rows : 0
-Opcode tokens     : min=907, p05=2204, median=3918, mean=3872.28, p95=5371, max=6727
+Opcode tokens     : min=907, p05=2327, median=4027, mean=3989.57, p95=5443, max=6727
 
 Per-label positives
 ----------------------------------------
-acl_misconfig: 2727 (48.45%)
-arithmetic_overflow_underflow: 2608 (46.34%)
-callback_replay: 2639 (46.89%)
+acl_misconfig: 1069 (46.14%)
+arithmetic_overflow_underflow: 842 (36.34%)
+callback_replay: 873 (37.68%)
 
 Positive-label count per row
 ----------------------------------------
-0 positive labels: 844 (15.00%)
-1 positive labels: 2263 (40.21%)
-2 positive labels: 1852 (32.91%)
-3 positive labels: 669 (11.89%)
+0 positive labels: 467 (20.16%)
+1 positive labels: 1069 (46.14%)
+2 positive labels: 628 (27.10%)
+3 positive labels: 153 (6.60%)
 
 Label-combination distribution
 ----------------------------------------
-000 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=0: 844 (15.00%)
-100 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=0: 763 (13.56%)
-001 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=1: 755 (13.42%)
-010 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=0: 745 (13.24%)
-111 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=1: 669 (11.89%)
-101 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=1: 658 (11.69%)
-110 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=0: 637 (11.32%)
-011 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=1: 557 (9.90%)
+000 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=0: 467 (20.16%)
+100 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=0: 381 (16.44%)
+001 | acl_misconfig=0|arithmetic_overflow_underflow=0|callback_replay=1: 361 (15.58%)
+010 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=0: 327 (14.11%)
+110 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=0: 269 (11.61%)
+101 | acl_misconfig=1|arithmetic_overflow_underflow=0|callback_replay=1: 266 (11.48%)
+111 | acl_misconfig=1|arithmetic_overflow_underflow=1|callback_replay=1: 153 (6.60%)
+011 | acl_misconfig=0|arithmetic_overflow_underflow=1|callback_replay=1: 93 (4.01%)
 
 Distribution CSV  : C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\train_augmented_label_distribution.csv
+Per-class CSV     : C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\train_augmented_per_class_distribution.csv
+Positive count CSV: C:\Users\mario\Code\Projects\rm\try-agent-generator\dataset\train_augmented_positive_count_distribution.csv

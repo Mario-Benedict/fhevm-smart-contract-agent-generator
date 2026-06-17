@@ -54,6 +54,16 @@ def parse_args() -> argparse.Namespace:
         help="Optional CSV output for label-combination distribution. Use empty string to disable.",
     )
     parser.add_argument(
+        "--per-class-output",
+        default="dataset/train_augmented_per_class_distribution.csv",
+        help="Optional CSV output for per-class positive/negative distribution. Use empty string to disable.",
+    )
+    parser.add_argument(
+        "--positive-count-output",
+        default="dataset/train_augmented_positive_count_distribution.csv",
+        help="Optional CSV output for count of positive labels per row. Use empty string to disable.",
+    )
+    parser.add_argument(
         "--print-output",
         default="",
         help="Optional human-readable TXT report output.",
@@ -143,6 +153,52 @@ def write_distribution(
             writer.writerow(row)
 
 
+def write_per_class_distribution(
+    path: Path,
+    labels: Sequence[str],
+    per_label_positive: Counter[str],
+    total: int,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["label", "positive", "negative", "positive_percent", "negative_percent"]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for label in labels:
+            positive = per_label_positive[label]
+            negative = total - positive
+            writer.writerow(
+                {
+                    "label": label,
+                    "positive": positive,
+                    "negative": negative,
+                    "positive_percent": f"{(positive / total * 100):.4f}" if total else "0.0000",
+                    "negative_percent": f"{(negative / total * 100):.4f}" if total else "0.0000",
+                }
+            )
+
+
+def write_positive_count_distribution(
+    path: Path,
+    positive_counts: Counter[int],
+    total: int,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["positive_label_count", "rows", "percent"]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for count in sorted(positive_counts):
+            rows = positive_counts[count]
+            writer.writerow(
+                {
+                    "positive_label_count": count,
+                    "rows": rows,
+                    "percent": f"{(rows / total * 100):.4f}" if total else "0.0000",
+                }
+            )
+
+
 def build_printable_report(
     rows: Sequence[Dict[str, str]],
     labels: Sequence[str],
@@ -154,6 +210,8 @@ def build_printable_report(
     per_label_positive: Counter[str],
     input_path: Path,
     distribution_output: Optional[Path],
+    per_class_output: Optional[Path],
+    positive_count_output: Optional[Path],
 ) -> List[str]:
     total = len(rows)
     sorted_counts = sorted(token_counts)
@@ -204,6 +262,10 @@ def build_printable_report(
     if distribution_output:
         lines.append("")
         lines.append(f"Distribution CSV  : {distribution_output}")
+    if per_class_output:
+        lines.append(f"Per-class CSV     : {per_class_output}")
+    if positive_count_output:
+        lines.append(f"Positive count CSV: {positive_count_output}")
 
     if empty_rows[:10]:
         lines.append("")
@@ -216,6 +278,8 @@ def main() -> int:
     args = parse_args()
     input_path = resolve_path(args.input)
     distribution_output = resolve_path(args.distribution_output) if args.distribution_output else None
+    per_class_output = resolve_path(args.per_class_output) if args.per_class_output else None
+    positive_count_output = resolve_path(args.positive_count_output) if args.positive_count_output else None
     print_output = resolve_path(args.print_output) if args.print_output else None
 
     try:
@@ -259,11 +323,17 @@ def main() -> int:
         per_label_positive=per_label_positive,
         input_path=input_path,
         distribution_output=distribution_output,
+        per_class_output=per_class_output,
+        positive_count_output=positive_count_output,
     )
     print("\n".join(report_lines))
 
     if distribution_output:
         write_distribution(distribution_output, combo_counts, labels, total)
+    if per_class_output:
+        write_per_class_distribution(per_class_output, labels, per_label_positive, total)
+    if positive_count_output:
+        write_positive_count_distribution(positive_count_output, positive_counts, total)
     if print_output:
         print_output.parent.mkdir(parents=True, exist_ok=True)
         print_output.write_text("\n".join(report_lines) + "\n", encoding="utf-8")

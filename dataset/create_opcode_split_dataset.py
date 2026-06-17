@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Create train/test CSV files with an added EVM opcode column.
+Create train/test/validation CSV files with an added EVM opcode column.
 
 The input split CSVs are expected to contain at least a `file` column, e.g.:
   id,file,acl_misconfig,arithmetic_overflow_underflow,callback_replay
@@ -9,15 +9,17 @@ For each row, this script looks under:
   <artifacts-dir>/<file>/
 
 It scans only artifact JSON files, skipping `build-info/` and `*.dbg.json`, then
-chooses the JSON that contains real non-empty bytecode. The bytecode is
-converted into an opcode sequence and written to a new CSV.
+chooses the JSON that contains real non-empty deployed/runtime bytecode. The
+deployed bytecode is converted into an opcode sequence and written to a new CSV.
 
 Example:
   python dataset/create_opcode_split_dataset.py \
     --train-split dataset/split/train.csv \
+    --val-split dataset/split/val.csv \
     --test-split dataset/split/test.csv \
     --artifacts-dir output/contracts \
     --output-train dataset/opcode_train.csv \
+    --output-val dataset/opcode_val.csv \
     --output-test dataset/opcode_test.csv
 """
 
@@ -34,17 +36,27 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 
-BYTECODE_PATHS = [
+DEPLOYED_BYTECODE_PATHS = [
     ("deployedBytecode",),
     ("deployed_bytecode",),
     ("runtimeBytecode",),
     ("runtime_bytecode",),
     ("evm", "deployedBytecode", "object"),
     ("evm", "deployed_bytecode", "object"),
+    ("evm", "runtimeBytecode", "object"),
+    ("evm", "runtime_bytecode", "object"),
+]
+
+CREATION_BYTECODE_PATHS = [
     ("bytecode",),
     ("evm", "bytecode", "object"),
     ("object",),
 ]
+
+BYTECODE_PATHS_BY_KIND = {
+    "deployed": DEPLOYED_BYTECODE_PATHS,
+    "creation": CREATION_BYTECODE_PATHS,
+}
 
 DEFAULT_SKIP_DIR_NAMES = {"build-info", "build_info"}
 
@@ -165,12 +177,24 @@ class ArtifactChoice:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Read train/test split CSVs and add an opcode column from compiled artifact bytecode."
+        description="Read train/test/validation split CSVs and add an opcode column from compiled artifact bytecode."
     )
     parser.add_argument("--train-split", required=True, help="Input train split CSV.")
+    parser.add_argument(
+        "--val-split",
+        "--validation-split",
+        default="",
+        help="Optional input validation split CSV.",
+    )
     parser.add_argument("--test-split", required=True, help="Input test split CSV.")
     parser.add_argument("--artifacts-dir", required=True, help="Artifact root, e.g. output/contracts.")
     parser.add_argument("--output-train", required=True, help="Output train CSV with opcode column.")
+    parser.add_argument(
+        "--output-val",
+        "--output-validation",
+        default="dataset/opcode_val.csv",
+        help="Output validation CSV with opcode column. Used when --val-split is provided.",
+    )
     parser.add_argument("--output-test", required=True, help="Output test CSV with opcode column.")
     parser.add_argument("--file-column", default="file", help="Column containing contract .sol filename.")
     parser.add_argument("--opcode-column", default="opcode", help="Output opcode column name.")
@@ -178,7 +202,10 @@ def parse_args() -> argparse.Namespace:
         "--prefer-bytecode",
         choices=("deployed", "creation"),
         default="deployed",
-        help="Prefer deployed/runtime bytecode or creation bytecode if both exist.",
+        help=(
+            "Bytecode kind to disassemble. Default uses deployed/runtime bytecode only "
+            "and does not fall back to creation bytecode."
+        ),
     )
     parser.add_argument(
         "--include-push-data",
@@ -310,27 +337,21 @@ def artifact_json_files(contract_dir: Path) -> List[Path]:
     return files
 
 
-def path_priority(path: Sequence[str], prefer_bytecode: str) -> int:
+def path_priority(path: Sequence[str], bytecode_kind: str) -> int:
     joined = ".".join(path).lower()
     is_deployed = "deployedbytecode" in joined or "deployed_bytecode" in joined or "runtime" in joined
     is_creation = "bytecode" in joined and not is_deployed
 
-    if prefer_bytecode == "deployed":
-        if is_deployed:
-            return 300
-        if is_creation:
-            return 200
-    else:
-        if is_creation:
-            return 300
-        if is_deployed:
-            return 200
+    if bytecode_kind == "deployed" and is_deployed:
+        return 300
+    if bytecode_kind == "creation" and is_creation:
+        return 300
     return 100
 
 
 def find_bytecode_in_artifact(data: Dict[str, Any], prefer_bytecode: str) -> Optional[Tuple[str, str, int]]:
     choices: List[Tuple[str, str, int]] = []
-    for path in BYTECODE_PATHS:
+    for path in BYTECODE_PATHS_BY_KIND[prefer_bytecode]:
         raw = bytecode_from_value(get_nested(data, path))
         compact = strip_hex_bytecode(raw)
         if compact:
@@ -422,7 +443,9 @@ def process_rows(
             contract_dir = artifact_dir_for_contract(artifacts_dir, filename)
             choice = choose_artifact(contract_dir, filename, prefer_bytecode)
             if choice is None:
-                missing.append(f"{filename}: artifact JSON dengan bytecode tidak ditemukan di {contract_dir}")
+                missing.append(
+                    f"{filename}: artifact JSON dengan {prefer_bytecode} bytecode tidak ditemukan di {contract_dir}"
+                )
             else:
                 opcode, unknown = disassemble_bytecode(
                     choice.bytecode,
@@ -465,16 +488,35 @@ def main() -> int:
     args = parse_args()
 
     train_split = resolve_path(args.train_split)
+    val_split = resolve_path(args.val_split) if args.val_split else None
     test_split = resolve_path(args.test_split)
     artifacts_dir = resolve_path(args.artifacts_dir)
     output_train = resolve_path(args.output_train)
+    output_val = resolve_path(args.output_val) if val_split is not None else None
     output_test = resolve_path(args.output_test)
 
     try:
         train_rows, train_fields = read_csv(train_split)
         test_rows, test_fields = read_csv(test_split)
-        if args.file_column not in train_fields or args.file_column not in test_fields:
-            raise ValueError(f"Kolom file '{args.file_column}' wajib ada di train dan test CSV.")
+        val_rows: List[Dict[str, str]] = []
+        val_fields: List[str] = []
+        if val_split is not None:
+            val_rows, val_fields = read_csv(val_split)
+
+        splits_missing_file_column = [
+            split_name
+            for split_name, fields in (
+                ("train", train_fields),
+                ("validation", val_fields),
+                ("test", test_fields),
+            )
+            if fields and args.file_column not in fields
+        ]
+        if splits_missing_file_column:
+            raise ValueError(
+                f"Kolom file '{args.file_column}' wajib ada di CSV: "
+                f"{', '.join(splits_missing_file_column)}."
+            )
     except (FileNotFoundError, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
@@ -488,6 +530,19 @@ def main() -> int:
         include_push_data=args.include_push_data,
         keep_solc_metadata=args.keep_solc_metadata,
     )
+    val_output: List[Dict[str, Any]] = []
+    val_missing: List[str] = []
+    val_unknown: List[str] = []
+    if val_split is not None:
+        val_output, val_missing, val_unknown = process_rows(
+            rows=val_rows,
+            artifacts_dir=artifacts_dir,
+            file_column=args.file_column,
+            opcode_column=args.opcode_column,
+            prefer_bytecode=args.prefer_bytecode,
+            include_push_data=args.include_push_data,
+            keep_solc_metadata=args.keep_solc_metadata,
+        )
     test_output, test_missing, test_unknown = process_rows(
         rows=test_rows,
         artifacts_dir=artifacts_dir,
@@ -501,21 +556,37 @@ def main() -> int:
     train_fields_out = output_fieldnames(train_fields, args.opcode_column)
     test_fields_out = output_fieldnames(test_fields, args.opcode_column)
     write_csv(output_train, train_output, train_fields_out)
+    if output_val is not None:
+        val_fields_out = output_fieldnames(val_fields, args.opcode_column)
+        write_csv(output_val, val_output, val_fields_out)
     write_csv(output_test, test_output, test_fields_out)
 
     print("Selesai membuat CSV split dengan kolom opcode.")
     print(f"Train rows : {len(train_output)} -> {output_train}")
+    if output_val is not None:
+        print(f"Val rows   : {len(val_output)} -> {output_val}")
     print(f"Test rows  : {len(test_output)} -> {output_test}")
     print(f"Artifacts  : {artifacts_dir}")
     print(f"Opcode col : {args.opcode_column}")
-    print(f"Bytecode   : prefer {args.prefer_bytecode}")
+    print(f"Bytecode   : {args.prefer_bytecode} only")
 
     report("Train artifact/opcode kosong", train_missing)
+    if val_split is not None:
+        report("Validation artifact/opcode kosong", val_missing)
     report("Test artifact/opcode kosong", test_missing)
     report("Train unknown opcode byte", train_unknown)
+    if val_split is not None:
+        report("Validation unknown opcode byte", val_unknown)
     report("Test unknown opcode byte", test_unknown)
 
-    has_errors = bool(train_missing or test_missing or train_unknown or test_unknown)
+    has_errors = bool(
+        train_missing
+        or val_missing
+        or test_missing
+        or train_unknown
+        or val_unknown
+        or test_unknown
+    )
     if args.strict and has_errors:
         print("ERROR: strict aktif dan masih ada masalah opcode.", file=sys.stderr)
         return 1
